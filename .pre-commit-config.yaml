@@ -8,6 +8,8 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
     -   id: double-quote-string-fixer
+    -   id: no-commit-to-branch
+        args: ['--pattern', '^(?!((feature|docs|bugfix|release|hotfix)\/\w+)$)']
 -   repo: https://github.com/PyCQA/isort.git
     rev: 5.6.4
     hooks:
