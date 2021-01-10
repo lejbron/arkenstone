@@ -25,5 +25,9 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('', include('asgard.urls')),
+]
+
+urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]
