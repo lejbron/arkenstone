@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% block header %}Players{% endblock %}
+{% block content %}
+{% load user_filters %}
+
+<div class="row">
+  {% if players_list %}
+      <ul>
+        {% for plr in players_list %}
+          <li>
+            <p>
+              <a href="{% url 'player-detail' plr.id %}">{{ plr }}</a>
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+  {% else %}
+    <p>There are no players yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
