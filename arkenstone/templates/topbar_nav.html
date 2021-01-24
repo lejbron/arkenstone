@@ -8,7 +8,7 @@
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'index' %}">Home</a>
+            <a class="nav-link" href="{% url 'player-detail' user.id %}">{{ user.username }}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'password_change' %}">Изменить пароль</a>

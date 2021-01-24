@@ -8,7 +8,7 @@
   <p>Arkenstone has the following objects counts:</p>
   <ul>
     <li><strong>Tournaments:</strong> </li>
-    <li><strong>Players:</strong> </li>
+    <li><a href="{% url 'players-list' %}"><strong>Players:</strong></a> {{ players_amount }}</li>
   </ul>
 
   <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
