@@ -4,19 +4,19 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import redirect, render
 
-from .forms import ProfileForm, UserForm
+from .forms import ProfileForm, SignUpForm, UserForm
 
 
 def signup(request):
     if request.method == 'POST':
-        user_form = UserForm(request.POST)
+        user_form = SignUpForm(request.POST)
         if user_form.is_valid():
-            user = user_form.save()
+            user = SignUpForm.save()
             profile_form = ProfileForm(request.POST, instance=user.profile)
             if profile_form.is_valid():
                 profile_form.save()
                 user.refresh_from_db()  # load the profile instance created by the signal
-                raw_password = user_form.cleaned_data.get('password1')
+                raw_password = SignUpForm.cleaned_data.get('password1')
                 user = authenticate(username=user.username, password=raw_password)
                 login(request, user)
                 return redirect('index')
@@ -47,7 +47,7 @@ def update_profile(request):
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'profiles/profile.html', {
+    return render(request, 'update_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form
     })
