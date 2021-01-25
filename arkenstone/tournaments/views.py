@@ -3,12 +3,14 @@ from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
 from .forms import TournamentRegisterForm
-from .models import PlayerStats, Tournament
+from .models import PlayerStats, Tour, Tournament
 
 
 def tournament_detail_view(request, pk):
-    """Функция отображения детальной информации об игроке."""
+    """Функция отображения детальной информации о турнире."""
     tournament = get_object_or_404(Tournament, id=pk)
+
+    tours_list = Tour.objects.filter(tournament__exact=tournament)
 
     # queryset = PlayerStats.objects.filter(tournament__exact=tournament).\
     #    order_by('-tournament_points', '-difference', '-game_points')
@@ -18,6 +20,7 @@ def tournament_detail_view(request, pk):
 
     context = {
         'tournament': tournament,
+        'tours_list': tours_list,
         'players_stat': players_stat,
         }
 
@@ -56,3 +59,18 @@ def register_on_tournament(request, pk):
     else:
         reg_form = TournamentRegisterForm()
     return render(request, 'tournament_reg_form.html', {'tournament': tournament, 'reg_form': reg_form, })
+
+
+def tour_detail_view(request, pk):
+    """Функция отображения детальной информации о туре."""
+    tour = get_object_or_404(Tour, id=pk)
+
+    players_stat = PlayerStats.objects.filter(tournament__exact=tour.tournament).\
+        order_by('-tournament_points', '-difference', '-game_points')
+
+    context = {
+        'tour': tour,
+        'players_stat': players_stat,
+        }
+
+    return render(request, 'tour_detail.html', context=context)

@@ -1,24 +1,15 @@
 {% extends "base_generic.html" %}
-{% block title %}{{ tournament }}{% endblock %}
-{% block header %}{{ tournament }}{% endblock %}
+{% block title %}{{ tour }}{% endblock %}
+{% block header %}{{ tour }}{% endblock %}
 {% block content %}
 {% load user_filters %}
 
 <div class="row">
     <div class="col-md-8">
-        <p>{{ tournament.start_date }}</p>
-        <p>{{ tournament.status }}</p>
-        <p>{{ tournament.tours_amount }}</p>
+        <p>{{ tour.tour_status }}</p>
     </div>
 </div>
-{% if tournament.status == 'act' or tournament.status == 'fin' %}
-    <div class="row">
-        {% for t in tours_list %}
-          <li>
-            <a href="{% url 'tour-detail' t.id %}">{{ t }}</a>
-          </li>
-        {% endfor %}
-    </div>
+{% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
     <div class="row">
         <table class="table">
         <thead>
