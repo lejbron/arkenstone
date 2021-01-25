@@ -25,10 +25,18 @@ def tournament_detail_view(request, pk):
 
 
 def tournaments_list_view(request):
-    """Функция отображения списка игроков."""
+    """Функция отображения списка турниров."""
     tournaments_list = get_list_or_404(Tournament)
 
-    context = {'tournaments_list': tournaments_list, }
+    try:
+        player_tournaments = PlayerStats.objects.filter(player=request.user)
+    except PlayerStats.DoesNotExist:
+        pass
+
+    context = {
+        'tournaments_list': tournaments_list,
+        'player_tournaments': player_tournaments,
+        }
 
     return render(request, 'tournaments_list.html', context=context)
 

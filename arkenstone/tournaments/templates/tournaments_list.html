@@ -11,6 +11,13 @@
           <li>
             <p>
               <a href="{% url 'tournament-detail' t.id %}">{{ t }}</a>
+              {% if user.is_authenticated %}
+                {% if t in player_tournaments %}
+                  <a href="">Leave</a>
+                {% else %}
+                  <a href="{% url 'tournament-reg' t.id %}">Register</a>
+                {% endif %}
+              {% endif %}
             </p>
           </li>
         {% endfor %}
