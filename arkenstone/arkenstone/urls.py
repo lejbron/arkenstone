@@ -32,3 +32,7 @@ urlpatterns += [
 urlpatterns += [
     path('players/', include('players.urls')),
 ]
+
+urlpatterns += [
+    path('tournaments/', include('tournaments.urls')),
+]

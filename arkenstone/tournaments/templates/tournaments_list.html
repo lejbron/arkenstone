@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+{% block title %}Tournaments{% endblock %}
+{% block header %}Tournaments{% endblock %}
+{% block content %}
+{% load user_filters %}
+
+<div class="row">
+  {% if tournaments_list %}
+      <ul>
+        {% for t in tournaments_list %}
+          <li>
+            <p>
+              <a href="{% url 'tournament-detail' t.id %}">{{ t }}</a>
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+  {% else %}
+    <p>There are no tournaments yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

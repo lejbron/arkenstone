@@ -1,0 +1,39 @@
+{% extends "base_generic.html" %}
+{% block title %}{{ tournament }}{% endblock %}
+{% block header %}{{ tournament }}{% endblock %}
+{% block content %}
+{% load user_filters %}
+
+<div class="row">
+    <div class="col-md-8">
+        <p>{{ tournament.start_date }}</p>
+        <p>{{ tournament.status }}</p>
+        <p>{{ tournament.tours_amount }}</p>
+    </div>
+</div>
+{% if tournament.status == 'act' or tournament.status == 'fin'%}
+    <div class="row">
+        <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Player</th>
+            <th scope="col">Game Points</th>
+            <th scope="col">Difference</th>
+            <th scope="col">Tournament Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in players_stat %}
+            <tr>
+                <td><a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
+                <td>{{ record.game_points }}</td>
+                <td>{{ record.difference }}</td>
+                <td>{{ record.tournament_points }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% endblock %}
