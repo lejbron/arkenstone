@@ -10,4 +10,4 @@ class TournamentAdmin(admin.ModelAdmin):
 
 @admin.register(PlayerStats)
 class PlayerStatsAdmin(admin.ModelAdmin):
-    list_display = ('tournament', 'player', 'game_points', 'tournament_points', 'difference',)
+    list_display = ('player', 'tournament', 'army', 'game_points', 'tournament_points', 'difference',)

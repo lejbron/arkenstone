@@ -51,17 +51,21 @@ class PlayerStats(models.Model):
         on_delete=models.SET_NULL,
         null=True)
 
+    army = models.CharField(
+        max_length=80,
+        default='Shier')
+
     game_points = models.PositiveIntegerField(
         blank=True,
-        default=None,
+        default=0,
         null=True)
     tournament_points = models.PositiveIntegerField(
         blank=True,
-        default=None,
+        default=0,
         null=True)
     difference = models.IntegerField(
         blank=True,
-        default=None,
+        default=0,
         null=True)
 
     def __str__(self):

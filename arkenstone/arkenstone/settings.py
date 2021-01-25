@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'arkenstone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ark_test_001',
+        'NAME': 'ark_test_002',
         'USER': 'postgres',
         'PASSWORD': 'lake90distr',
         'HOST': '127.0.0.1',

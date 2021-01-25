@@ -6,10 +6,22 @@
 
 <div class="row">
     <div class="col-md-8">
-        <p>{{ player.profile.nickname }}</p>
-        <p>{{ player.profile.army }}</p>
         <p>{{ player.profile.birth_date }}</p>
     </div>
 </div>
 
-{% endblock %}
+<div class="row">
+    {% if armies %}
+        <ul>
+            {% for army in armies %}
+            <li>
+                <p>{{ army }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Player has no armies yet.</p>
+    {% endif %}
+
+    {% endblock %}
+</div>

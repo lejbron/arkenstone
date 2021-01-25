@@ -6,9 +6,6 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=20, blank=False)
-    # temporary
-    army = models.CharField(max_length=100, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
 
