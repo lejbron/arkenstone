@@ -44,7 +44,8 @@ class PlayerStats(models.Model):
     tournament = models.ForeignKey(
         Tournament,
         on_delete=models.CASCADE,
-        null=True)
+        null=True,
+        related_name='tournaments')
 
     player = models.ForeignKey(
         User,

@@ -10,12 +10,12 @@ def tournament_detail_view(request, pk):
     """Функция отображения детальной информации о турнире."""
     tournament = get_object_or_404(Tournament, id=pk)
 
-    tours_list = Tour.objects.filter(tournament__exact=tournament)
+    tours_list = Tour.objects.filter(tournament=tournament)
 
     # queryset = PlayerStats.objects.filter(tournament__exact=tournament).\
     #    order_by('-tournament_points', '-difference', '-game_points')
     # players_stat = get_list_or_404(queryset)
-    players_stat = PlayerStats.objects.filter(tournament__exact=tournament).\
+    players_stat = PlayerStats.objects.filter(tournament=tournament).\
         order_by('-tournament_points', '-difference', '-game_points')
 
     context = {
@@ -32,13 +32,14 @@ def tournaments_list_view(request):
     tournaments_list = get_list_or_404(Tournament)
 
     try:
-        player_tournaments = PlayerStats.objects.filter(player=request.user)
+        players = PlayerStats.objects.filter(player=request.user)
+        tournaments_reglist = players.values_list('tournament', flat=True)
     except PlayerStats.DoesNotExist:
         pass
 
     context = {
         'tournaments_list': tournaments_list,
-        'player_tournaments': player_tournaments,
+        'tournaments_reglist': tournaments_reglist,
         }
 
     return render(request, 'tournaments_list.html', context=context)
@@ -65,7 +66,7 @@ def tour_detail_view(request, pk):
     """Функция отображения детальной информации о туре."""
     tour = get_object_or_404(Tour, id=pk)
 
-    players_stat = PlayerStats.objects.filter(tournament__exact=tour.tournament).\
+    players_stat = PlayerStats.objects.filter(tournament=tour.tournament).\
         order_by('-tournament_points', '-difference', '-game_points')
 
     context = {
