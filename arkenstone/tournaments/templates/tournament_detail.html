@@ -15,7 +15,7 @@
     <div class="row">
         {% for t in tours_list %}
           <li>
-            <a href="{% url 'tour-detail' t.id %}">{{ t }}</a>
+            <a href="{{ t.get_absolute_url }}">{{ t }}</a>
           </li>
         {% endfor %}
     </div>

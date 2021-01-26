@@ -10,7 +10,7 @@
         {% for t in tournaments_list %}
           <li>
             <p>
-              <a href="{% url 'tournament-detail' t.id %}">{{ t }}</a>
+              <a href="{{ t.get_absolute_url }}">{{ t }}</a>
               {% if user.is_authenticated %}
                 {% if t.id in tournaments_reglist %}
                   <a href="">Leave</a>

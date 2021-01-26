@@ -10,13 +10,14 @@ def tournament_detail_view(request, pk):
     """Функция отображения детальной информации о турнире."""
     tournament = get_object_or_404(Tournament, id=pk)
 
-    tours_list = Tour.objects.filter(tournament=tournament)
-
-    # queryset = PlayerStats.objects.filter(tournament__exact=tournament).\
-    #    order_by('-tournament_points', '-difference', '-game_points')
-    # players_stat = get_list_or_404(queryset)
-    players_stat = PlayerStats.objects.filter(tournament=tournament).\
-        order_by('-tournament_points', '-difference', '-game_points')
+    try:
+        tours_list = Tour.objects.filter(tournament=tournament)
+        players_stat = PlayerStats.objects.filter(tournament=tournament).\
+            order_by('-tournament_points', '-difference', '-game_points')
+    except Tour.DoesNotExist:
+        pass
+    except PlayerStats.DoesNotExist:
+        pass
 
     context = {
         'tournament': tournament,
@@ -47,7 +48,7 @@ def tournaments_list_view(request):
 
 def register_on_tournament(request, pk):
     """Функция отображения формы регистрации на турнир."""
-    tournament = Tournament.objects.get(id=pk)
+    tournament = get_object_or_404(Tournament, id=pk)
 
     if request.method == 'POST':
         reg_form = TournamentRegisterForm(request.POST)
@@ -66,8 +67,11 @@ def tour_detail_view(request, pk):
     """Функция отображения детальной информации о туре."""
     tour = get_object_or_404(Tour, id=pk)
 
-    players_stat = PlayerStats.objects.filter(tournament=tour.tournament).\
-        order_by('-tournament_points', '-difference', '-game_points')
+    try:
+        players_stat = PlayerStats.objects.filter(tournament=tour.tournament).\
+            order_by('-tournament_points', '-difference', '-game_points')
+    except PlayerStats.DoesNotExist:
+        pass
 
     context = {
         'tour': tour,

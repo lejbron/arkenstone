@@ -1,6 +1,8 @@
 {% extends "base_generic.html" %}
 {% block title %}{{ tour }}{% endblock %}
-{% block header %}{{ tour }}{% endblock %}
+{% block header %}
+    <a href="{{ tour.tournament.get_absolute_url }}">{{ tour.tournament }}</a> - {{ tour }}
+{% endblock %}
 {% block content %}
 {% load user_filters %}
 

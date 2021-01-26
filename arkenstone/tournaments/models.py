@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.validators import (MaxValueValidator,
                                                 MinValueValidator)
 from django.db import models
+from django.urls import reverse
 
 MAX_TOURS = 6
 
@@ -33,9 +34,9 @@ class Tournament(models.Model):
         """String for representing the Model object."""
         return self.title
 
-#    def get_absolute_url(self):
-#       """Returns the url to access a particular tournament instance."""
-#        return reverse('tournament-detail', args=[str(self.id)])
+    def get_absolute_url(self):
+        """Returns the url to access a particular tournament instance."""
+        return reverse('tournament-detail', args=[str(self.id)])
 
 
 class PlayerStats(models.Model):
@@ -115,6 +116,6 @@ class Tour(models.Model):
         """String for representing the Model object."""
         return f'{self.order_num} tour'
 
-#    def get_absolute_url(self):
-#        """Returns the url to access a particular tour instance."""
-#        return reverse('tour-detail', args=[str(self.id)])
+    def get_absolute_url(self):
+        """Returns the url to access a particular tour instance."""
+        return reverse('tour-detail', args=[str(self.id)])
