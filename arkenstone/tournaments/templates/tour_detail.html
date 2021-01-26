@@ -11,7 +11,7 @@
         <p>{{ tour.tour_status }}</p>
     </div>
 </div>
-{% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
+{% if tour.tour_status == 'crt' or tour.tour_status == 'act' or tour.tour_status == 'fin' %}
     <div class="row">
         {% if matches %}
             <ul>

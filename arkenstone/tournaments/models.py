@@ -40,6 +40,19 @@ class Tournament(models.Model):
         """Returns the url to access a particular tournament instance."""
         return reverse('tournament-detail', args=[str(self)])
 
+    def create_tours(self):
+        for i in range(1, self.tours_amount + 1):
+            tour = Tour(
+                tournament=self,
+                order_num=i,
+                tour_status='crt',
+            )
+            tour.save()
+            tour.create_matches()
+
+    def get_registered_players(self):
+        return PlayerStats.objects.filter(tournament=self).values('player')
+
 
 class PlayerStats(models.Model):
     """Model representing player statistics for tournament."""
@@ -74,6 +87,7 @@ class PlayerStats(models.Model):
 
     class Meta:
         verbose_name_plural = 'Players Stats'
+        ordering = ['-tournament_points', '-difference', '-game_points']
 
     def __str__(self):
         """String for representing the Model object."""
@@ -124,6 +138,25 @@ class Tour(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a particular tour instance."""
         return reverse('tour-detail', args=[str(self.tournament), str(self.id)])
+
+    def create_matches(self):
+        try:
+            players = PlayerStats.objects.filter(tournament=self.tournament)
+            for i in range(0, self.tournament.get_registered_players().count(), 2):
+                if self.order_num == 1:
+                    m = Match(
+                        tour=self,
+                        opp1=players[i].player,
+                        opp2=players[i+1].player,
+                    )
+                    m.save()
+                else:
+                    m = Match(
+                        tour=self,
+                    )
+                    m.save()
+        except PlayerStats.DoesNotExist:
+            print('Create Match Stats error')
 
 
 class Match(models.Model):

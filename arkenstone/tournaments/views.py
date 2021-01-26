@@ -2,7 +2,7 @@
 from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
-from .forms import TournamentRegisterForm
+from .forms import TournamentRegisterForm, TournamentStartForm
 from .models import Match, PlayerStats, Tour, Tournament
 
 
@@ -19,8 +19,7 @@ def tournament_detail_view(request, tournament):
 
     try:
         tours_list = Tour.objects.filter(tournament=tournament)
-        players_stat = PlayerStats.objects.filter(tournament=tournament).\
-            order_by('-tournament_points', '-difference', '-game_points')
+        players_stat = PlayerStats.objects.filter(tournament=tournament)
     except Tour.DoesNotExist:
         pass
     except PlayerStats.DoesNotExist:
@@ -97,8 +96,7 @@ def tour_detail_view(request, tournament, tour_pk):
     tour = get_object_or_404(Tour, id=tour_pk)
 
     try:
-        players_stat = PlayerStats.objects.filter(tournament=tour.tournament).\
-            order_by('-tournament_points', '-difference', '-game_points')
+        players_stat = PlayerStats.objects.filter(tournament=tour.tournament)
         matches = Match.objects.filter(tour=tour)
     except PlayerStats.DoesNotExist:
         pass
@@ -132,3 +130,22 @@ def match_detail_view(request, tournament, tour_pk, match_pk):
         }
 
     return render(request, 'match_detail.html', context=context)
+
+
+def start_tournament(request, tt_title):
+    '''
+    Форма запуска турнира. Доступна только организаторам.
+    '''
+    tournament = get_object_or_404(Tournament, title=tt_title)
+
+    if request.method == 'POST':
+        start_form = TournamentStartForm(request.POST)
+        if start_form.is_valid():
+            tournament.status = start_form.cleaned_data['status']
+            tournament.save()
+            if start_form.cleaned_data['status'] == 'act':
+                tournament.create_tours()
+            return redirect('tournaments-list')
+    else:
+        start_form = TournamentStartForm()
+    return render(request, 'tournament_start_form.html', {'tournament': tournament, 'start_form': start_form, })
