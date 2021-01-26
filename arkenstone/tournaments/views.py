@@ -3,7 +3,7 @@ from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
 from .forms import TournamentRegisterForm
-from .models import PlayerStats, Tour, Tournament
+from .models import Match, PlayerStats, Tour, Tournament
 
 
 def tournament_detail_view(request, tournament):
@@ -91,19 +91,44 @@ def tour_detail_view(request, tournament, tour_pk):
 
     Attributes:
         tour: Выбранный тур.
-        player_stat: Текущие результаты тура. Статусы туринра: ['act', 'fin'].
+        player_stat: Текущие результаты тура(ВРЕМЕННО ТУРНИРА). Статусы туринра: ['act', 'fin'].
+        matches: Список матчей тура. Статусы тура: ['prd','act','fin']
     '''
     tour = get_object_or_404(Tour, id=tour_pk)
 
     try:
         players_stat = PlayerStats.objects.filter(tournament=tour.tournament).\
             order_by('-tournament_points', '-difference', '-game_points')
+        matches = Match.objects.filter(tour=tour)
     except PlayerStats.DoesNotExist:
+        pass
+    except Match.DoesNotExist:
         pass
 
     context = {
         'tour': tour,
         'players_stat': players_stat,
+        'matches': matches,
         }
 
     return render(request, 'tour_detail.html', context=context)
+
+
+def match_detail_view(request, tournament, tour_pk, match_pk):
+    '''
+    Отображение детальной информации о матче.
+
+    Attributes:
+        match: Выбранный матч.
+        tour: Используется для ссылки на тур.
+        tournament: Используется для ссылки на турнир.
+    '''
+    match = get_object_or_404(Match.objects.select_related('tour'), id=match_pk)
+
+    context = {
+        'match': match,
+        'tour': match.tour,
+        'tournament': match.tour.tournament,
+        }
+
+    return render(request, 'match_detail.html', context=context)

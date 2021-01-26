@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import PlayerStats, Tour, Tournament
+from .models import Match, PlayerStats, Tour, Tournament
 
 
 @admin.register(Tournament)
@@ -16,3 +16,8 @@ class PlayerStatsAdmin(admin.ModelAdmin):
 @admin.register(Tour)
 class TourAdmin(admin.ModelAdmin):
     list_display = ('order_num', 'tour_status', 'tournament',)
+
+
+@admin.register(Match)
+class MatchAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'tour', 'opp1', 'opp2', 'opp1_gp', 'opp2_gp')

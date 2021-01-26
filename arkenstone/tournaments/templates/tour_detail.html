@@ -13,6 +13,19 @@
 </div>
 {% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
     <div class="row">
+        {% if matches %}
+            <ul>
+                {% for match in matches %}
+                <li>
+                    <a href="{{ match.get_absolute_url }}">{{ match }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>There are no matches yet.</p>
+        {% endif %}
+    </div>
+    <div class="row">
         <table class="table">
         <thead>
             <tr>

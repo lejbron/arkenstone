@@ -124,3 +124,48 @@ class Tour(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a particular tour instance."""
         return reverse('tour-detail', args=[str(self.tournament), str(self.id)])
+
+
+class Match(models.Model):
+    """Model representing a match between opponents unique for tour."""
+    MAX_GAME_POINTS = 12
+
+    tour = models.ForeignKey(
+        Tour,
+        on_delete=models.CASCADE,)
+
+    opp1 = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='opp1',)
+    opp2 = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='opp2',)
+
+    opp1_gp = models.PositiveIntegerField(
+        default=None,
+        blank=True,
+        null=True,
+        validators=[MaxValueValidator(MAX_GAME_POINTS)])
+
+    opp2_gp = models.PositiveIntegerField(
+        default=None,
+        blank=True,
+        null=True,
+        validators=[MaxValueValidator(MAX_GAME_POINTS)])
+
+    class Meta:
+        verbose_name_plural = 'matches'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.opp1} vs {self.opp2}'
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular match instance."""
+        return reverse(
+            'match-detail',
+            args=[str(self.tour.tournament), str(self.tour.order_num), str(self.id)])
