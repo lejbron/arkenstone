@@ -72,6 +72,9 @@ class PlayerStats(models.Model):
         default=0,
         null=True)
 
+    class Meta:
+        verbose_name_plural = 'Players Stats'
+
     def __str__(self):
         """String for representing the Model object."""
         return self.player.username

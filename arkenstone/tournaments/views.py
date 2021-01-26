@@ -7,7 +7,14 @@ from .models import PlayerStats, Tour, Tournament
 
 
 def tournament_detail_view(request, tournament):
-    """Функция отображения детальной информации о турнире."""
+    '''
+    Отображение детальной информации о турнире.
+
+    Attributes:
+        tournament: Выбранный турнир.
+        tours_list: Список туров.
+        players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].'
+    '''
     tournament = get_object_or_404(Tournament, title=tournament)
 
     try:
@@ -29,7 +36,15 @@ def tournament_detail_view(request, tournament):
 
 
 def tournaments_list_view(request):
-    """Функция отображения списка турниров."""
+    '''
+    Отображение списка турниров.
+
+    Attributes:
+        tournaments_list: Список турниров. Статусы турнира: ['ann', 'reg', 'creg', 'act'].
+        tournaments_reglist: Список значений id туриниров, на которые зараегистрирован
+                             залогиненый пользователь.
+
+    '''
     tournaments_list = get_list_or_404(Tournament)
 
     try:
@@ -47,16 +62,23 @@ def tournaments_list_view(request):
 
 
 def register_on_tournament(request, tournament):
-    """Функция отображения формы регистрации на турнир."""
+    '''
+    Форма регистрации на турнир.
+
+    Attributes:
+        tournament: Выбранный турнир.
+        reg_form: Форма регистрации.
+        player_stat: Статистика игрока на выбранном турнире.
+    '''
     tournament = get_object_or_404(Tournament, title=tournament)
 
     if request.method == 'POST':
         reg_form = TournamentRegisterForm(request.POST)
         if reg_form.is_valid():
-            player = reg_form.save()
-            player.tournament = tournament
-            player.player = request.user
-            player.save()
+            player_stat = reg_form.save()
+            player_stat.tournament = tournament
+            player_stat.player = request.user
+            player_stat.save()
             return redirect('index')
     else:
         reg_form = TournamentRegisterForm()
@@ -64,7 +86,13 @@ def register_on_tournament(request, tournament):
 
 
 def tour_detail_view(request, tournament, tour_pk):
-    """Функция отображения детальной информации о туре."""
+    '''
+    Отображение детальной информации о туре.
+
+    Attributes:
+        tour: Выбранный тур.
+        player_stat: Текущие результаты тура.
+    '''
     tour = get_object_or_404(Tour, id=tour_pk)
 
     try:
