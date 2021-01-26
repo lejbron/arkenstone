@@ -91,7 +91,7 @@ def tour_detail_view(request, tournament, tour_pk):
 
     Attributes:
         tour: Выбранный тур.
-        player_stat: Текущие результаты тура.
+        player_stat: Текущие результаты тура. Статусы туринра: ['act', 'fin'].
     '''
     tour = get_object_or_404(Tour, id=tour_pk)
 

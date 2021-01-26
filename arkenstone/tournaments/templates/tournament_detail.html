@@ -13,11 +13,13 @@
 </div>
 {% if tournament.status == 'act' or tournament.status == 'fin' %}
     <div class="row">
-        {% for t in tours_list %}
-          <li>
-            <a href="{{ t.get_absolute_url }}">{{ t }}</a>
-          </li>
-        {% endfor %}
+        <ul>
+            {% for t in tours_list %}
+            <li>
+                <a href="{{ t.get_absolute_url }}">{{ t }}</a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="row">
         <table class="table">
