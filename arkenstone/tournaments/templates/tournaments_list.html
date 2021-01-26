@@ -15,7 +15,7 @@
                 {% if t.id in tournaments_reglist %}
                   <a href="">Leave</a>
                 {% else %}
-                  <a href="{% url 'tournament-reg' t.id %}">Register</a>
+                  <a href="{{ t.get_absolute_url }}register/">Register</a>
                 {% endif %}
               {% endif %}
             </p>

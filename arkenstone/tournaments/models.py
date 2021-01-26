@@ -18,7 +18,9 @@ class Tournament(models.Model):
         ('fin', 'finished'),
     ]
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(
+        max_length=200,
+        unique=True)
     start_date = models.DateField(null=True)
     status = models.CharField(
         default='ann',
@@ -36,7 +38,7 @@ class Tournament(models.Model):
 
     def get_absolute_url(self):
         """Returns the url to access a particular tournament instance."""
-        return reverse('tournament-detail', args=[str(self.id)])
+        return reverse('tournament-detail', args=[str(self)])
 
 
 class PlayerStats(models.Model):
@@ -118,4 +120,4 @@ class Tour(models.Model):
 
     def get_absolute_url(self):
         """Returns the url to access a particular tour instance."""
-        return reverse('tour-detail', args=[str(self.id)])
+        return reverse('tour-detail', args=[str(self.tournament), str(self.id)])

@@ -6,9 +6,9 @@ from .forms import TournamentRegisterForm
 from .models import PlayerStats, Tour, Tournament
 
 
-def tournament_detail_view(request, pk):
+def tournament_detail_view(request, tournament):
     """Функция отображения детальной информации о турнире."""
-    tournament = get_object_or_404(Tournament, id=pk)
+    tournament = get_object_or_404(Tournament, title=tournament)
 
     try:
         tours_list = Tour.objects.filter(tournament=tournament)
@@ -46,9 +46,9 @@ def tournaments_list_view(request):
     return render(request, 'tournaments_list.html', context=context)
 
 
-def register_on_tournament(request, pk):
+def register_on_tournament(request, tournament):
     """Функция отображения формы регистрации на турнир."""
-    tournament = get_object_or_404(Tournament, id=pk)
+    tournament = get_object_or_404(Tournament, title=tournament)
 
     if request.method == 'POST':
         reg_form = TournamentRegisterForm(request.POST)
@@ -63,9 +63,9 @@ def register_on_tournament(request, pk):
     return render(request, 'tournament_reg_form.html', {'tournament': tournament, 'reg_form': reg_form, })
 
 
-def tour_detail_view(request, pk):
+def tour_detail_view(request, tournament, tour_pk):
     """Функция отображения детальной информации о туре."""
-    tour = get_object_or_404(Tour, id=pk)
+    tour = get_object_or_404(Tour, id=tour_pk)
 
     try:
         players_stat = PlayerStats.objects.filter(tournament=tour.tournament).\
