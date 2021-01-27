@@ -35,7 +35,7 @@ class Tournament(models.Model):
     @property
     def registered_players(self):
         try:
-            return PlayerStats.objects.filter(tournament=self).values('player')
+            return PlayerStats.objects.filter(tournament=self)
         except PlayerStats.DoesNotExist:
             print('No players registered yet')
 
@@ -125,7 +125,8 @@ class Tour(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        limit_choices_to={'status__in': ['ann', 'reg', 'act']})
+        limit_choices_to={'status__in': ['ann', 'reg', 'act']},
+        related_name='tours')
     order_num = models.PositiveIntegerField(
         default=1,
         choices=TOURS_NUM)
@@ -173,7 +174,8 @@ class Match(models.Model):
 
     tour = models.ForeignKey(
         Tour,
-        on_delete=models.CASCADE,)
+        on_delete=models.CASCADE,
+        related_name='matches')
 
     opp1 = models.OneToOneField(
         User,

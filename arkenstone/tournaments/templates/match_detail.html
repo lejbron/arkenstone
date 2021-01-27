@@ -1,20 +1,28 @@
 {% extends "base_generic.html" %}
 {% block title %}{{ tour }}{% endblock %}
 {% block header %}
-    <a href="{{ tournament.get_absolute_url }}">
-        {{ tournament }}
+    <a href="{{ match.tour.tournament.get_absolute_url }}">
+        {{ match.tour.tournament }}
     </a>
      -
-    <a href="{{ tour.get_absolute_url }}">
-        {{ tour }}
-    </a><br>
-    {{ match }}
+    <a href="{{ match.tour.get_absolute_url }}">
+        {{ match.tour }}
+    </a>
 {% endblock %}
 {% block content %}
 {% load user_filters %}
 
 <div class="row">
     <div class="col-md-8">
+        <p>
+            <a href="{% url 'player-detail' match.opp1.id %}">
+                {{ match.opp1 }}
+            </a>
+             vs
+             <a href="{% url 'player-detail' match.opp2.id %}">
+                {{ match.opp2 }}
+            </a>
+        </p>
         <p>{{ match.opp1_army }} vs {{ match.opp2_army }}</p>
         <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
     </div>

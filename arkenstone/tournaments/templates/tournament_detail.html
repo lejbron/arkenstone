@@ -14,7 +14,7 @@
 {% if tournament.status == 'act' or tournament.status == 'fin' %}
     <div class="row">
         <ul>
-            {% for t in tours_list %}
+            {% for t in tournament.tours.all %}
             <li>
                 <a href="{{ t.get_absolute_url }}">{{ t }}</a>
             </li>

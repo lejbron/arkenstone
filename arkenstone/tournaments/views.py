@@ -12,23 +12,13 @@ def tournament_detail_view(request, tournament):
 
     Attributes:
         tournament: Выбранный турнир.
-        tours_list: Список туров.
         players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].'
     '''
     tournament = get_object_or_404(Tournament, title=tournament)
 
-    try:
-        tours_list = Tour.objects.filter(tournament=tournament)
-        players_stat = PlayerStats.objects.filter(tournament=tournament)
-    except Tour.DoesNotExist:
-        pass
-    except PlayerStats.DoesNotExist:
-        pass
-
     context = {
         'tournament': tournament,
-        'tours_list': tours_list,
-        'players_stat': players_stat,
+        'players_stat': tournament.registered_players,
         }
 
     return render(request, 'tournament_detail.html', context=context)
@@ -97,16 +87,12 @@ def tour_detail_view(request, tournament, tour_pk):
 
     try:
         players_stat = PlayerStats.objects.filter(tournament=tour.tournament)
-        matches = Match.objects.filter(tour=tour)
     except PlayerStats.DoesNotExist:
-        pass
-    except Match.DoesNotExist:
         pass
 
     context = {
         'tour': tour,
         'players_stat': players_stat,
-        'matches': matches,
         }
 
     return render(request, 'tour_detail.html', context=context)
@@ -118,14 +104,10 @@ def match_detail_view(request, tournament, tour_pk, match_pk):
 
     Attributes:
         match: Выбранный матч.
-        tour: Используется для ссылки на тур.
-        tournament: Используется для ссылки на турнир.
     '''
-    match = get_object_or_404(Match.objects.select_related('tour'), id=match_pk)
+    match = get_object_or_404(Match, id=match_pk)
     context = {
         'match': match,
-        'tour': match.tour,
-        'tournament': match.tour.tournament,
         }
 
     return render(request, 'match_detail.html', context=context)

@@ -13,9 +13,9 @@
 </div>
 {% if tour.tour_status == 'crt' or tour.tour_status == 'act' or tour.tour_status == 'fin' %}
     <div class="row">
-        {% if matches %}
+        {% if tour.matches %}
             <ul>
-                {% for match in matches %}
+                {% for match in tour.matches.all %}
                 <li>
                     <a href="{{ match.get_absolute_url }}">{{ match }}</a>
                 </li>
