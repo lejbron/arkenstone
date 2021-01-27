@@ -1,8 +1,10 @@
 # from django.contrib.auth.models import User
+from django.forms import inlineformset_factory
 from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
-from .forms import TournamentRegisterForm, TournamentStartForm
+from .forms import (SetMatchPairsForm, TournamentRegisterForm,
+                    TournamentStartForm)
 from .models import Match, PlayerStats, Tour, Tournament
 
 
@@ -129,4 +131,42 @@ def start_tournament(request, tt_title):
             return redirect('tournaments-list')
     else:
         start_form = TournamentStartForm()
-    return render(request, 'tournament_start_form.html', {'tournament': tournament, 'start_form': start_form, })
+    return render(
+        request,
+        'tournament_start_form.html',
+        {'tournament': tournament, 'start_form': start_form, }
+    )
+
+
+def input_tour_pairs(request, tour_id):
+    '''
+    Форма корректировки парингов. Доступна только организаторам.
+    '''
+    tour = get_object_or_404(Tour, pk=tour_id)
+#   if tour.tour_status == 'crt':
+#        tour.setup_pairs()
+    MatchesFormSet = inlineformset_factory(
+        Tour,
+        Match,
+        fields=('opp1', 'opp2',),
+        extra=0,
+        can_delete=False,)
+    if request.method == 'POST':
+        formset = MatchesFormSet(request.POST, instance=tour)
+        if formset.is_valid():
+            formset.save()
+            tour.tour_status = 'prd'
+            tour.save()
+            return redirect(
+                'tour-detail',
+                str(tour.tournament),
+                str(tour.id)
+            )
+    else:
+        formset = MatchesFormSet(instance=tour)
+    context = {
+        'formset': formset,
+        'tour': tour,
+    }
+
+    return render(request, 'tour_pairs_setup_form.html', context)
