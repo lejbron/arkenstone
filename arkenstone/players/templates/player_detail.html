@@ -4,24 +4,24 @@
 {% block content %}
 {% load user_filters %}
 
-<div class="row">
-    <div class="col-md-8">
-        <p>{{ player.profile.birth_date }}</p>
+    <div class="row">
+        <div class="col-md-8">
+            <p>{{ player.profile.birth_date }}</p>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    {% if armies %}
-        <ul>
-            {% for army in armies %}
-            <li>
-                <p>{{ army }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Player has no armies yet.</p>
-    {% endif %}
-
-    {% endblock %}
-</div>
+    <div class="row">
+        {% if player_info %}
+            <ul>
+                {% for record in player_info %}
+                <li>
+                    <a href="{{ record.tournament.get_absolute_url }}">{{ record.tournament }}</a>
+                    <p>{{ record.army }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Player has no tournaments yet.</p>
+        {% endif %}
+    </div>
+{% endblock %}

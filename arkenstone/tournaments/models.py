@@ -64,13 +64,12 @@ class PlayerStats(models.Model):
     tournament = models.ForeignKey(
         Tournament,
         on_delete=models.CASCADE,
-        null=True,
-        related_name='tournaments')
+        null=True,)
 
     player = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
-        null=True)
+        null=True,)
 
     army = models.CharField(
         max_length=80,
