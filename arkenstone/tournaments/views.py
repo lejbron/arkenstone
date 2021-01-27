@@ -122,7 +122,6 @@ def match_detail_view(request, tournament, tour_pk, match_pk):
         tournament: Используется для ссылки на турнир.
     '''
     match = get_object_or_404(Match.objects.select_related('tour'), id=match_pk)
-
     context = {
         'match': match,
         'tour': match.tour,

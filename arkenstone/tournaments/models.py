@@ -32,6 +32,13 @@ class Tournament(models.Model):
         validators=[MinValueValidator(3), MaxValueValidator(MAX_TOURS)]
     )
 
+    @property
+    def registered_players(self):
+        try:
+            return PlayerStats.objects.filter(tournament=self).values('player')
+        except PlayerStats.DoesNotExist:
+            print('No players registered yet')
+
     def __str__(self):
         """String for representing the Model object."""
         return self.title
@@ -49,9 +56,6 @@ class Tournament(models.Model):
             )
             tour.save()
             tour.create_matches()
-
-    def get_registered_players(self):
-        return PlayerStats.objects.filter(tournament=self).values('player')
 
 
 class PlayerStats(models.Model):
@@ -147,7 +151,7 @@ class Tour(models.Model):
     def create_matches(self):
         try:
             players = PlayerStats.objects.filter(tournament=self.tournament)
-            for i in range(0, self.tournament.get_registered_players().count(), 2):
+            for i in range(0, self.tournament.registered_players.count(), 2):
                 if self.order_num == 1:
                     m = Match(
                         tour=self,
@@ -194,6 +198,20 @@ class Match(models.Model):
         blank=True,
         null=True,
         validators=[MaxValueValidator(MAX_GAME_POINTS)])
+
+    @property
+    def opp1_army(self):
+        try:
+            return PlayerStats.objects.filter(tournament=self.tour.tournament).get(player=self.opp1).army
+        except PlayerStats.DoesNotExist:
+            print('Match property error')
+
+    @property
+    def opp2_army(self):
+        try:
+            return PlayerStats.objects.filter(tournament=self.tour.tournament).get(player=self.opp2).army
+        except PlayerStats.DoesNotExist:
+            print('Match property error')
 
     class Meta:
         verbose_name_plural = 'matches'
