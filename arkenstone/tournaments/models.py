@@ -88,6 +88,11 @@ class PlayerStats(models.Model):
     class Meta:
         verbose_name_plural = 'Players Stats'
         ordering = ['-tournament_points', '-difference', '-game_points']
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_tournament_paleyr',
+                fields=['tournament', 'player'])
+        ]
 
     def __str__(self):
         """String for representing the Model object."""
