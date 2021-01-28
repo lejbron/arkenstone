@@ -13,5 +13,6 @@ urlpatterns = [
 urlpatterns += [
     path('<str:tournament>/register/', views.register_on_tournament, name='tournament-reg'),
     path('<str:tt_title>/start/', views.start_tournament, name='tournament-start'),
-    path('<int:tour_id>/pairs/', views.input_tour_pairs, name='tour-pair'),
+    path('<int:tour_id>/pairs/', views.input_tour_pairs, name='tour-pairs'),
+    path('<int:tour_id>/results/', views.input_tour_results, name='tour-results'),
 ]

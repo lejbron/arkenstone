@@ -176,3 +176,44 @@ def input_tour_pairs(request, tour_id):
     }
 
     return render(request, 'tour_matches_setup_form.html', context)
+
+
+def input_tour_results(request, tour_id):
+    '''
+    Форма корректировки парингов. Доступна только организаторам.
+    '''
+    tour = get_object_or_404(Tour, pk=tour_id)
+    registered_players = tour.tournament.registered_players.values_list('player', flat=True)
+    data = request.POST or None
+#   if tour.tour_status == 'crt':
+#        tour.setup_pairs()
+
+    MatchesFormSet = inlineformset_factory(
+        Tour,
+        Match,
+        fields=('opp1', 'opp2', 'opp1_gp', 'opp2_gp'),
+        extra=0,
+        can_delete=False,)
+    formset = MatchesFormSet(
+        data,
+        instance=tour,)
+    for form in formset:
+        form.fields['opp1'].queryset = User.objects.filter(id__in=registered_players)
+        form.fields['opp2'].queryset = User.objects.filter(id__in=registered_players)
+
+    if request.method == 'POST' and formset.is_valid():
+        formset.save()
+        tour.tour_status = 'fin'
+        tour.save()
+        return redirect(
+            'tour-detail',
+            str(tour.tournament),
+            str(tour.id)
+        )
+
+    context = {
+        'formset': formset,
+        'tour': tour,
+    }
+
+    return render(request, 'tour_matches_setup_form.html', context)

@@ -177,12 +177,12 @@ class Match(models.Model):
         on_delete=models.CASCADE,
         related_name='matches')
 
-    opp1 = models.OneToOneField(
+    opp1 = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         related_name='opp1',)
-    opp2 = models.OneToOneField(
+    opp2 = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
