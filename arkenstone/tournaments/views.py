@@ -1,10 +1,9 @@
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
-from .forms import (SetMatchPairsForm, TournamentRegisterForm,
-                    TournamentStartForm)
+from .forms import TournamentRegisterForm, TournamentStartForm
 from .models import Match, PlayerStats, Tour, Tournament
 
 
@@ -143,30 +142,37 @@ def input_tour_pairs(request, tour_id):
     Форма корректировки парингов. Доступна только организаторам.
     '''
     tour = get_object_or_404(Tour, pk=tour_id)
+    registered_players = tour.tournament.registered_players.values_list('player', flat=True)
+    data = request.POST or None
 #   if tour.tour_status == 'crt':
 #        tour.setup_pairs()
+
     MatchesFormSet = inlineformset_factory(
         Tour,
         Match,
         fields=('opp1', 'opp2',),
         extra=0,
         can_delete=False,)
-    if request.method == 'POST':
-        formset = MatchesFormSet(request.POST, instance=tour)
-        if formset.is_valid():
-            formset.save()
-            tour.tour_status = 'prd'
-            tour.save()
-            return redirect(
-                'tour-detail',
-                str(tour.tournament),
-                str(tour.id)
-            )
-    else:
-        formset = MatchesFormSet(instance=tour)
+    formset = MatchesFormSet(
+        data,
+        instance=tour,)
+    for form in formset:
+        form.fields['opp1'].queryset = User.objects.filter(id__in=registered_players)
+        form.fields['opp2'].queryset = User.objects.filter(id__in=registered_players)
+
+    if request.method == 'POST' and formset.is_valid():
+        formset.save()
+        tour.tour_status = 'prd'
+        tour.save()
+        return redirect(
+            'tour-detail',
+            str(tour.tournament),
+            str(tour.id)
+        )
+
     context = {
         'formset': formset,
         'tour': tour,
     }
 
-    return render(request, 'tour_pairs_setup_form.html', context)
+    return render(request, 'tour_matches_setup_form.html', context)

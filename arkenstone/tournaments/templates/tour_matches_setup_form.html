@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 {% block content %}
 
-    <h1>Edit pairs for {{ tour }}</h1>
+    <h1><a href="{{ tour.get_absolute_url }}">{{ tour }}</a></h1>
 
     <form action="" method="post">
         {% csrf_token %}
@@ -15,7 +15,7 @@
             </tr>
             {% endfor %}
         </table>
-        <input type="submit" value="Accept Editions" class="btn btn-primary">
+        <input type="submit" value="Сохранить изменения" class="btn btn-primary">
     </form>
 
 {% endblock %}
