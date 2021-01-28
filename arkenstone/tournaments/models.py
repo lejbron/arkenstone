@@ -155,8 +155,8 @@ class Tour(models.Model):
                 if self.order_num == 1:
                     m = Match(
                         tour=self,
-                        opp1=players[i].player,
-                        opp2=players[i+1].player,
+                        opp1=players[i],
+                        opp2=players[i+1],
                     )
                     m.save()
                 else:
@@ -178,12 +178,12 @@ class Match(models.Model):
         related_name='matches')
 
     opp1 = models.ForeignKey(
-        User,
+        PlayerStats,
         on_delete=models.SET_NULL,
         null=True,
         related_name='opp1',)
     opp2 = models.ForeignKey(
-        User,
+        PlayerStats,
         on_delete=models.SET_NULL,
         null=True,
         related_name='opp2',)
@@ -199,20 +199,6 @@ class Match(models.Model):
         blank=True,
         null=True,
         validators=[MaxValueValidator(MAX_GAME_POINTS)])
-
-    @property
-    def opp1_army(self):
-        try:
-            return PlayerStats.objects.filter(tournament=self.tour.tournament).get(player=self.opp1).army
-        except PlayerStats.DoesNotExist:
-            print('Match property error')
-
-    @property
-    def opp2_army(self):
-        try:
-            return PlayerStats.objects.filter(tournament=self.tour.tournament).get(player=self.opp2).army
-        except PlayerStats.DoesNotExist:
-            print('Match property error')
 
     class Meta:
         verbose_name_plural = 'matches'

@@ -15,15 +15,15 @@
 <div class="row">
     <div class="col-md-8">
         <p>
-            <a href="{% url 'player-detail' match.opp1.id %}">
+            <a href="{% url 'player-detail' match.opp1.player.id %}">
                 {{ match.opp1 }}
             </a>
              vs
-             <a href="{% url 'player-detail' match.opp2.id %}">
+             <a href="{% url 'player-detail' match.opp2.player.id %}">
                 {{ match.opp2 }}
             </a>
         </p>
-        <p>{{ match.opp1_army }} vs {{ match.opp2_army }}</p>
+        <p>{{ match.opp1.army }} vs {{ match.opp2.army }}</p>
         <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
     </div>
 </div>
