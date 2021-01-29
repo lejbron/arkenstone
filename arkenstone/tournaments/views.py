@@ -1,9 +1,10 @@
 # from django.contrib.auth.models import User
-from django.forms import inlineformset_factory
+# from django.forms import inlineformset_factory
 from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
-from .forms import TournamentRegisterForm, TournamentStartForm
+from .forms import (MatchesPairsFormSet, MatchesResultsFormSet,
+                    TournamentRegisterForm, TournamentStartForm)
 from .models import Match, PlayerStats, Tour, Tournament
 
 
@@ -147,13 +148,7 @@ def input_tour_pairs(request, tour_id):
 #   if tour.tour_status == 'crt':
 #        tour.setup_pairs()
 
-    MatchesFormSet = inlineformset_factory(
-        Tour,
-        Match,
-        fields=('opp1', 'opp2',),
-        extra=0,
-        can_delete=False,)
-    formset = MatchesFormSet(
+    formset = MatchesPairsFormSet(
         data,
         instance=tour,)
     for form in formset:
@@ -188,13 +183,7 @@ def input_tour_results(request, tour_id):
 #   if tour.tour_status == 'crt':
 #        tour.setup_pairs()
 
-    MatchesFormSet = inlineformset_factory(
-        Tour,
-        Match,
-        fields=('opp1', 'opp2', 'opp1_gp', 'opp2_gp'),
-        extra=0,
-        can_delete=False,)
-    formset = MatchesFormSet(
+    formset = MatchesResultsFormSet(
         data,
         instance=tour,)
     for form in formset:
