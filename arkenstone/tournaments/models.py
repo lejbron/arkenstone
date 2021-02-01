@@ -1,12 +1,16 @@
+import json
+
 from django.contrib.auth.models import User
 from django.contrib.postgres.validators import (MaxValueValidator,
                                                 MinValueValidator)
-from django.core import serializers
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+
+# from django.core import serializers
+
 
 MAX_TOURS = 6
 
@@ -182,13 +186,11 @@ class Tour(models.Model):
             m.save()
 
     def update_tour_results(self):
-        self.tour_results = serializers.serialize(
-            'json',
-            PlayerStats.objects.filter(tournament=self.tournament),
-            fields=('player', 'game_points', 'difference', 'tournament_points')
-            )
+        json_data = list(
+            PlayerStats.objects.filter(tournament=self.tournament).
+            values('player__username', 'game_points', 'difference', 'tournament_points'))
+        self.tour_results = json.dumps(json_data)
         self.save()
-#        for m in tour.matches:
 
 
 class Match(models.Model):

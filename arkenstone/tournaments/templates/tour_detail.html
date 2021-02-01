@@ -26,28 +26,30 @@
             <p>There are no matches yet.</p>
         {% endif %}
     </div>
-    <div class="row">
-        <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">Player</th>
-            <th scope="col">Game Points</th>
-            <th scope="col">Difference</th>
-            <th scope="col">Tournament Points</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in players_stat %}
-            <tr>
-                <td><a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
-                <td>{{ record.game_points }}</td>
-                <td>{{ record.difference }}</td>
-                <td>{{ record.tournament_points }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-    </div>
+    {% if json_stat %}
+        <div class="row">
+            <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Player</th>
+                <th scope="col">Game Points</th>
+                <th scope="col">Difference</th>
+                <th scope="col">Tournament Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in json_stat %}
+                <tr>
+                    <td><a href="">{{ record.player__username }}</a></td>
+                    <td>{{ record.game_points }}</td>
+                    <td>{{ record.difference }}</td>
+                    <td>{{ record.tournament_points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    {% endif %}
 {% endif %}
 
 {% endblock %}

@@ -1,5 +1,7 @@
 # from django.contrib.auth.models import User
 # from django.forms import inlineformset_factory
+import json
+
 from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
                               render)
 
@@ -87,14 +89,11 @@ def tour_detail_view(request, tournament, tour_pk):
     '''
     tour = get_object_or_404(Tour, id=tour_pk)
 
-    try:
-        players_stat = PlayerStats.objects.filter(tournament=tour.tournament)
-    except PlayerStats.DoesNotExist:
-        pass
+    json_stat = json.loads(tour.tour_results)
 
     context = {
         'tour': tour,
-        'players_stat': players_stat,
+        'json_stat': json_stat,
         }
 
     return render(request, 'tour_detail.html', context=context)
