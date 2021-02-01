@@ -1,7 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.postgres.validators import (MaxValueValidator,
                                                 MinValueValidator)
+from django.core import serializers
 from django.db import models
+from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 
 MAX_TOURS = 6
@@ -48,14 +52,18 @@ class Tournament(models.Model):
         return reverse('tournament-detail', args=[str(self)])
 
     def create_tours(self):
-        for i in range(1, self.tours_amount + 1):
-            tour = Tour(
-                tournament=self,
-                order_num=i,
-                tour_status='crt',
-            )
-            tour.save()
-            tour.create_matches()
+        if self.status == 'act':
+            for i in range(1, self.tours_amount + 1):
+                tour = Tour(
+                    tournament=self,
+                    order_num=i,
+                    tour_status='crt',
+                )
+                tour.save()
+                if tour.order_num == 1:
+                    tour.create_matches()
+        else:
+            print('Tournament is not active!')
 
 
 class PlayerStats(models.Model):
@@ -101,6 +109,18 @@ class PlayerStats(models.Model):
         """String for representing the Model object."""
         return self.player.username
 
+    def update_player_stats(self):
+        self.game_points = 0
+        player_matches = Match.objects.\
+            filter(tour__tournament=self.tournament).\
+            filter(Q(opp1__exact=self) | Q(opp2__exact=self))
+        for m in player_matches:
+            if m.opp1 == self:
+                self.game_points += m.opp1_gp
+            else:
+                self.game_points += m.opp2_gp
+        self.save()
+
 
 class Tour(models.Model):
     """Model representing one of tournament tours"""
@@ -135,6 +155,9 @@ class Tour(models.Model):
         max_length=4,
         choices=TOUR_STATUSES)
 
+    tour_results = models.JSONField(
+        default={'players': 'empty'})
+
     class Meta:
         constraints = [
             models.UniqueConstraint(name='unique_tour', fields=['order_num', 'tournament_id'])
@@ -149,23 +172,23 @@ class Tour(models.Model):
         return reverse('tour-detail', args=[str(self.tournament), str(self.id)])
 
     def create_matches(self):
-        try:
-            players = PlayerStats.objects.filter(tournament=self.tournament)
-            for i in range(0, self.tournament.registered_players.count(), 2):
-                if self.order_num == 1:
-                    m = Match(
-                        tour=self,
-                        opp1=players[i],
-                        opp2=players[i+1],
-                    )
-                    m.save()
-                else:
-                    m = Match(
-                        tour=self,
-                    )
-                    m.save()
-        except PlayerStats.DoesNotExist:
-            print('Create Match Stats error')
+        players = self.tournament.registered_players
+        for i in range(0, players.count(), 2):
+            m = Match(
+                tour=self,
+                opp1=players[i],
+                opp2=players[i+1],
+            )
+            m.save()
+
+    def update_tour_results(self):
+        self.tour_results = serializers.serialize(
+            'json',
+            PlayerStats.objects.filter(tournament=self.tournament),
+            fields=('player', 'game_points', 'difference', 'tournament_points')
+            )
+        self.save()
+#        for m in tour.matches:
 
 
 class Match(models.Model):
@@ -212,3 +235,10 @@ class Match(models.Model):
         return reverse(
             'match-detail',
             args=[str(self.tour.tournament), str(self.tour.order_num), str(self.id)])
+
+
+@receiver(post_save, sender=Match)
+def save_match(sender, instance, **kwargs):
+    if instance.opp1_gp and instance.opp2_gp:
+        instance.opp1.update_player_stats()
+        instance.opp2.update_player_stats()

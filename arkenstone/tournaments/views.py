@@ -192,8 +192,10 @@ def input_tour_results(request, tour_id):
 
     if request.method == 'POST' and formset.is_valid():
         formset.save()
-        tour.tour_status = 'fin'
-        tour.save()
+#        tour.tour_status = 'fin'
+#       tour.save()
+        if tour.tour_status == 'fin':
+            tour.update_tour_results()
         return redirect(
             'tour-detail',
             str(tour.tournament),

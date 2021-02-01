@@ -18,6 +18,7 @@
                 {% for match in tour.matches.all %}
                 <li>
                     <a href="{{ match.get_absolute_url }}">{{ match }}</a>
+                    <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
                 </li>
                 {% endfor %}
             </ul>

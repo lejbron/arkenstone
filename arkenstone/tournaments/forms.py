@@ -19,6 +19,7 @@ class TournamentStartForm(forms.ModelForm):
 class TourResultsForm(forms.ModelForm):
     class Meta:
         model = Tour
+        fields = ('tour_status', )
         exclude = ()
 
 

@@ -5,6 +5,7 @@
 
     <form action="" method="post">
         {% csrf_token %}
+        {{ tour.tour_status }}
         {{ formset.management_form }}
         <table>
             {% for form in formset %}
