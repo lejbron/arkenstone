@@ -89,7 +89,11 @@ def tour_detail_view(request, tournament, tour_pk):
     '''
     tour = get_object_or_404(Tour, id=tour_pk)
 
-    json_stat = json.loads(tour.tour_results)
+    try:
+        json_stat = json.loads(tour.tour_results)
+    except TypeError:
+        print('No results yet')
+        json_stat = None
 
     context = {
         'tour': tour,

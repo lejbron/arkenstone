@@ -159,8 +159,7 @@ class Tour(models.Model):
         max_length=4,
         choices=TOUR_STATUSES)
 
-    tour_results = models.JSONField(
-        default={'players': 'empty'})
+    tour_results = models.JSONField(null=True)
 
     class Meta:
         constraints = [
@@ -188,7 +187,7 @@ class Tour(models.Model):
     def update_tour_results(self):
         json_data = list(
             PlayerStats.objects.filter(tournament=self.tournament).
-            values('player__username', 'game_points', 'difference', 'tournament_points'))
+            values('player__id', 'player__username', 'game_points', 'difference', 'tournament_points'))
         self.tour_results = json.dumps(json_data)
         self.save()
 

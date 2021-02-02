@@ -11,22 +11,22 @@
         <p>{{ tour.tour_status }}</p>
     </div>
 </div>
-{% if tour.tour_status == 'crt' or tour.tour_status == 'act' or tour.tour_status == 'fin' %}
-    <div class="row">
-        {% if tour.matches %}
-            <ul>
-                {% for match in tour.matches.all %}
-                <li>
-                    <a href="{{ match.get_absolute_url }}">{{ match }}</a>
-                    <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
-                </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>There are no matches yet.</p>
-        {% endif %}
-    </div>
-    {% if json_stat %}
+    {% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
+        <div class="row">
+            {% if tour.matches %}
+                <ul>
+                    {% for match in tour.matches.all %}
+                    <li>
+                        <a href="{{ match.get_absolute_url }}">{{ match }}</a>
+                        <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>There are no matches yet.</p>
+            {% endif %}
+        </div>
+    {% if json_stat.exists %}
         <div class="row">
             <table class="table">
             <thead>
@@ -40,7 +40,7 @@
             <tbody>
                 {% for record in json_stat %}
                 <tr>
-                    <td><a href="">{{ record.player__username }}</a></td>
+                    <td><a href="{% url 'player-detail' record.player__id %}">{{ record.player__username }}</a></td>
                     <td>{{ record.game_points }}</td>
                     <td>{{ record.difference }}</td>
                     <td>{{ record.tournament_points }}</td>
