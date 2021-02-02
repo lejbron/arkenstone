@@ -1,57 +1,8 @@
-# from django.contrib.auth.models import User
-# from django.forms import inlineformset_factory
-import json
+from django.shortcuts import get_object_or_404, redirect, render
 
-from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
-                              render)
-
-from .forms import (MatchesPairsFormSet, MatchesResultsFormSet,
-                    TournamentRegisterForm, TournamentStartForm)
-from .models import Match, PlayerStats, Tour, Tournament
-
-
-def tournament_detail_view(request, tournament):
-    '''
-    Отображение детальной информации о турнире.
-
-    Attributes:
-        tournament: Выбранный турнир.
-        players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].'
-    '''
-    tournament = get_object_or_404(Tournament, title=tournament)
-
-    context = {
-        'tournament': tournament,
-        'players_stat': tournament.registered_players,
-        }
-
-    return render(request, 'tournament_detail.html', context=context)
-
-
-def tournaments_list_view(request):
-    '''
-    Отображение списка турниров.
-
-    Attributes:
-        tournaments_list: Список турниров. Статусы турнира: ['ann', 'reg', 'creg', 'act'].
-        tournaments_reglist: Список значений id туриниров, на которые зараегистрирован
-                             залогиненый пользователь.
-
-    '''
-    tournaments_list = get_list_or_404(Tournament)
-
-    try:
-        players = PlayerStats.objects.filter(player=request.user)
-        tournaments_reglist = players.values_list('tournament', flat=True)
-    except PlayerStats.DoesNotExist:
-        pass
-
-    context = {
-        'tournaments_list': tournaments_list,
-        'tournaments_reglist': tournaments_reglist,
-        }
-
-    return render(request, 'tournaments_list.html', context=context)
+from ..forms import (MatchesPairsFormSet, MatchesResultsFormSet,
+                     TournamentRegisterForm, TournamentStartForm)
+from ..models import PlayerStats, Tour, Tournament
 
 
 def register_on_tournament(request, tournament):
@@ -76,46 +27,6 @@ def register_on_tournament(request, tournament):
     else:
         reg_form = TournamentRegisterForm()
     return render(request, 'tournament_reg_form.html', {'tournament': tournament, 'reg_form': reg_form, })
-
-
-def tour_detail_view(request, tournament, tour_pk):
-    '''
-    Отображение детальной информации о туре.
-
-    Attributes:
-        tour: Выбранный тур.
-        player_stat: Текущие результаты тура(ВРЕМЕННО ТУРНИРА). Статусы туринра: ['act', 'fin'].
-        matches: Список матчей тура. Статусы тура: ['prd','act','fin']
-    '''
-    tour = get_object_or_404(Tour, id=tour_pk)
-
-    try:
-        json_stat = json.loads(tour.tour_results)
-    except TypeError:
-        print('No results yet')
-        json_stat = None
-
-    context = {
-        'tour': tour,
-        'json_stat': json_stat,
-        }
-
-    return render(request, 'tour_detail.html', context=context)
-
-
-def match_detail_view(request, tournament, tour_pk, match_pk):
-    '''
-    Отображение детальной информации о матче.
-
-    Attributes:
-        match: Выбранный матч.
-    '''
-    match = get_object_or_404(Match, id=match_pk)
-    context = {
-        'match': match,
-        }
-
-    return render(request, 'match_detail.html', context=context)
 
 
 def start_tournament(request, tt_title):

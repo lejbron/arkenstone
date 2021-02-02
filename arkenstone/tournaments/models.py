@@ -173,6 +173,7 @@ class Tour(models.Model):
         constraints = [
             models.UniqueConstraint(name='unique_tour', fields=['order_num', 'tournament_id'])
         ]
+        ordering = ['tournament', 'order_num']
 
     def __str__(self):
         """String for representing the Model object."""
