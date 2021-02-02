@@ -115,14 +115,20 @@ class PlayerStats(models.Model):
 
     def update_player_stats(self):
         self.game_points = 0
+        self.tournament_points = 0
+        self.difference = 0
         player_matches = Match.objects.\
             filter(tour__tournament=self.tournament).\
             filter(Q(opp1__exact=self) | Q(opp2__exact=self))
         for m in player_matches:
             if m.opp1 == self:
                 self.game_points += m.opp1_gp
+                self.tournament_points += m.opp1_tp
+                self.difference += m.opp1_diff
             else:
                 self.game_points += m.opp2_gp
+                self.tournament_points += m.opp2_tp
+                self.difference += m.opp2_diff
         self.save()
 
 
@@ -159,7 +165,9 @@ class Tour(models.Model):
         max_length=4,
         choices=TOUR_STATUSES)
 
-    tour_results = models.JSONField(null=True)
+    tour_results = models.JSONField(
+        null=True,
+        blank=True)
 
     class Meta:
         constraints = [
@@ -196,6 +204,14 @@ class Match(models.Model):
     """Model representing a match between opponents unique for tour."""
     MAX_GAME_POINTS = 12
 
+    t_points_lookup = {
+        'bigWin': 6,
+        'minorWin': 5,
+        'draw': 2,
+        'minorLoose': 1,
+        'bigLoose': 0
+    }
+
     tour = models.ForeignKey(
         Tour,
         on_delete=models.CASCADE,
@@ -224,6 +240,28 @@ class Match(models.Model):
         null=True,
         validators=[MaxValueValidator(MAX_GAME_POINTS)])
 
+    @property
+    def opp1_tp(self):
+        if self.opp1_gp is not None:
+            return self.get_tournament_points()[0]
+
+    @property
+    def opp2_tp(self):
+        if self.opp2_gp is not None:
+            return self.get_tournament_points()[1]
+
+    @property
+    def opp1_diff(self):
+        if self.opp1_gp is not None and self.opp2_gp is not None:
+            diff = self.opp1_gp - self.opp2_gp
+            return diff
+
+    @property
+    def opp2_diff(self):
+        if self.opp1_gp is not None and self.opp2_gp is not None:
+            diff = self.opp2_gp - self.opp1_gp
+            return diff
+
     class Meta:
         verbose_name_plural = 'matches'
 
@@ -237,9 +275,36 @@ class Match(models.Model):
             'match-detail',
             args=[str(self.tour.tournament), str(self.tour.order_num), str(self.id)])
 
+    def get_tournament_points(self):
+        '''
+        Возвращает рассчитанные по игровым очкам турнирные очки оппонентов.
+
+        Attributes:
+            tp1: Турнирные очки первого оппонента.
+            tp2: Турнирные очки второго оппонента.
+        '''
+        if self.opp1_gp > self.opp2_gp:
+            if self.opp1_diff >= self.opp2_gp:
+                tp1 = self.t_points_lookup.get('bigWin')
+                tp2 = self.t_points_lookup.get('bigLoose')
+            else:
+                tp1 = self.t_points_lookup.get('minorWin')
+                tp2 = self.t_points_lookup.get('minorLoose')
+        elif self.opp1_gp < self.opp2_gp:
+            if self.opp2_diff >= self.opp1_gp:
+                tp2 = self.t_points_lookup.get('bigWin')
+                tp1 = self.t_points_lookup.get('bigLoose')
+            else:
+                tp2 = self.t_points_lookup.get('minorWin')
+                tp1 = self.t_points_lookup.get('minorLoose')
+        elif self.opp1_gp == self.opp2_gp:
+            tp1 = tp2 = self.t_points_lookup.get('draw')
+
+        return tp1, tp2
+
 
 @receiver(post_save, sender=Match)
 def save_match(sender, instance, **kwargs):
-    if instance.opp1_gp and instance.opp2_gp:
+    if instance.opp1_gp is not None and instance.opp2_gp is not None:
         instance.opp1.update_player_stats()
         instance.opp2.update_player_stats()
