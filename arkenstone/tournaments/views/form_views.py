@@ -5,7 +5,7 @@ from ..forms import (MatchesPairsFormSet, MatchesResultsFormSet,
 from ..models import PlayerStats, Tour, Tournament
 
 
-def register_on_tournament(request, tournament):
+def register_on_tournament(request, tt_title):
     '''
     Форма регистрации на турнир.
 
@@ -14,7 +14,7 @@ def register_on_tournament(request, tournament):
         reg_form: Форма регистрации.
         player_stat: Статистика игрока на выбранном турнире.
     '''
-    tournament = get_object_or_404(Tournament, title=tournament)
+    tournament = get_object_or_404(Tournament, title=tt_title)
 
     if request.method == 'POST':
         reg_form = TournamentRegisterForm(request.POST)
@@ -57,10 +57,7 @@ def input_tour_pairs(request, tour_id):
     Форма корректировки парингов. Доступна только организаторам.
     '''
     tour = get_object_or_404(Tour, pk=tour_id)
-#    registered_players = tour.tournament.registered_players.values_list('player', flat=True)
     data = request.POST or None
-#   if tour.tour_status == 'crt':
-#        tour.setup_pairs()
 
     formset = MatchesPairsFormSet(
         data,
