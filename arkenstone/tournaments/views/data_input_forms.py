@@ -62,10 +62,7 @@ def input_tour_results(request, tour_slug):
     Форма корректировки парингов. Доступна только организаторам.
     '''
     tour = get_object_or_404(Tour, tour_slug=tour_slug)
-#    registered_players = tour.tournament.registered_players.values_list('player', flat=True)
     data = request.POST or None
-#   if tour.tour_status == 'crt':
-#        tour.setup_pairs()
 
     formset = MatchesResultsFormSet(
         data,
@@ -76,8 +73,6 @@ def input_tour_results(request, tour_slug):
 
     if request.method == 'POST' and formset.is_valid():
         formset.save()
-#        tour.tour_status = 'fin'
-#       tour.save()
         if tour.tour_status == 'fin':
             tour.update_tour_results()
         return redirect('tour-detail', tour.tour_slug)
