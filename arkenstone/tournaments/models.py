@@ -39,6 +39,12 @@ class Tournament(models.Model):
         validators=[MinValueValidator(3), MaxValueValidator(MAX_TOURS)]
     )
 
+    tt_slug = models.SlugField(
+        null=True,
+        unique=True,
+        blank=True
+    )
+
     @property
     def registered_players(self):
         try:
@@ -50,9 +56,15 @@ class Tournament(models.Model):
         """String for representing the Model object."""
         return self.title
 
+    def save(self, *args, **kwargs):
+        if self.tt_slug is None:
+            super(Tournament, self).save(*args, **kwargs)
+            self.tt_slug = slugify(self)
+        super(Tournament, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         """Returns the url to access a particular tournament instance."""
-        return reverse('tournament-detail', args=[str(self)])
+        return reverse('tournament-detail', args=[self.tt_slug])
 
     def create_tours(self):
         if self.status == 'act':
@@ -168,6 +180,11 @@ class Tour(models.Model):
         null=True,
         blank=True)
 
+    tour_slug = models.SlugField(
+        null=True,
+        unique=True
+    )
+
     class Meta:
         constraints = [
             models.UniqueConstraint(name='unique_tour', fields=['order_num', 'tournament_id'])
@@ -178,9 +195,16 @@ class Tour(models.Model):
         """String for representing the Model object."""
         return f'{self.order_num} tour'
 
+    def save(self, *args, **kwargs):
+        if self.tour_slug is None:
+            super(Tour, self).save(*args, **kwargs)
+            slug_str = str(self.tournament) + '-' + str(self)
+            self.tour_slug = slugify(slug_str)
+        super(Tour, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         """Returns the url to access a particular tour instance."""
-        return reverse('tour-detail', args=[str(self.tournament), str(self.id)])
+        return reverse('tour-detail', args=[str(self.tour_slug)])
 
     def create_matches(self):
         players = self.tournament.registered_players
@@ -275,7 +299,7 @@ class Match(models.Model):
             super(Match, self).save(*args, **kwargs)
             slug_str = str(self.tour.tournament) + '-' + str(self.tour) + '-' + str(self.id)
             self.match_slug = slugify(slug_str)
-            super(Match, self).save(*args, **kwargs)
+        super(Match, self).save(*args, **kwargs)
 
     def __str__(self):
         """String for representing the Model object."""

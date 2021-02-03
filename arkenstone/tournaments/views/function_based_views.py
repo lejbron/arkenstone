@@ -33,7 +33,7 @@ def tournaments_list_view(request):
     return render(request, 'tournaments_list.html', context=context)
 
 
-def tournament_detail_view(request, tournament):
+def tournament_detail_view(request, tt_slug):
     '''
     Отображение детальной информации о турнире.
 
@@ -41,7 +41,7 @@ def tournament_detail_view(request, tournament):
         tournament: Выбранный турнир.
         players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].'
     '''
-    tournament = get_object_or_404(Tournament, title=tournament)
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
     context = {
         'tournament': tournament,
@@ -51,7 +51,7 @@ def tournament_detail_view(request, tournament):
     return render(request, 'tournament_detail.html', context=context)
 
 
-def tour_detail_view(request, tournament, tour_pk):
+def tour_detail_view(request, tour_slug):
     '''
     Отображение детальной информации о туре.
 
@@ -60,7 +60,7 @@ def tour_detail_view(request, tournament, tour_pk):
         player_stat: Текущие результаты тура(ВРЕМЕННО ТУРНИРА). Статусы туринра: ['act', 'fin'].
         matches: Список матчей тура. Статусы тура: ['prd','act','fin']
     '''
-    tour = get_object_or_404(Tour, id=tour_pk)
+    tour = get_object_or_404(Tour, tour_slug=tour_slug)
 
     try:
         json_stat = json.loads(tour.tour_results)
