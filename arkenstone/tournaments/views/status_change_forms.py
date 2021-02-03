@@ -36,4 +36,6 @@ def finish_tour(request, tour_slug):
     tour.tour_status = 'fin'
     tour.update_tour_results()
     tour.save()
+    if tour.order_num == tour.tournament.tours_amount:
+        tour.tournament.finish_tournament()
     return redirect('tour-detail', tour.tour_slug)

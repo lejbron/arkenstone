@@ -78,6 +78,10 @@ class Tournament(models.Model):
         else:
             print('Tournament is not active!')
 
+    def finish_tournament(self):
+        self.status = 'fin'
+        self.save()
+
 
 class PlayerStats(models.Model):
     """Model representing player statistics for tournament."""

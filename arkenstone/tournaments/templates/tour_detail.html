@@ -13,7 +13,9 @@
 </div>
 
 {% if tour.tour_status == 'crt' and tour.previous_finished %}
-    <button type="button" class="btn btn-primary" onclick=showModal()>Начать тур</button>
+    <div class="row">
+        <button type="button" class="btn btn-primary" onclick=showModal()>Начать тур</button>
+    </div>
     <div class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
