@@ -4,13 +4,20 @@
 {% block content %}
 {% load user_filters %}
 
-<div class="row">
-    <div class="col-md-8">
-        <p>{{ tournament.start_date }}</p>
-        <p>{{ tournament.status }}</p>
-        <p>{{ tournament.tours_amount }}</p>
-    </div>
-</div>
+{% if tournament.status == 'reg' or tournament.status == 'creg' %}
+    {% if players_stat is not None %}
+        <div class="row">
+            <ul>
+                {% for record in players_stat %}
+                    <li>
+                        <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endif %}
+
 {% if tournament.status == 'act' or tournament.status == 'fin' %}
     <div class="row">
         <ul>

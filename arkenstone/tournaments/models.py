@@ -183,6 +183,10 @@ class Tour(models.Model):
         unique=True
     )
 
+    @property
+    def all_results_ready(self) -> bool:
+        return not Match.objects.filter(tour=self).filter(Q(opp1_gp__exact=None)|Q(opp2_gp__exact=None)).exists()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(name='unique_tour', fields=['order_num', 'tournament_id'])
@@ -219,7 +223,6 @@ class Tour(models.Model):
             PlayerStats.objects.filter(tournament=self.tournament).
             values('player__id', 'player__username', 'game_points', 'difference', 'tournament_points'))
         self.tour_results = json.dumps(json_data)
-        self.save()
 
 
 class Match(models.Model):

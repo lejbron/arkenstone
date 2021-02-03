@@ -11,54 +11,9 @@
         <p>{{ tour.tour_status }}</p>
     </div>
 </div>
-    {% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
-        <div class="row">
-            {% if tour.matches %}
-                <ul>
-                    {% for match in tour.matches.all %}
-                    <li>
-                        <a href="{{ match.get_absolute_url }}">{{ match }}</a>
-                        <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
-                    </li>
-                    {% endfor %}
-                    {% if tour.tour_status == 'act' %}
-                        <form action="{% url 'tour-results' tour.tour_slug %}">
-                            <button type="submit" class="btn btn-primary">Обновить результаты матчей</button>
-                        </form>
-                    {% endif %}
-                </ul>
-            {% else %}
-                <p>There are no matches yet.</p>
-            {% endif %}
-        </div>
-    {% if json_stat is not None %}
-        <div class="row">
-            <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Player</th>
-                <th scope="col">Game Points</th>
-                <th scope="col">Difference</th>
-                <th scope="col">Tournament Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in json_stat %}
-                <tr>
-                    <td><a href="{% url 'player-detail' record.player__id %}">{{ record.player__username }}</a></td>
-                    <td>{{ record.game_points }}</td>
-                    <td>{{ record.difference }}</td>
-                    <td>{{ record.tournament_points }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            </table>
-        </div>
-    {% endif %}
-{% endif %}
 
 {% if tour.tour_status == 'crt' %}
-    <button type="button" class="myBtn" onclick=showModal()>Начать тур</button>
+    <button type="button" class="btn btn-primary" onclick=showModal()>Начать тур</button>
     <div class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -81,6 +36,60 @@
                 </form>
             </div>
         </div>
+    </div>
+{% endif %}
+
+{% if tour.tour_status == 'act' %}
+    <div class="row">
+        {% if tour.matches %}
+            <ul>
+                {% for match in tour.matches.all %}
+                <li>
+                    <a href="{{ match.get_absolute_url }}">{{ match }}</a>
+                    <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>There are no matches yet.</p>
+        {% endif %}
+    </div>
+    <div class="row">
+        <form action="{% url 'tour-results' tour.tour_slug %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Обновить результаты матчей</button>
+        </form>
+        {% if tour.all_results_ready %}
+            <form action="{% url 'tour-finish' tour.tour_slug %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Завершить тур</button>
+            </form>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if tour.tour_status == 'fin' and json_stat is not None %}
+    <div class="row">
+        <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Player</th>
+            <th scope="col">Game Points</th>
+            <th scope="col">Difference</th>
+            <th scope="col">Tournament Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in json_stat %}
+            <tr>
+                <td><a href="{% url 'player-detail' record.player__id %}">{{ record.player__username }}</a></td>
+                <td>{{ record.game_points }}</td>
+                <td>{{ record.difference }}</td>
+                <td>{{ record.tournament_points }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
     </div>
 {% endif %}
 

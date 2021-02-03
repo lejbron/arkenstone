@@ -25,3 +25,15 @@ def start_tour(request, tour_slug):
     tour.save()
     tour.create_matches()
     return redirect('tour-detail', tour.tour_slug)
+
+
+def finish_tour(request, tour_slug):
+    '''
+    Форма запуска турнира. Доступна только организаторам.
+    '''
+    tour = get_object_or_404(Tour, tour_slug=tour_slug)
+
+    tour.tour_status = 'fin'
+    tour.update_tour_results()
+    tour.save()
+    return redirect('tour-detail', tour.tour_slug)
