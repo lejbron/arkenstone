@@ -5,6 +5,7 @@ from django.contrib.postgres.validators import (MaxValueValidator,
                                                 MinValueValidator)
 from django.db import models
 from django.db.models import Q
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 
 # from django.core import serializers
@@ -239,6 +240,11 @@ class Match(models.Model):
         null=True,
         validators=[MaxValueValidator(MAX_GAME_POINTS)])
 
+    match_slug = models.SlugField(
+        null=True,
+        unique=True
+    )
+
     @property
     def opp1_tp(self):
         if self.opp1_gp is not None:
@@ -264,15 +270,20 @@ class Match(models.Model):
     class Meta:
         verbose_name_plural = 'matches'
 
+    def save(self, *args, **kwargs):
+        if self.match_slug is None:
+            super(Match, self).save(*args, **kwargs)
+            slug_str = str(self.tour.tournament) + '-' + str(self.tour) + '-' + str(self.id)
+            self.match_slug = slugify(slug_str)
+            super(Match, self).save(*args, **kwargs)
+
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.opp1} vs {self.opp2}'
 
     def get_absolute_url(self):
         """Returns the url to access a particular match instance."""
-        return reverse(
-            'match-detail',
-            args=[str(self.tour.tournament), str(self.tour.order_num), str(self.id)])
+        return reverse('match-detail', args=[str(self.match_slug)])
 
     def get_tournament_points(self):
         '''

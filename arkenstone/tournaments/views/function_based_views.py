@@ -76,14 +76,14 @@ def tour_detail_view(request, tournament, tour_pk):
     return render(request, 'tour_detail.html', context=context)
 
 
-def match_detail_view(request, tournament, tour_pk, match_pk):
+def match_detail_view(request, match_slug):
     '''
     Отображение детальной информации о матче.
 
     Attributes:
         match: Выбранный матч.
     '''
-    match = get_object_or_404(Match, id=match_pk)
+    match = get_object_or_404(Match, match_slug=match_slug)
     context = {
         'match': match,
         }

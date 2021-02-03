@@ -6,8 +6,7 @@ urlpatterns = [
     path('', views.tournaments_list_view, name='tournaments-list'),
     path('<str:tournament>/', views.tournament_detail_view, name='tournament-detail'),
     path('<str:tournament>/tour/<int:tour_pk>/', views.tour_detail_view, name='tour-detail'),
-    path('<str:tournament>/tour/<int:tour_pk>/match/<int:match_pk>',
-         views.match_detail_view, name='match-detail'),
+    path('match/<slug:match_slug>', views.match_detail_view, name='match-detail'),
 ]
 
 urlpatterns += [
