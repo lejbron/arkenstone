@@ -70,11 +70,7 @@ def input_tour_pairs(request, tour_slug):
         formset.save()
         tour.tour_status = 'prd'
         tour.save()
-        return redirect(
-            'tour-detail',
-            str(tour.tournament),
-            str(tour.id)
-        )
+        return redirect('tour-detail', tour.tour_slug)
 
     context = {
         'formset': formset,
@@ -107,11 +103,7 @@ def input_tour_results(request, tour_slug):
 #       tour.save()
         if tour.tour_status == 'fin':
             tour.update_tour_results()
-        return redirect(
-            'tour-detail',
-            str(tour.tournament),
-            str(tour.id)
-        )
+        return redirect('tour-detail', tour.tour_slug)
 
     context = {
         'formset': formset,
