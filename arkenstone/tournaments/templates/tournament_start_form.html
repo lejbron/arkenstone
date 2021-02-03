@@ -16,7 +16,7 @@
                     {% endfor %}
 
 
-                <form method="post" action="{% url 'tournament-start' tournament.title %}">
+                <form method="post" action="{% url 'tournament-start' tournament.tt_slug %}">
                     {% csrf_token %}
                     {% for field in start_form %}
                         <div class="form-group row" aria-required={% if field.field.required %}"true"{% else %}"false"{% endif %}>

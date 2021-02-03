@@ -5,7 +5,7 @@ from ..forms import (MatchesPairsFormSet, MatchesResultsFormSet,
 from ..models import PlayerStats, Tour, Tournament
 
 
-def register_on_tournament(request, tt_title):
+def register_on_tournament(request, tt_slug):
     '''
     Форма регистрации на турнир.
 
@@ -14,7 +14,7 @@ def register_on_tournament(request, tt_title):
         reg_form: Форма регистрации.
         player_stat: Статистика игрока на выбранном турнире.
     '''
-    tournament = get_object_or_404(Tournament, title=tt_title)
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
     if request.method == 'POST':
         reg_form = TournamentRegisterForm(request.POST)
@@ -29,11 +29,11 @@ def register_on_tournament(request, tt_title):
     return render(request, 'tournament_reg_form.html', {'tournament': tournament, 'reg_form': reg_form, })
 
 
-def start_tournament(request, tt_title):
+def start_tournament(request, tt_slug):
     '''
     Форма запуска турнира. Доступна только организаторам.
     '''
-    tournament = get_object_or_404(Tournament, title=tt_title)
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
     if request.method == 'POST':
         start_form = TournamentStartForm(request.POST)
@@ -52,11 +52,11 @@ def start_tournament(request, tt_title):
     )
 
 
-def input_tour_pairs(request, tour_id):
+def input_tour_pairs(request, tour_slug):
     '''
     Форма корректировки парингов. Доступна только организаторам.
     '''
-    tour = get_object_or_404(Tour, pk=tour_id)
+    tour = get_object_or_404(Tour, tour_slug=tour_slug)
     data = request.POST or None
 
     formset = MatchesPairsFormSet(
@@ -84,11 +84,11 @@ def input_tour_pairs(request, tour_id):
     return render(request, 'tour_matches_setup_form.html', context)
 
 
-def input_tour_results(request, tour_id):
+def input_tour_results(request, tour_slug):
     '''
     Форма корректировки парингов. Доступна только организаторам.
     '''
-    tour = get_object_or_404(Tour, pk=tour_id)
+    tour = get_object_or_404(Tour, tour_slug=tour_slug)
 #    registered_players = tour.tournament.registered_players.values_list('player', flat=True)
     data = request.POST or None
 #   if tour.tour_status == 'crt':

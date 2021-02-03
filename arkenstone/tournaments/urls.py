@@ -10,8 +10,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('<str:tt_title>/register/', views.register_on_tournament, name='tournament-reg'),
-    path('<str:tt_title>/start/', views.start_tournament, name='tournament-start'),
-    path('<int:tour_id>/pairs/', views.input_tour_pairs, name='tour-pairs'),
-    path('<int:tour_id>/results/', views.input_tour_results, name='tour-results'),
+    path('<slug:tt_slug>/register/', views.register_on_tournament, name='tournament-reg'),
+    path('<slug:tt_slug>/start/', views.start_tournament, name='tournament-start'),
+    path('tours/<slug:tour_slug>/pairs/', views.input_tour_pairs, name='tour-pairs'),
+    path('tours/<slug:tour_slug>/results/', views.input_tour_results, name='tour-results'),
 ]
