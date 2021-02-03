@@ -185,7 +185,15 @@ class Tour(models.Model):
 
     @property
     def all_results_ready(self) -> bool:
-        return not Match.objects.filter(tour=self).filter(Q(opp1_gp__exact=None)|Q(opp2_gp__exact=None)).exists()
+        return not Match.objects.filter(tour=self).filter(Q(opp1_gp__exact=None) | Q(opp2_gp__exact=None)).exists()
+
+    @property
+    def previous_finished(self) -> bool:
+        if self.order_num != 1:
+            status = Tour.objects.filter(tournament=self.tournament).get(order_num=self.order_num-1).tour_status
+            if status != 'fin':
+                return False
+        return True
 
     class Meta:
         constraints = [
