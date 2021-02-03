@@ -75,8 +75,6 @@ class Tournament(models.Model):
                     tour_status='crt',
                 )
                 tour.save()
-                if tour.order_num == 1:
-                    tour.create_matches()
         else:
             print('Tournament is not active!')
 
@@ -207,8 +205,8 @@ class Tour(models.Model):
         return reverse('tour-detail', args=[str(self.tour_slug)])
 
     def create_matches(self):
-        players = self.tournament.registered_players
-        for i in range(0, players.count(), 2):
+        players = list(self.tournament.registered_players)
+        for i in range(0, len(players), 2):
             m = Match(
                 tour=self,
                 opp1=players[i],
