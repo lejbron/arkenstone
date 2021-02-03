@@ -317,7 +317,23 @@ class Match(models.Model):
             tp1: Турнирные очки первого оппонента.
             tp2: Турнирные очки второго оппонента.
         '''
-        if self.opp1_gp > self.opp2_gp:
+        if self.opp1_gp == self.opp2_gp:
+            tp1 = tp2 = self.t_points_lookup.get('draw')
+        elif self.opp2_gp == 0:
+            if self.opp1_gp > 1:
+                tp1 = self.t_points_lookup.get('bigWin')
+                tp2 = self.t_points_lookup.get('bigLoose')
+            else:
+                tp1 = self.t_points_lookup.get('minorWin')
+                tp2 = self.t_points_lookup.get('minorLoose')
+        elif self.opp1_gp == 0:
+            if self.opp2_gp > 1:
+                tp2 = self.t_points_lookup.get('bigWin')
+                tp1 = self.t_points_lookup.get('bigLoose')
+            else:
+                tp2 = self.t_points_lookup.get('minorWin')
+                tp1 = self.t_points_lookup.get('minorLoose')
+        elif self.opp1_gp > self.opp2_gp:
             if self.opp1_diff >= self.opp2_gp:
                 tp1 = self.t_points_lookup.get('bigWin')
                 tp2 = self.t_points_lookup.get('bigLoose')
@@ -331,7 +347,4 @@ class Match(models.Model):
             else:
                 tp2 = self.t_points_lookup.get('minorWin')
                 tp1 = self.t_points_lookup.get('minorLoose')
-        elif self.opp1_gp == self.opp2_gp:
-            tp1 = tp2 = self.t_points_lookup.get('draw')
-
         return tp1, tp2
