@@ -132,11 +132,11 @@ class PlayerStats(models.Model):
             filter(tour__tournament=self.tournament).\
             filter(Q(opp1__exact=self) | Q(opp2__exact=self))
         for m in player_matches:
-            if m.opp1 == self:
+            if m.opp1 == self and m.opp1_gp is not None:
                 self.game_points += m.opp1_gp
                 self.tournament_points += m.opp1_tp
                 self.difference += m.opp1_diff
-            else:
+            elif m.opp2_gp is not None:
                 self.game_points += m.opp2_gp
                 self.tournament_points += m.opp2_tp
                 self.difference += m.opp2_diff
