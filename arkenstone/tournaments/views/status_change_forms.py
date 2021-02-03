@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 
-from ..models import Tournament
+from ..models import Tour, Tournament
 
 
 def start_tournament(request, tt_slug):
@@ -14,3 +14,14 @@ def start_tournament(request, tt_slug):
     tournament.create_tours()
     return redirect('tournament-detail', tournament.tt_slug)
 
+
+def start_tour(request, tour_slug):
+    '''
+    Форма запуска турнира. Доступна только организаторам.
+    '''
+    tour = get_object_or_404(Tour, tour_slug=tour_slug)
+
+    tour.tour_status = 'act'
+    tour.save()
+    tour.create_matches()
+    return redirect('tour-detail', tour.tour_slug)
