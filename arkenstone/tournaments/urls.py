@@ -16,7 +16,6 @@ urlpatterns += [
 
 urlpatterns += [
     path('tours/<slug:tour_slug>/start/', views.start_tour, name='tour-start'),
-    path('tours/<slug:tour_slug>/pairs/', views.input_tour_pairs, name='tour-pairs'),
     path('tours/<slug:tour_slug>/results/', views.input_tour_results, name='tour-results'),
     path('tours/<slug:tour_slug>/finish/', views.finish_tour, name='tour-finish'),
 ]
