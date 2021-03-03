@@ -2,7 +2,7 @@
 # from django.forms import inlineformset_factory
 import json
 
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render
 
 from ..models import Match, PlayerStats, Tour, Tournament
 
@@ -17,13 +17,12 @@ def tournaments_list_view(request):
                              залогиненый пользователь.
 
     '''
-    tournaments_list = get_list_or_404(Tournament)
+    tournaments_list = Tournament.objects.all()
+    tournaments_reglist = []
 
-    try:
+    if not request.user.is_anonymous:
         players = PlayerStats.objects.filter(player=request.user)
         tournaments_reglist = players.values_list('tournament', flat=True)
-    except PlayerStats.DoesNotExist:
-        pass
 
     context = {
         'tournaments_list': tournaments_list,

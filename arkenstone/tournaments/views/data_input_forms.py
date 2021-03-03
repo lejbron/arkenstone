@@ -18,7 +18,7 @@ def register_on_tournament(request, tt_slug):
     if request.method == 'POST':
         reg_form = TournamentRegisterForm(request.POST)
         if reg_form.is_valid():
-            player_stat = reg_form.save()
+            player_stat = reg_form.save(commit=False)
             player_stat.tournament = tournament
             player_stat.player = request.user
             player_stat.save()
