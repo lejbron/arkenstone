@@ -1,15 +1,12 @@
 import json
 
-from django.contrib.auth.models import User
 from django.contrib.postgres.validators import (MaxValueValidator,
                                                 MinValueValidator)
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-
-# from django.core import serializers
-
+from players.models import PlayerStats
 
 MAX_TOURS = 6
 
@@ -80,68 +77,6 @@ class Tournament(models.Model):
 
     def finish_tournament(self):
         self.status = 'fin'
-        self.save()
-
-
-class PlayerStats(models.Model):
-    """Model representing player statistics for tournament."""
-
-    tournament = models.ForeignKey(
-        Tournament,
-        on_delete=models.CASCADE,
-        null=True,)
-
-    player = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,)
-
-    army = models.CharField(
-        max_length=80,
-        default='Shier')
-
-    game_points = models.PositiveIntegerField(
-        blank=True,
-        default=0,
-        null=True)
-    tournament_points = models.PositiveIntegerField(
-        blank=True,
-        default=0,
-        null=True)
-    difference = models.IntegerField(
-        blank=True,
-        default=0,
-        null=True)
-
-    class Meta:
-        verbose_name_plural = 'Players Stats'
-        ordering = ['-tournament_points', '-difference', '-game_points']
-        constraints = [
-            models.UniqueConstraint(
-                name='unique_tournament_paleyr',
-                fields=['tournament', 'player'])
-        ]
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.player.username
-
-    def update_player_stats(self):
-        self.game_points = 0
-        self.tournament_points = 0
-        self.difference = 0
-        player_matches = Match.objects.\
-            filter(tour__tournament=self.tournament).\
-            filter(Q(opp1__exact=self) | Q(opp2__exact=self))
-        for m in player_matches:
-            if m.opp1 == self and m.opp1_gp is not None:
-                self.game_points += m.opp1_gp
-                self.tournament_points += m.opp1_tp
-                self.difference += m.opp1_diff
-            elif m.opp2_gp is not None:
-                self.game_points += m.opp2_gp
-                self.tournament_points += m.opp2_tp
-                self.difference += m.opp2_diff
         self.save()
 
 

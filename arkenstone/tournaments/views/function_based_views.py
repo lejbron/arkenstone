@@ -3,8 +3,8 @@
 import json
 
 from django.shortcuts import get_object_or_404, render
-
-from ..models import Match, PlayerStats, Tour, Tournament
+from players.models import PlayerStats
+from tournaments.models import Match, Tour, Tournament
 
 
 def tournaments_list_view(request):

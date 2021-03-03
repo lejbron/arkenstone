@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect
-
-from ..models import Tour, Tournament
+from tournaments.models import Tour, Tournament
 
 
 def start_tournament(request, tt_slug):

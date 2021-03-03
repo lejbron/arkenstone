@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
-
-from ..forms import MatchesResultsFormSet, TournamentRegisterForm
-from ..models import PlayerStats, Tour, Tournament
+from players.models import PlayerStats
+from tournaments.forms import MatchesResultsFormSet, TournamentRegisterForm
+from tournaments.models import Tour, Tournament
 
 
 def register_on_tournament(request, tt_slug):
