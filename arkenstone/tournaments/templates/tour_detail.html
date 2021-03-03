@@ -56,18 +56,20 @@
             <p>There are no matches yet.</p>
         {% endif %}
     </div>
-    <div class="row">
-        <form action="{% url 'tour-results' tour.tour_slug %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Обновить результаты матчей</button>
-        </form>
-        {% if tour.all_results_ready %}
-            <form action="{% url 'tour-finish' tour.tour_slug %}">
+    {% if user.is_staff %}
+        <div class="row">
+            <form action="{% url 'tour-results' tour.tour_slug %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Завершить тур</button>
+                <button type="submit" class="btn btn-primary">Обновить результаты матчей</button>
             </form>
-        {% endif %}
-    </div>
+            {% if tour.all_results_ready %}
+                <form action="{% url 'tour-finish' tour.tour_slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Завершить тур</button>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endif %}
 
 {% if tour.tour_status == 'fin' and json_stat is not None %}
