@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_list_or_404, render
+
 from tournaments.models import PlayerStats
 
 

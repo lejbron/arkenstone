@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+
 from players.models import PlayerStats
 from tournaments.forms import MatchesResultsFormSet, TournamentRegisterForm
 from tournaments.models import Tour, Tournament
