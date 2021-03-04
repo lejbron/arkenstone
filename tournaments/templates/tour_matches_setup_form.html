@@ -1,13 +1,24 @@
 {% extends "base_generic.html" %}
 {%block header%}<a href="{{ tour.get_absolute_url }}">{{ tour }}</a>{%endblock%}
 {% block content %}
+{% load user_filters %}
     <form action="" method="post">
         {% csrf_token %}
-        <table>
+        {{ formset.management_form }}
+        <table class='table'>
             {% for form in formset %}
             <tr>
                 <td>
-                    <ul class="list-inline">{{ form.as_ul }}</ul>
+                    {% for field in form %}
+                        <div class="form-group row" aria-required={% if field.field.required %}"true"{% else %}"false"{% endif %}>
+                            <div class="col-md-6">
+                                {{ field|addclass:"form-control" }}
+                                {% if field.help_text %}
+                                <small id="{{ field.id_for_label }}-help" class="form-text text-muted">{{ field.help_text|safe }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </td>
             </tr>
             {% endfor %}
