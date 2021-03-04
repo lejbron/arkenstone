@@ -45,7 +45,7 @@ SECRET_KEY = 'g*aqf87yvnj_t15m-*789uk7i=+%v7p!p%2pg-8u0o9#uhc-g4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 
 
 # Application definition
