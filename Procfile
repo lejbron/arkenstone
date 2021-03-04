@@ -1,1 +1,1 @@
-web: gunicorn arkenstone.wsgi --log-file -
+web: gunicorn arkenstone:app --log-file -
