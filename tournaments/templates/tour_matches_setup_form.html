@@ -1,12 +1,8 @@
 {% extends "base_generic.html" %}
+{%block header%}<a href="{{ tour.get_absolute_url }}">{{ tour }}</a>{%endblock%}
 {% block content %}
-
-    <h1><a href="{{ tour.get_absolute_url }}">{{ tour }}</a></h1>
-
     <form action="" method="post">
         {% csrf_token %}
-        {{ tour.tour_status }}
-        {{ formset.management_form }}
         <table>
             {% for form in formset %}
             <tr>
@@ -18,5 +14,4 @@
         </table>
         <input type="submit" value="Сохранить изменения" class="btn btn-primary">
     </form>
-
 {% endblock %}
