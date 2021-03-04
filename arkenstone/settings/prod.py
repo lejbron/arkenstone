@@ -9,5 +9,3 @@ DATABASES = {
         default=config('DATABASE_URL')  # noqa
     )
 }
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # noqa
