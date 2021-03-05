@@ -4,8 +4,8 @@ from django.contrib.postgres.validators import (MaxValueValidator,
                                                 MinValueValidator)
 from django.db import models
 from django.db.models import Q
-from django.template.defaultfilters import slugify
 from django.urls import reverse
+from pytils.translit import slugify
 
 from players.models import PlayerStats
 
