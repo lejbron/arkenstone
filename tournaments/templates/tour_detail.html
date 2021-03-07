@@ -21,7 +21,7 @@
     </div>
 {% endif %}
 
-{% if tour.tour_status == 'act' %}
+{% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
     <div class="row">
         {% if tour.matches %}
             <ul>
@@ -36,7 +36,7 @@
             <p>There are no matches yet.</p>
         {% endif %}
     </div>
-    {% if user.is_staff %}
+    {% if user.is_staff and tour.tour_status == 'act' %}
         <div class="row">
             <div class="col-sm-3">
                 <form action="{% url 'tour-results' tour.tour_slug %}">
