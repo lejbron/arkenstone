@@ -177,7 +177,7 @@ class Match(models.Model):
     """Model representing a match between opponents unique for tour."""
     MAX_GAME_POINTS = 12
 
-    t_points_lookup = {
+    TP_POINTS = {
         'bigWin': 6,
         'minorWin': 5,
         'draw': 2,
@@ -267,33 +267,31 @@ class Match(models.Model):
             tp2: Турнирные очки второго оппонента.
         '''
         if self.opp1_gp == self.opp2_gp:
-            tp1 = tp2 = self.t_points_lookup.get('draw')
-        elif self.opp2_gp == 0:
-            if self.opp1_gp > 1:
-                tp1 = self.t_points_lookup.get('bigWin')
-                tp2 = self.t_points_lookup.get('bigLoose')
-            else:
-                tp1 = self.t_points_lookup.get('minorWin')
-                tp2 = self.t_points_lookup.get('minorLoose')
-        elif self.opp1_gp == 0:
-            if self.opp2_gp > 1:
-                tp2 = self.t_points_lookup.get('bigWin')
-                tp1 = self.t_points_lookup.get('bigLoose')
-            else:
-                tp2 = self.t_points_lookup.get('minorWin')
-                tp1 = self.t_points_lookup.get('minorLoose')
+            res1 = res2 = 'draw'
         elif self.opp1_gp > self.opp2_gp:
-            if self.opp1_diff >= self.opp2_gp:
-                tp1 = self.t_points_lookup.get('bigWin')
-                tp2 = self.t_points_lookup.get('bigLoose')
-            else:
-                tp1 = self.t_points_lookup.get('minorWin')
-                tp2 = self.t_points_lookup.get('minorLoose')
-        elif self.opp1_gp < self.opp2_gp:
-            if self.opp2_diff >= self.opp1_gp:
-                tp2 = self.t_points_lookup.get('bigWin')
-                tp1 = self.t_points_lookup.get('bigLoose')
-            else:
-                tp2 = self.t_points_lookup.get('minorWin')
-                tp1 = self.t_points_lookup.get('minorLoose')
+            win_type = self.get_win_type(self.opp1_gp, self.opp2_gp)
+            res1 = win_type + 'Win'
+            res2 = win_type + 'Loose'
+        else:
+            win_type = self.get_win_type(self.opp2_gp, self.opp1_gp)
+            res2 = win_type + 'Win'
+            res1 = win_type + 'Loose'
+
+        tp1 = self.TP_POINTS[res1]
+        tp2 = self.TP_POINTS[res2]
+
         return tp1, tp2
+
+    def get_win_type(self, winner_gp, looser_gp):
+        """
+        Определние типа победы - minor/big.
+        """
+        if looser_gp == 0:
+            if winner_gp == 1:
+                return 'minor'
+            else:
+                return 'big'
+        elif winner_gp >= looser_gp * 2:
+            return 'big'
+        else:
+            return 'minor'
