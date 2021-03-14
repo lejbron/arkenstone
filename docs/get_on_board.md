@@ -1,8 +1,10 @@
 # Arkenstone Onboarding Guide
 
-Для начала работы над проектом выполните следующие действия:
+Перед началом работы над проектом внимательно ознакомьтесь с [Arkenstone Codestyle](https://github.com/lejbron/arkenstone/blob/master/docs/Arcenstone_codestyle.md).
 
-- Склонируйте репозиторий `arkenstone` с [GitHub](https://github.com/lejbron/arkenstone).
+## Настройка окружения
+
+- Склонируйте репозиторий [arkenstone](https://github.com/lejbron/arkenstone).
 - Создайте виртульную среду python, выполнив в папке проекта (arkenstone) следующую команду:
 ```
 python -m venv .venv
@@ -35,4 +37,21 @@ pre-commit install
 		- найдите константу `python.pythonPath`;
 		- задайте ей значение `./.venv/bin/python`.
 
-- Внимтально ознакомьтесь с Arkenstone codestyle.
+## Настройки проекта
+
+В проекте используется отдельные настройки для dev и prod сред.
+- Общие настройки: `arkenston/settings/base.py`.
+- Development: `arkenston/settings/dev.py`
+- Production: `arkenston/settings/prod.py`
+
+Текущаяю версия сайта работает на [басплатном тарифе](https://www.heroku.com/pricing) хостинга Heroku.
+Ограничения:
+- 600 часов работы сервера в месяц.
+- 10000 записей в базе данных - [Postgres Heroku add-on](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier).
+- Сервер засыпает через 30 мин при отсуствии активности.
+
+Для локального запуска необхомо настроить переменные окружени:
+- Скопируйте файл `.env.template` и переименуйте его в `.env`.
+- Укажите необходимые значения, соответсвующие вашему окружению.
+
+## Подключение базы данных

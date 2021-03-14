@@ -15,3 +15,10 @@ Gives admins possibilies to:
 - Manage ongoing tournaments and moderate applications for registrarion recieved from users.
 
 For more information about user scenarios read [google sheet](https://docs.google.com/spreadsheets/d/1-0XJSyblXo-fqIp7M5ilByEk8yUb91jx0wxa1dGEdLY/edit?usp=sharing).
+
+# Documentation:
+
+- [Developer on-boarding guide](https://github.com/lejbron/arkenstone/blob/master/docs/get_on_board.md)
+- [Branch naiming policy](https://github.com/lejbron/arkenstone/blob/master/docs/branch_policy.md)
+- [Arkenstone codestyle](https://github.com/lejbron/arkenstone/blob/master/docs/Arcenstone_codestyle.md)
+
