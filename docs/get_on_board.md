@@ -27,32 +27,17 @@ pip install -r requirements.txt
 pre-commit install
 ```
 
-> В данном прокте ветка master используется **ТОЛЬКО** для текущей рабочей версии сайта. `pre-commit` hook запрещает делать commit в ветку master и я влявется обязательным для установки. Помимо этого он берет на себя проверку соблюдения PEP8 и сортирует импорты с помощью isort.
-
-- Установите в Visual Studio Code ассоциацию с `python` из установленной виртуальной среды:
-	+ Windows:
-		- перейдитие на вкладку `File > Preferences > Settings`;
-		- найдите константу `python.pythonPath`;
-		- задайте ей значение `./.venv/Scripts/python.exe`.
-	+ Linux and macOS:
-		- перейдитие на вкладку `Code > Preferences > Settings`;
-		- найдите константу `python.pythonPath`;
-		- задайте ей значение `./.venv/bin/python`.
+> В данном прокте ветка master используется **ТОЛЬКО** для текущей рабочей версии сайта. `pre-commit` hook запрещает делать commit в ветку master и является обязательным для установки.
+Также он берет на себя проверку соблюдения PEP8 и сортирует импорты с помощью isort, упрощая codereview.
 
 ## Настройки проекта
 
-В проекте используется отдельные настройки для dev и prod сред.
-- Общие настройки: `arkenston/settings/base.py`.
+В проекте используется отдельные настройки для dev и prod сред:
+- Общие настройки: `arkenston/settings/base.py`
 - Development: `arkenston/settings/dev.py`
 - Production: `arkenston/settings/prod.py`
 
-Текущаяю версия сайта работает на [басплатном тарифе](https://www.heroku.com/pricing) хостинга Heroku.
-Ограничения:
-- 600 часов работы сервера в месяц.
-- 10000 записей в базе данных - [Postgres Heroku add-on](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier).
-- Сервер засыпает через 30 мин при отсуствии активности.
-
-Для локального запуска необхомо настроить переменные окружени:
+Для локального запуска необхомо настроить переменные окружения:
 - Скопируйте файл `.env.template` и переименуйте его в `.env`.
 - Укажите необходимые значения, соответсвующие вашему окружению.
 
@@ -64,3 +49,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'arkenstone.settings.dev')
 ```
 
 > Перед запуском убедитесь, что указали значения всех переменных соотвественно вашему окружению в файле `.env`.
+
+## Текущая версия
+
+Текущаяю версия сайта работает на [басплатном тарифе](https://www.heroku.com/pricing) хостинга Heroku.
+Ограничения:
+- 600 часов работы сервера в месяц.
+- 10000 записей в базе данных - [Postgres Heroku add-on](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier).
+- Сервер засыпает через 30 мин при отсуствии активности.
