@@ -6,12 +6,31 @@ from django.shortcuts import get_list_or_404
 
 
 class Profile(models.Model):
+    """
+    Профиль пользователя
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
 
 
 class PlayerStats(models.Model):
-    """Model representing player statistics for tournament."""
+    """
+    Статистика игрока на турнире.
+    Объект класса создается при регистрации пользователя на турнир.
+    Данные о набранных очках обновляются после сохранения результатов матча с участием игрока.
+
+    Attributes:
+        tournament: ID турнира, на который регистрируется пользователь.
+        player: ID пользователя.
+        army: Армии, которые игрок заявлет ра турнир.
+        game_points: Сумма набранных игровых очков.
+        tournament_points: Сумма набранных турнирных очков
+        difference: Общая разница игровых очков.
+
+    Methods:
+        update_player_stats: обновляет данные о набранных очках.
+
+    """
 
     tournament = models.ForeignKey(
         'tournaments.Tournament',
@@ -53,7 +72,14 @@ class PlayerStats(models.Model):
         """String for representing the Model object."""
         return self.player.username
 
-    def update_player_stats(self):
+    def update_player_stats(self) -> None:
+        """
+        Обновление результатов игрока.
+        При сохранении матча обнуляет текущие значения и завно вычисляет результаты для игрока.
+
+        Atrributes:
+            player_matches: список всех матчей с участием игрока в рамках турнира.
+        """
         self.game_points = 0
         self.tournament_points = 0
         self.difference = 0

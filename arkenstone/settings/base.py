@@ -1,7 +1,3 @@
-"""
-Base settings for arkenstone project, all environments.
-"""
-
 import os
 
 from decouple import Csv, config
