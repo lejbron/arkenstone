@@ -15,7 +15,6 @@
                         </div>
                     {% endfor %}
 
-
                 <form method="post" action="{% url 'signup' %}">
                     {% csrf_token %}
                     {% for field in user_form %}
