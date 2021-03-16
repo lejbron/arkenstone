@@ -5,4 +5,4 @@ class TournamentsConfig(AppConfig):
     name = 'tournaments'
 
     def ready(self):
-        import tournaments.signals
+        import tournaments.signals  # noqa

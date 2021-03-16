@@ -9,15 +9,16 @@ from tournaments.models import Match, Tour, Tournament
 
 
 def tournaments_list_view(request):
-    '''
-    Отображение списка турниров.
+    """
+    View-функция отображения списка турниров.
 
     Attributes:
         tournaments_list: Список турниров. Статусы турнира: ['ann', 'reg', 'creg', 'act'].
         tournaments_reglist: Список значений id туриниров, на которые зараегистрирован
-                             залогиненый пользователь.
+                             залогиненый пользователь. Необходим для определения кнопки
+                             Зарегистрироваться/Покинуть.
 
-    '''
+    """
     tournaments_list = Tournament.objects.all()
     tournaments_reglist = []
 
@@ -34,13 +35,13 @@ def tournaments_list_view(request):
 
 
 def tournament_detail_view(request, tt_slug):
-    '''
-    Отображение детальной информации о турнире.
+    """
+    View-функция отображения детальной информации о турнире.
 
     Attributes:
         tournament: Выбранный турнир.
-        players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].'
-    '''
+        players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].
+    """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
     context = {
@@ -52,14 +53,13 @@ def tournament_detail_view(request, tt_slug):
 
 
 def tour_detail_view(request, tour_slug):
-    '''
-    Отображение детальной информации о туре.
+    """
+    View-функция отображения детальной информации о туре.
 
     Attributes:
         tour: Выбранный тур.
-        player_stat: Текущие результаты тура(ВРЕМЕННО ТУРНИРА). Статусы туринра: ['act', 'fin'].
-        matches: Список матчей тура. Статусы тура: ['prd','act','fin']
-    '''
+        json_stat: Промежуточные реузльтаты турнира. Доступны только после завршения тура.
+    """
     tour = get_object_or_404(Tour, tour_slug=tour_slug)
 
     try:
@@ -77,13 +77,14 @@ def tour_detail_view(request, tour_slug):
 
 
 def match_detail_view(request, match_slug):
-    '''
-    Отображение детальной информации о матче.
+    """
+    View-функция отображения детальной информации о матче.
 
     Attributes:
         match: Выбранный матч.
-    '''
+    """
     match = get_object_or_404(Match, match_slug=match_slug)
+
     context = {
         'match': match,
         }

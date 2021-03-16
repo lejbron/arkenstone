@@ -13,7 +13,21 @@ MAX_TOURS = 6
 
 
 class Tournament(models.Model):
-    """Model representing the Tournament."""
+    """
+    Турнир
+
+    Attributes:
+        title: Название турнира.
+        strat_date: Дата начала турнира.
+        tours_amout: Количество туров.
+        status: Статус турнира, не доступен для ручного изменения.
+        tt_slug: URL-постфикс страницы турнира.
+    Properties:
+        registered_palyers: Список зарегистрированных на турнир игроков.
+    Methods:
+        save: при создании турнира поле title преобразуется в slug и присваивается tt_slug.
+        create_tours: создает указанное в tours_amount количество туров.
+    """
 
     TOURNAMENT_STATUSES = [
         ('ann', 'announce'),
@@ -27,16 +41,16 @@ class Tournament(models.Model):
         max_length=200,
         unique=True)
     start_date = models.DateField(null=True)
-    status = models.CharField(
-        default='ann',
-        max_length=4,
-        choices=TOURNAMENT_STATUSES)
     tours_amount = models.PositiveIntegerField(
         default=3,
         blank=True,
         validators=[MinValueValidator(3), MaxValueValidator(MAX_TOURS)]
     )
 
+    status = models.CharField(
+        default='ann',
+        max_length=4,
+        choices=TOURNAMENT_STATUSES)
     tt_slug = models.SlugField(
         null=True,
         unique=True,
@@ -55,6 +69,10 @@ class Tournament(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        """
+        Attributes:
+            tt_slug: Преобразованное название турнира.
+        """
         if self.tt_slug is None:
             super(Tournament, self).save(*args, **kwargs)
             self.tt_slug = slugify(self)
@@ -65,6 +83,9 @@ class Tournament(models.Model):
         return reverse('tournament-detail', args=[self.tt_slug])
 
     def create_tours(self):
+        """
+        Функция создания указанного в tours_amount количества туров.
+        """
         if self.status == 'act':
             for i in range(1, self.tours_amount + 1):
                 tour = Tour(
@@ -77,12 +98,34 @@ class Tournament(models.Model):
             print('Tournament is not active!')
 
     def finish_tournament(self):
+        """
+        Функция завршения турнира.
+        После завршения турнира данные о сыгранных матчах становятся недоступны для редактирования.
+        """
         self.status = 'fin'
         self.save()
 
 
 class Tour(models.Model):
-    """Model representing one of tournament tours"""
+    """
+    Тур
+
+    Attributes:
+        tournament: Турнир, в рамках которого создан тур.
+        order_num: Порядковый номер тура.
+        tour_status: Статус турнира.
+        tour_slug: URL-постфикс страницы тура.
+        tour_results: JSON с результатами турнира на момент завршения тура.
+
+    Properties:
+        all_results_ready: bool - внесены ли результаты всех матчей тура.
+        previous_finished: bool - завершен ли предыдущий тур.
+
+    Methods:
+        save: при создании тура поле title преобразуется в slug и присваивается tt_slug.
+        create_matches: создает матчи для тура.
+        update_tour_results: обновляет промежуточные результаты турнира после завршения тура.
+    """
     TOURS_NUM = [
         (1, 'First'),
         (2, 'Second'),
@@ -105,22 +148,24 @@ class Tour(models.Model):
         null=False,
         blank=False,
         limit_choices_to={'status__in': ['ann', 'reg', 'act']},
-        related_name='tours')
+        related_name='tours'
+    )
     order_num = models.PositiveIntegerField(
         default=1,
-        choices=TOURS_NUM)
+        choices=TOURS_NUM
+    )
     tour_status = models.CharField(
         default='crt',
         max_length=4,
-        choices=TOUR_STATUSES)
-
-    tour_results = models.JSONField(
-        null=True,
-        blank=True)
-
+        choices=TOUR_STATUSES
+    )
     tour_slug = models.SlugField(
         null=True,
         unique=True
+    )
+    tour_results = models.JSONField(
+        null=True,
+        blank=True
     )
 
     @property
@@ -146,6 +191,10 @@ class Tour(models.Model):
         return f'{self.order_num} tour'
 
     def save(self, *args, **kwargs):
+        """
+        Attributes:
+            slug_str: Преобразованное название турнира и № тура.
+        """
         if self.tour_slug is None:
             super(Tour, self).save(*args, **kwargs)
             slug_str = str(self.tournament) + '-' + str(self)
@@ -157,6 +206,12 @@ class Tour(models.Model):
         return reverse('tour-detail', args=[str(self.tour_slug)])
 
     def create_matches(self):
+        """
+        Создание матчей для тура.
+
+        Attributes:
+            players: Список зарегистриованных на турнир игроков.
+        """
         players = list(self.tournament.registered_players)
         for i in range(0, len(players), 2):
             m = Match(
@@ -167,6 +222,13 @@ class Tour(models.Model):
             m.save()
 
     def update_tour_results(self):
+        """
+        Обновление промежуточных результатов турнира на момент завершения тура.
+
+        Attributes:
+            json_data: Отсортированный по убыванию список результаов зарегистрированных на турнир игроков.
+                       Порядок сортировки: турнирные очки, игровые очки, разница.
+        """
         json_data = list(
             PlayerStats.objects.filter(tournament=self.tournament).
             values('player__id', 'player__username', 'game_points', 'difference', 'tournament_points'))
@@ -174,7 +236,29 @@ class Tour(models.Model):
 
 
 class Match(models.Model):
-    """Model representing a match between opponents unique for tour."""
+    """
+    Матч
+
+    Attributes:
+        tour: Тур, в рамках которого создан матч.
+        opp1: Первый оппонент.
+        opp2: Второй оппонент.
+        opp1_gp: Игровые очки первого оппонента.
+        opp2_gp: Игровые очки второго оппонента.
+        match_slug: URL-постфикс страницы матча.
+
+    Properties:
+        opp1_tp: Турнирные очки первого оппонента.
+        opp2_tp: Турнирные очки второго оппонента.
+        opp1_diff: Разница игровых очков первого оппонента.
+        opp2_diff: Разница игровых очков второго оппонента.
+
+    Methods:
+        save: при создании матча поле title преобразуется в slug и присваивается tt_slug.
+        get_tournament_points: возвращает турнирые очки, заработанные в матче оппонентами.
+        get_win_type: возвращает тип победы - минорная или большая.
+
+    """
     MAX_GAME_POINTS = 12
 
     TP_POINTS = {
@@ -244,6 +328,10 @@ class Match(models.Model):
         verbose_name_plural = 'matches'
 
     def save(self, *args, **kwargs):
+        """
+        Attributes:
+            slug_str: Преобразованное название турнира, № тура и ID матча.
+        """
         if self.match_slug is None:
             super(Match, self).save(*args, **kwargs)
             slug_str = str(self.tour.tournament) + '-' + str(self.tour) + '-' + str(self.id)
@@ -259,13 +347,14 @@ class Match(models.Model):
         return reverse('match-detail', args=[str(self.match_slug)])
 
     def get_tournament_points(self):
-        '''
+        """
         Возвращает рассчитанные по игровым очкам турнирные очки оппонентов.
 
         Attributes:
             tp1: Турнирные очки первого оппонента.
             tp2: Турнирные очки второго оппонента.
-        '''
+            win_type: Тип победы - minor/big.
+        """
         if self.opp1_gp == self.opp2_gp:
             res1 = res2 = 'draw'
         elif self.opp1_gp > self.opp2_gp:

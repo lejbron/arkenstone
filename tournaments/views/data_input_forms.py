@@ -6,27 +6,32 @@ from tournaments.models import Tour, Tournament
 
 
 def register_on_tournament(request, tt_slug):
-    '''
-    Форма регистрации на турнир.
+    """
+    View-функция формы регистрации на турнир.
 
     Attributes:
         tournament: Выбранный турнир.
         reg_form: Форма регистрации.
         player_stat: Статистика игрока на выбранном турнире.
-    '''
+    """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
-    if request.method == 'POST':
-        reg_form = TournamentRegisterForm(request.POST)
-        if reg_form.is_valid():
-            player_stat = reg_form.save(commit=False)
-            player_stat.tournament = tournament
-            player_stat.player = request.user
-            player_stat.save()
-            return redirect('index')
-    else:
-        reg_form = TournamentRegisterForm()
-    return render(request, 'tournament_reg_form.html', {'tournament': tournament, 'reg_form': reg_form, })
+    data = request.POST or None
+    reg_form = TournamentRegisterForm(data)
+
+    if reg_form.is_valid():
+        player_stat = reg_form.save(commit=False)
+        player_stat.tournament = tournament
+        player_stat.player = request.user
+        player_stat.save()
+        return redirect('index')
+
+    context = {
+        'tournament': tournament,
+        'reg_form': reg_form,
+    }
+
+    return render(request, 'tournament_reg_form.html', context)
 
 
 def input_tour_results(request, tour_slug):
@@ -52,8 +57,8 @@ def input_tour_results(request, tour_slug):
         return redirect('tour-detail', tour.tour_slug)
 
     context = {
-        'formset': formset,
         'tour': tour,
+        'formset': formset,
     }
 
     return render(request, 'tour_matches_setup_form.html', context)

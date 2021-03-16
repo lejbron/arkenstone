@@ -4,9 +4,12 @@ from tournaments.models import Tour, Tournament
 
 
 def start_tournament(request, tt_slug):
-    '''
-    Форма запуска турнира. Доступна только организаторам.
-    '''
+    """
+    View-функция формы запуска турнира. Доступна только организаторам.
+
+    Attributes:
+        tournament: Выбранный турнир.
+    """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
     tournament.status = 'act'
@@ -16,9 +19,12 @@ def start_tournament(request, tt_slug):
 
 
 def start_tour(request, tour_slug):
-    '''
-    Форма запуска турнира. Доступна только организаторам.
-    '''
+    """
+    View-функция формы запуска турнира. Доступна только организаторам.
+
+    Attributes:
+        tour: Выбранный тур.
+    """
     tour = get_object_or_404(Tour, tour_slug=tour_slug)
 
     tour.tour_status = 'act'
@@ -28,9 +34,12 @@ def start_tour(request, tour_slug):
 
 
 def finish_tour(request, tour_slug):
-    '''
-    Форма запуска турнира. Доступна только организаторам.
-    '''
+    """
+    View-функция формы завершения турнира. Доступна только организаторам.
+
+    Attributes:
+        tour: Выбранный тур.
+    """
     tour = get_object_or_404(Tour, tour_slug=tour_slug)
 
     tour.tour_status = 'fin'
