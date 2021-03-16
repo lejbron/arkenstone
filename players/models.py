@@ -29,7 +29,6 @@ class PlayerStats(models.Model):
 
     Methods:
         update_player_stats: обновляет данные о набранных очках.
-
     """
 
     tournament = models.ForeignKey(

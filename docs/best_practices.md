@@ -8,8 +8,12 @@
 
     - В файле `apps.py` добавьте код:
         ```
-        def ready(self):
-            import app_name.signals  # noqa
+        from django.apps import AppConfig
+
+        class MyAppConfig(AppConfig):
+            name = 'app_name'
+            def ready(self):
+                import app_name.signals  # noqa
         ```
     - В файле `__init__.py` приложения задайте значение:
         ```
