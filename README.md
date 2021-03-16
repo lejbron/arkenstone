@@ -24,4 +24,4 @@ Backend сайта написан на django, в процессе разраб�
 
 Общие моменты, касающиеся [структуры проекта](https://github.com/lejbron/arkenstone/blob/master/docs/arc_structure.md) или принципов работы приложения описаны в [best practices](https://github.com/lejbron/arkenstone/blob/master/docs/best_practices.md).
 
-Пользовательские сценарии более подробно описаны в [google таблица](https://docs.google.com/spreadsheets/d/1-0XJSyblXo-fqIp7M5ilByEk8yUb91jx0wxa1dGEdLY/edit?usp=sharing).
+Пользовательские сценарии более подробно описаны в [google таблице](https://docs.google.com/spreadsheets/d/1-0XJSyblXo-fqIp7M5ilByEk8yUb91jx0wxa1dGEdLY/edit?usp=sharing).
