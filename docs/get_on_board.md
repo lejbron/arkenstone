@@ -27,6 +27,8 @@ pip install -r requirements.txt
 pre-commit install
 ```
 
+Все файлы, используемые для конфигурации перечислены в [файле](https://github.com/lejbron/arkenstone/blob/master/docs/config_files.md).
+
 > В данном прокте ветка master используется **ТОЛЬКО** для текущей рабочей версии сайта. `pre-commit` hook запрещает делать commit в ветку master и является обязательным для установки.
 Также он берет на себя проверку соблюдения PEP8 и сортирует импорты с помощью isort, упрощая codereview.
 

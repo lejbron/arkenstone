@@ -1,3 +1,18 @@
+
+## Используемые файлы конфигураций
+
+- VSCode:
+	+ `launch.json` -
+	+ `settings.json` -
+- `.editorconfoig` -
+- `.pre-commit-config.yaml` -
+- `Procfile` -
+- `runtime.txt` -
+- `setup.cfg` -
+
+
+
+
 - Установите в Visual Studio Code ассоциацию с `python` из установленной виртуальной среды:
 	+ Windows:
 		- перейдитие на вкладку `File > Preferences > Settings`;
