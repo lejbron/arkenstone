@@ -5,6 +5,7 @@
 - В `urls.py` в конце роутов стоит слеш `/`.
 - Для URL применяются соответствующие [Path converters](https://docs.djangoproject.com/en/3.1/topics/http/urls/#path-converters).
 - Соблюдается официальный [Django codestyle](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/).
+- View-функции хрянятся в нескольких файлах, при добавлении новых view-функций они **обязательно** должны быть подключены в `__init__.py`.
 
 ## HTML-шаблоны
 

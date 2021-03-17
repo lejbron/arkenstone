@@ -21,7 +21,7 @@
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings.dev")
     ```
 
-Подробное описание разделенеия `settings.py` на несколько файлов подробно описана в [статье](https://simpleisbetterthancomplex.com/tips/2017/07/03/django-tip-20-working-with-multiple-settings-modules.html)
+Подробное описание разделенеия `settings.py` на несколько файлов приводится в [статье](https://simpleisbetterthancomplex.com/tips/2017/07/03/django-tip-20-working-with-multiple-settings-modules.html)
 
 # Separated views
 
@@ -31,7 +31,7 @@
 
 При созаднии новых view-функций **не забывайте** добавлять их в import в файле `__init__.py`!
 
-Подробное описание разделенеия `views.py` на несколько файлов подробно описана в [статье](https://simpleisbetterthancomplex.com/tutorial/2016/08/02/how-to-split-views-into-multiple-files.html).
+Подробное описание разделенеия `views.py` на несколько файлов привеодится в [статье](https://simpleisbetterthancomplex.com/tutorial/2016/08/02/how-to-split-views-into-multiple-files.html).
 
 # Signals
 
