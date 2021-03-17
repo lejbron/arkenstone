@@ -28,6 +28,6 @@ Backend сайта написан на django, в процессе разраб�
 
 ## Диаграммы
 
-- [Карта сайта](https://drive.google.com/file/d/1-lc86x4ecBPRqgJbM8t0nkQSFpocXUWE/view?usp=sharing)
-- [ERD](https://drive.google.com/file/d/1bi2a6C3eg8EpwOjQMdY1MLxjJzddPEJE/view?usp=sharing)
-- [Status-flow проведения турнира](https://drive.google.com/file/d/1T6VTBjkud1Ax-vFzVpCJVqI-Rp7sbqH8/view?usp=sharing)
+- [Карта сайта](https://drive.google.com/file/d/1L9HJCxISj05P-uX8s6-EZ4jgd87GMYG8/view?usp=sharing)
+- [ERD](https://drive.google.com/file/d/1eyMkw809fLA8hwQQFUq9-8wouB04VEzy/view?usp=sharing)
+- [Status-flow проведения турнира](https://drive.google.com/file/d/1P1EIO7wVPv9IEBexWyMha63L4dM0HSgv/view?usp=sharing)
