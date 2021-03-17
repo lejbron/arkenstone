@@ -25,3 +25,9 @@ Backend сайта написан на django, в процессе разраб�
 Общие моменты, касающиеся [структуры проекта](https://github.com/lejbron/arkenstone/blob/master/docs/arc_structure.md) или принципов работы приложения описаны в [best practices](https://github.com/lejbron/arkenstone/blob/master/docs/best_practices.md).
 
 Пользовательские сценарии более подробно описаны в [google таблице](https://docs.google.com/spreadsheets/d/1-0XJSyblXo-fqIp7M5ilByEk8yUb91jx0wxa1dGEdLY/edit?usp=sharing).
+
+## Диаграммы
+
+- [Карта сайта](https://drive.google.com/file/d/1-lc86x4ecBPRqgJbM8t0nkQSFpocXUWE/view?usp=sharing)
+- [ERD](https://drive.google.com/file/d/1bi2a6C3eg8EpwOjQMdY1MLxjJzddPEJE/view?usp=sharing)
+- [Status-flow проведения турнира](https://drive.google.com/file/d/1T6VTBjkud1Ax-vFzVpCJVqI-Rp7sbqH8/view?usp=sharing)
