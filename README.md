@@ -26,7 +26,7 @@ Backend сайта написан на django, в процессе разраб�
 
 Пользовательские сценарии более подробно описаны в [google таблице](https://docs.google.com/spreadsheets/d/1-0XJSyblXo-fqIp7M5ilByEk8yUb91jx0wxa1dGEdLY/edit?usp=sharing).
 
-## Диаграммы
+## Схемы
 
 - [Карта сайта](https://drive.google.com/file/d/1L9HJCxISj05P-uX8s6-EZ4jgd87GMYG8/view?usp=sharing)
 - [ERD](https://drive.google.com/file/d/1eyMkw809fLA8hwQQFUq9-8wouB04VEzy/view?usp=sharing)
