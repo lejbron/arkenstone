@@ -1,13 +1,13 @@
 {% extends "base_generic.html" %}
-{% block title %}Players{% endblock %}
-{% block header %}Players{% endblock %}
+{% block title %}Пользователи{% endblock %}
+{% block header %}Пользователи{% endblock %}
 {% block content %}
 {% load user_filters %}
 
 <div class="row">
-  {% if players_list %}
+  {% if users_list %}
       <ul>
-        {% for plr in players_list %}
+        {% for plr in users_list %}
           <li>
             <p>
               <a href="{% url 'player-detail' plr.id %}">{{ plr }}</a>

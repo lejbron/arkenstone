@@ -6,6 +6,9 @@ from .models import Match
 
 @receiver(post_save, sender=Match)
 def save_match(sender, instance, **kwargs):
+    """
+    Обновление статистики игроков при сохранении результатов матча.
+    """
     if instance.opp1_gp is not None and instance.opp2_gp is not None:
         instance.opp1.update_player_stats()
         instance.opp2.update_player_stats()

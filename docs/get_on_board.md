@@ -1,8 +1,10 @@
 # Arkenstone Onboarding Guide
 
-Для начала работы над проектом выполните следующие действия:
+Перед началом работы над проектом внимательно ознакомьтесь с [Arkenstone Codestyle](https://github.com/lejbron/arkenstone/blob/master/docs/Arcenstone_codestyle.md).
 
-- Склонируйте репозиторий `arkenstone` с [GitHub](https://github.com/lejbron/arkenstone).
+## Настройка окружения
+
+- Склонируйте репозиторий [arkenstone](https://github.com/lejbron/arkenstone).
 - Создайте виртульную среду python, выполнив в папке проекта (arkenstone) следующую команду:
 ```
 python -m venv .venv
@@ -25,7 +27,14 @@ pip install -r requirements.txt
 pre-commit install
 ```
 
-- Установите в Visual Studio Code ассоциацию с `python` из установленной виртуальной среды:
+Все файлы, используемые для конфигурации перечислены в [файле](https://github.com/lejbron/arkenstone/blob/master/docs/config_files.md).
+
+> В данном прокте ветка master используется **ТОЛЬКО** для текущей рабочей версии сайта. `pre-commit` hook запрещает делать commit в ветку master и является обязательным для установки.
+Также он берет на себя проверку соблюдения PEP8 и сортирует импорты с помощью isort, упрощая codereview.
+
+## Настройка терминала VSCode
+
+- Для корректной работы терминала задайте в Visual Studio Code ассоциацию с `python` из установленной виртуальной среды:
 	+ Windows:
 		- перейдитие на вкладку `File > Preferences > Settings`;
 		- найдите константу `python.pythonPath`;
@@ -35,4 +44,38 @@ pre-commit install
 		- найдите константу `python.pythonPath`;
 		- задайте ей значение `./.venv/bin/python`.
 
-- Внимтально ознакомьтесь с Arkenstone codestyle.
+## Настройки проекта
+
+В проекте используется отдельные настройки для dev и prod сред:
+- Общие настройки: `arkenston/settings/base.py`
+- Development: `arkenston/settings/dev.py`
+- Production: `arkenston/settings/prod.py`
+
+Для локального запуска необхомо настроить переменные окружения:
+- Скопируйте файл `.env.template` и переименуйте его в `.env`.
+- Укажите необходимые значения, соответсвующие вашему окружению.
+
+## Подключение базы данных
+
+На проекте используется PostgreSQL.
+Установите сервер базы данных для вашей системы используя [инструкцию на сайте](https://www.postgresql.org/download/).
+В процессе установки создайте пользователя для работы с базой данных.
+
+Значения всех необходимых для подключения к базе параметров должны быть указаны в файле `.env`.
+
+## Запуск проекта
+
+- В файле `manage.py` напрямую указан запуск сервера с использованием настроек dev-среды:
+```
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'arkenstone.settings.dev')
+```
+
+> Перед запуском убедитесь, что указали значения всех переменных соотвественно вашему окружению в файле `.env`.
+
+## Текущая версия
+
+Текущаяю версия сайта работает на [басплатном тарифе](https://www.heroku.com/pricing) хостинга Heroku.
+Ограничения:
+- 600 часов работы сервера в месяц.
+- 10000 записей в базе данных - [Postgres Heroku add-on](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier).
+- Сервер засыпает через 30 мин при отсуствии активности.

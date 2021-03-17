@@ -1,3 +1,9 @@
-from .data_input_forms import *  # noqa
-from .function_based_views import *  # noqa
-from .status_change_forms import *  # noqa
+from .data_input_forms import input_tour_results  # noqa
+from .data_input_forms import register_on_tournament  # noqa
+from .function_based_views import match_detail_view  # noqa
+from .function_based_views import tour_detail_view  # noqa
+from .function_based_views import tournament_detail_view  # noqa
+from .function_based_views import tournaments_list_view  # noqa
+from .status_change_forms import finish_tour  # noqa
+from .status_change_forms import start_tour  # noqa
+from .status_change_forms import start_tournament  # noqa
