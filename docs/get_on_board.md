@@ -36,3 +36,26 @@
 
 - [Editorconfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 - [Beautify](https://marketplace.visualstudio.com/items?itemName=HookyQR.beautify)
+
+### Пример settings.json
+
+```
+{
+    "python.pythonPath": ".venv/bin/python",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "editor.rulers": [119],
+    "debug.inlineValues": true,
+    "files.insertFinalNewline": true,
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "[html]": {
+        "editor.defaultFormatter": "HookyQR.beautify",
+        "editor.formatOnSave": true,
+    }
+}
+```
