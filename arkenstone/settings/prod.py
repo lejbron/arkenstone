@@ -1,5 +1,7 @@
 import dj_database_url
 
+from decouple import config
+
 from .base import *  # noqa
 
 DEBUG = config('DEBUG')
