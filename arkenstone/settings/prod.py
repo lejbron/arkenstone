@@ -2,7 +2,7 @@ import dj_database_url
 
 from .base import *  # noqa
 
-DENUG = False
+DEBUG = config('DEBUG')
 
 DATABASES = {
     'default': dj_database_url.config(
