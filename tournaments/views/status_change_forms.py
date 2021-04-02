@@ -12,7 +12,7 @@ def start_tournament(request, tt_slug):
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
 
-    tournament.status = 'act'
+    tournament.tt_status = 'act'
     tournament.save()
     tournament.create_tours()
     return redirect('tournament-detail', tournament.tt_slug)

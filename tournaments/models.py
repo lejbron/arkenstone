@@ -1,7 +1,8 @@
 import json
 
-from django.contrib.postgres.validators import (MaxValueValidator,
-                                                MinValueValidator)
+from django.contrib.postgres.validators import (
+    MaxValueValidator, MinValueValidator,
+)
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
@@ -20,7 +21,9 @@ class Tournament(models.Model):
         title: Название турнира.
         strat_date: Дата начала турнира.
         tours_amout: Количество туров.
-        status: Статус турнира, не доступен для ручного изменения.
+        tt_category: Категория турнира - нарративный или рейтинговый.
+        tt_type: Тип турнира - соло, парный, командный.
+        tt_status: Статус турнира, не доступен для ручного изменения.
         tt_slug: URL-постфикс страницы турнира.
     Properties:
         registered_palyers: Список зарегистрированных на турнир игроков.
@@ -37,24 +40,51 @@ class Tournament(models.Model):
         ('fin', 'finished'),
     ]
 
+    CATEGORIES = [
+        ('nrt', 'narrative'),
+        ('rtg', 'raiting'),
+    ]
+
+    TYPES = [
+        ('s', 'solo'),
+        ('d', 'duo'),
+        ('t', 'team')
+    ]
+
     title = models.CharField(
         max_length=200,
-        unique=True)
+        unique=True
+    )
     start_date = models.DateField(null=True)
     tours_amount = models.PositiveIntegerField(
         default=3,
-        blank=True,
         validators=[MinValueValidator(3), MaxValueValidator(MAX_TOURS)]
     )
 
-    status = models.CharField(
+    tt_category = models.CharField(
+        default='rtg',
+        max_length=4,
+        choices=CATEGORIES,
+        verbose_name='Tournament Category'
+    )
+    tt_type = models.CharField(
+        default='s',
+        max_length=4,
+        choices=TYPES,
+        verbose_name='Tournament Type'
+    )
+    tt_status = models.CharField(
         default='ann',
         max_length=4,
-        choices=TOURNAMENT_STATUSES)
+        choices=TOURNAMENT_STATUSES,
+        verbose_name='Tournament Status'
+    )
+
     tt_slug = models.SlugField(
         null=True,
         unique=True,
-        blank=True
+        blank=True,
+        verbose_name='Slug'
     )
 
     @property
@@ -63,6 +93,9 @@ class Tournament(models.Model):
             return PlayerStats.objects.filter(tournament=self)
         except PlayerStats.DoesNotExist:
             print('No players registered yet')
+
+    class Meta:
+        ordering = [('-start_date'), ]
 
     def __str__(self):
         """String for representing the Model object."""
@@ -86,7 +119,7 @@ class Tournament(models.Model):
         """
         Функция создания указанного в tours_amount количества туров.
         """
-        if self.status == 'act':
+        if self.tt_status == 'act':
             for i in range(1, self.tours_amount + 1):
                 tour = Tour(
                     tournament=self,
@@ -102,7 +135,7 @@ class Tournament(models.Model):
         Функция завршения турнира.
         После завршения турнира данные о сыгранных матчах становятся недоступны для редактирования.
         """
-        self.status = 'fin'
+        self.tt_status = 'fin'
         self.save()
 
 

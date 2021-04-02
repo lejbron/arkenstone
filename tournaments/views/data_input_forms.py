@@ -1,8 +1,31 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
 from players.models import PlayerStats
-from tournaments.forms import MatchesResultsFormSet, TournamentRegisterForm
+from tournaments.forms import (
+    MatchesResultsFormSet, TournamentCreationForm, TournamentRegisterForm,
+)
 from tournaments.models import Tour, Tournament
+
+
+def create_tournament(request):
+    """
+    View-функция формы создания турнира.
+
+    Attributes:
+        crt_form: Форма создания турнира.
+    """
+    data = request.POST or None
+    crt_form = TournamentCreationForm(data)
+
+    if crt_form.is_valid():
+        crt_form.save()
+        return redirect('index')
+
+    context = {
+        'crt_form': crt_form,
+    }
+
+    return render(request, 'tournament_crt_form.html', context)
 
 
 def register_on_tournament(request, tt_slug):

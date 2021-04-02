@@ -1,3 +1,4 @@
+from .data_input_forms import create_tournament  # noqa
 from .data_input_forms import input_tour_results  # noqa
 from .data_input_forms import register_on_tournament  # noqa
 from .function_based_views import match_detail_view  # noqa

@@ -4,81 +4,81 @@
 {% block content %}
 {% load user_filters %}
 
-{% if tournament.status == 'reg' or tournament.status == 'creg' %}
-    {% if players_stat is not None %}
-        <div class="row">
-            <ul>
-                {% for record in players_stat %}
-                    <li>
-                        <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+{% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
+{% if players_stat is not None %}
+<div class="row">
+  <ul>
+    {% for record in players_stat %}
+    <li>
+      <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 {% endif %}
 
-{% if tournament.status == 'creg' %}
-    <button type="submit" class="btn btn-primary" onclick=showModal()>Начать турнир</button>
-    <div class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick=closeModal()>
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+{% if tournament.tt_status == 'creg' %}
+<button type="submit" class="btn btn-primary" onclick=showModal()>Начать турнир</button>
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick=closeModal()>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-                <form method="post" action="{% url 'tournament-start' tournament.tt_slug %}">
-                    <div class="modal-body">
-                        {% csrf_token %}
-                        <p>Вы уверены, что готовы начать турнир?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=closeModal()>Close</button>
-                        <button type="submit" class="btn btn-primary">Начать турнир</button>
-                    </div>
-                </form>
-            </div>
+      <form method="post" action="{% url 'tournament-start' tournament.tt_slug %}">
+        <div class="modal-body">
+          {% csrf_token %}
+          <p>Вы уверены, что готовы начать турнир?</p>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=closeModal()>Close</button>
+          <button type="submit" class="btn btn-primary">Начать турнир</button>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
 {% endif %}
 
-{% if tournament.status == 'act' or tournament.status == 'fin' %}
-    <div class="row">
-        <ul>
-            {% for t in tournament.tours.all %}
-            <li>
-                <a href="{{ t.get_absolute_url }}">{{ t }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="row">
-        <table class="table table-sm">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Player</th>
-                <th scope="col">Game Points</th>
-                <th scope="col">Difference</th>
-                <th scope="col">Tournament Points</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in players_stat %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
-                <td>{{ record.game_points }}</td>
-                <td>{{ record.difference }}</td>
-                <td>{{ record.tournament_points }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-    </div>
+{% if tournament.tt_status == 'act' or tournament.tt_status == 'fin' %}
+<div class="row">
+  <ul>
+    {% for t in tournament.tours.all %}
+    <li>
+      <a href="{{ t.get_absolute_url }}">{{ t }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+<div class="row">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Player</th>
+        <th scope="col">Game Points</th>
+        <th scope="col">Difference</th>
+        <th scope="col">Tournament Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in players_stat %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
+        <td>{{ record.game_points }}</td>
+        <td>{{ record.difference }}</td>
+        <td>{{ record.tournament_points }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endif %}
 
 {% endblock %}

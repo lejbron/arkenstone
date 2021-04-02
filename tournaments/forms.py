@@ -1,7 +1,16 @@
 from django import forms
 from django.forms import inlineformset_factory
 
-from .models import Match, PlayerStats, Tour
+from .models import Match, PlayerStats, Tour, Tournament
+
+
+class TournamentCreationForm(forms.ModelForm):
+    """
+    Форма создания турнира.
+    """
+    class Meta:
+        model = Tournament
+        fields = ('title', 'start_date', 'tours_amount', 'tt_category', 'tt_type')
 
 
 class TournamentRegisterForm(forms.ModelForm):
