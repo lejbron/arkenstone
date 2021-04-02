@@ -1,6 +1,9 @@
 {% extends "base_generic.html" %}
 {% block title %}Создание турнира{% endblock %}
-{% block header %}{{ crt_form.media }}{% endblock %}
+{% block header %}
+<!-- Django Tempus Dominus assets are included in `{{ form.media }}` -->
+{{ crt_form.media }}
+{% endblock %}
 {% block content %}
 {% load user_filters %}
 

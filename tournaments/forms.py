@@ -19,17 +19,17 @@ class TournamentCreationForm(forms.ModelForm):
                     'collapse': False,
                 },
                 attrs={
-                    'append': 'fa fa-calendar',
+                    'append': 'far fa-calendar-alt',
                     'icon_toggle': True,
                 }
             ),
             'start_time': TimePicker(
                 options={
                     'enabledHours': [9, 10, 11, 12, 13, 14, 15, 16],
-                    'defaultDate': '1970-01-01T14:56:00'
+                    'defaultDate': '1992-01-01T10:00:00'
                 },
                 attrs={
-                    'append': 'fa fa-calendar',
+                    'append': 'far fa-clock',
                     'icon_toggle': True,
                 },
             ),
