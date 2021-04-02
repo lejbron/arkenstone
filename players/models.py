@@ -20,12 +20,15 @@ class PlayerStats(models.Model):
     Данные о набранных очках обновляются после сохранения результатов матча с участием игрока.
 
     Attributes:
-        tournament: ID турнира, на который регистрируется пользователь.
+        tournament: ID турнира, на который регистрируется игрок.
         player: ID пользователя.
         army: Армии, которые игрок заявлет ра турнир.
         game_points: Сумма набранных игровых очков.
         tournament_points: Сумма набранных турнирных очков
         difference: Общая разница игровых очков.
+
+    Properties:
+        played_on_tables: Столы, на которых уже играл оппонент.
 
     Methods:
         update_player_stats: обновляет данные о набранных очках.
@@ -57,6 +60,20 @@ class PlayerStats(models.Model):
         blank=True,
         default=0,
         null=True)
+
+    @property
+    def played_on_tables(self):
+        matches = get_list_or_404(
+            apps.get_model('tournaments.Match'),
+            Q(opp1__exact=self) | Q(opp2__exact=self),
+            tour__tournament=self.tournament,
+            tour__tour_status='fin'
+        )
+        tables = []
+        for m in matches:
+            tables.append(m.table)
+
+        return tables
 
     class Meta:
         verbose_name_plural = 'Players Stats'

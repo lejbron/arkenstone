@@ -276,6 +276,7 @@ class Match(models.Model):
 
     Attributes:
         tour: Тур, в рамках которого создан матч.
+        table: Стол, за которым играют оппоненты.
         opp1: Первый оппонент.
         opp2: Второй оппонент.
         opp1_gp: Игровые очки первого оппонента.
@@ -308,6 +309,10 @@ class Match(models.Model):
         Tour,
         on_delete=models.CASCADE,
         related_name='matches')
+
+    table = models.PositiveIntegerField(
+        default=0,
+    )
 
     opp1 = models.ForeignKey(
         PlayerStats,
