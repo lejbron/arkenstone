@@ -15,7 +15,7 @@ def create_tournament(request):
         crt_form: Форма создания турнира.
     """
     data = request.POST or None
-    crt_form = TournamentCreationForm(data)
+    crt_form = TournamentCreationForm(data)  # MyForm(data)
 
     if crt_form.is_valid():
         crt_form.save()

@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'homepage',
     'players',
     'tournaments',
+    'tempus_dominus',
 ]
 
 MIDDLEWARE = [

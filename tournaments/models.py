@@ -6,6 +6,7 @@ from django.contrib.postgres.validators import (
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
+from django.utils import timezone
 from pytils.translit import slugify
 
 from players.models import PlayerStats
@@ -55,7 +56,8 @@ class Tournament(models.Model):
         max_length=200,
         unique=True
     )
-    start_date = models.DateField(null=True)
+    start_date = models.DateField(default=timezone.now, null=True)
+    start_time = models.TimeField(default=timezone.now)
     tours_amount = models.PositiveIntegerField(
         default=3,
         validators=[MinValueValidator(3), MaxValueValidator(MAX_TOURS)]

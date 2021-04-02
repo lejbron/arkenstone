@@ -6,14 +6,14 @@ from .models import Match, Tour, Tournament
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
     list_display = (
-        'title', 'start_date', 'tours_amount',
+        'title', 'start_date', 'start_time', 'tours_amount',
         'tt_status', 'tt_category', 'tt_type')
     list_filter = (
         'tt_status', 'tt_category', 'tt_type'
     )
     fieldsets = (
       ('Tournament info', {
-          'fields': ('title', 'start_date', 'tours_amount')
+          'fields': ('title', 'start_date', 'start_time', 'tours_amount')
       }),
       ('Management', {
           'fields': ('tt_category', 'tt_type')
