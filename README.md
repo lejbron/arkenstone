@@ -1,5 +1,6 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![Support Server](https://img.shields.io/discord/591914197219016707.svg?color=7289da&label=arkenstone&logo=discord&style=flat-square)](https://discord.gg/RBkPNJYhjw)
+[![GitHub license](https://img.shields.io/github/license/lejbron/arkenstone)](https://github.com/lejbron/arkenstone/blob/master/LICENSE)
+![Discord](https://img.shields.io/discord/487183213618397185?label=arkenstone&logo=discord&style=social)
 
 # Arkenstone
 
