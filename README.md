@@ -1,7 +1,10 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![GitHub license](https://img.shields.io/github/license/lejbron/arkenstone)](https://github.com/lejbron/arkenstone/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/487183213618397185?label=arkenstone&logo=discord&style=social)](https://discord.gg/RBkPNJYhjw)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 03847b1 (Update badge link)
 
 # Arkenstone
 
