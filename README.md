@@ -2,6 +2,7 @@
 [![GitHub license](https://img.shields.io/github/license/lejbron/arkenstone)](https://github.com/lejbron/arkenstone/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/487183213618397185?label=arkenstone&logo=discord&style=social)](https://discord.gg/RBkPNJYhjw)
 
+
 # Arkenstone
 
 Добро пожаловать на страницу проекта Arkenstone - сайта для организации турниров по настольным варгеймам!
