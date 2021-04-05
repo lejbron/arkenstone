@@ -1,4 +1,5 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Support Server](https://img.shields.io/discord/591914197219016707.svg?color=7289da&label=arkenstone&logo=discord&style=flat-square)](https://discord.gg/RBkPNJYhjw)
 
 # Arkenstone
 
@@ -82,4 +83,3 @@ Backend сайта написан на django, в процессе разраб�
 - 600 часов работы сервера в месяц.
 - 10000 записей в базе данных - [Postgres Heroku add-on](https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier).
 - Сервер засыпает через 30 мин при отсутствии активности.
-

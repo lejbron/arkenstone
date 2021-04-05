@@ -256,6 +256,12 @@ class Tour(models.Model):
             )
             m.save()
 
+    def find_table(self):
+        """
+        Поиск не занятого стола, на котором не играл ни один из оппонентов.
+        """
+        exclude_tables = set(self.opp1.played_on_tables + self.opp2.played_on_tables)
+
     def update_tour_results(self):
         """
         Обновление промежуточных результатов турнира на момент завершения тура.
