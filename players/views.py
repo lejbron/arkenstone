@@ -11,10 +11,15 @@ def player_detail_view(request, pk):
     Attribures:
         player_info: содержит информацию о статистике игрока на турнирах (PlayerStats).
     """
-    player_info = get_list_or_404(PlayerStats.objects.filter(player_id=pk))
+    try:
+        player_info = get_list_or_404(PlayerStats.objects.filter(player_id=pk))
+        player = player_info[0].player
+    except Exception:
+        player = None
+        player_info = None
 
     context = {
-        'player': player_info[0].player,
+        'player': player,
         'player_info': player_info,
         }
 
