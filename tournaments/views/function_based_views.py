@@ -4,7 +4,6 @@ import json
 
 from django.shortcuts import get_object_or_404, render
 
-from players.models import PlayerStats
 from tournaments.models import Match, Tour, Tournament
 
 
@@ -20,11 +19,7 @@ def tournaments_list_view(request):
 
     """
     tournaments_list = Tournament.objects.all()
-    tournaments_reglist = []
-
-    if not request.user.is_anonymous:
-        players = PlayerStats.objects.filter(player=request.user)
-        tournaments_reglist = players.values_list('tournament', flat=True)
+    tournaments_reglist = request.user.tt_stats.all().values_list('tournament', flat=True)
 
     context = {
         'tournaments_list': tournaments_list,
@@ -46,7 +41,7 @@ def tournament_detail_view(request, tt_slug):
 
     context = {
         'tournament': tournament,
-        'players_stat': tournament.registered_players,
+        'players_stat': tournament.registered_players.all(),
         }
 
     return render(request, 'tournament_detail.html', context=context)
