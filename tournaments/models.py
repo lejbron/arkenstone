@@ -1,10 +1,12 @@
 import json
+import random
 
 from django.contrib.postgres.validators import (
     MaxValueValidator, MinValueValidator,
 )
 from django.db import models
 from django.db.models import Q
+from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
 from pytils.translit import slugify
@@ -121,16 +123,13 @@ class Tournament(models.Model):
         """
         Функция создания указанного в tours_amount количества туров.
         """
-        if self.tt_status == 'act':
-            for i in range(1, self.tours_amount + 1):
-                tour = Tour(
-                    tournament=self,
-                    order_num=i,
-                    tour_status='crt',
-                )
-                tour.save()
-        else:
-            print('Tournament is not active!')
+        for i in range(1, self.tours_amount + 1):
+            tour = Tour(
+                tournament=self,
+                order_num=i,
+                tour_status='crt',
+            )
+            tour.save()
 
     def finish_tournament(self):
         """
@@ -182,7 +181,7 @@ class Tour(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        limit_choices_to={'status__in': ['ann', 'reg', 'act']},
+        limit_choices_to={'tt_status__in': ['ann', 'reg', 'act']},
         related_name='tours'
     )
     order_num = models.PositiveIntegerField(
@@ -247,20 +246,18 @@ class Tour(models.Model):
         Attributes:
             players: Список зарегистриованных на турнир игроков.
         """
-        players = list(self.tournament.registered_players)
+        players = self.tournament.registered_players.all()
+        tables = set(range(1, int(len(players)/2 + 1)))
         for i in range(0, len(players), 2):
+            table = find_table(players[i], players[i+1], tables)
             m = Match(
                 tour=self,
                 opp1=players[i],
                 opp2=players[i+1],
+                table=table
             )
+            tables.remove(table)
             m.save()
-
-    def find_table(self):
-        """
-        Поиск не занятого стола, на котором не играл ни один из оппонентов.
-        """
-        exclude_tables = set(self.opp1.played_on_tables + self.opp2.played_on_tables)
 
     def update_tour_results(self):
         """
@@ -430,3 +427,17 @@ class Match(models.Model):
             return 'big'
         else:
             return 'minor'
+
+
+def find_table(opp1, opp2, tables):
+    """
+    Поиск не занятого стола, на котором не играл ни один из оппонентов.
+    """
+    try:
+        exclude_tables = set(opp1.played_on_tables + opp2.played_on_tables)
+        choose_from = tables - exclude_tables
+        if len(choose_from) == 0:
+            choose_from = tables
+    except Http404:
+        choose_from = tables
+    return random.choice(list(choose_from))

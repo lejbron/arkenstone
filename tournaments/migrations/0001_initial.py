@@ -2,6 +2,7 @@
 
 import django.core.validators
 import django.db.models.deletion
+
 from django.db import migrations, models
 
 
@@ -33,7 +34,7 @@ class Migration(migrations.Migration):
                 ('tour_status', models.CharField(choices=[('crt', 'created'), ('prd', 'paired'), ('act', 'active'), ('fin', 'finished'), ('arch', 'archived')], default='crt', max_length=4)),
                 ('tour_results', models.JSONField(blank=True, null=True)),
                 ('tour_slug', models.SlugField(null=True, unique=True)),
-                ('tournament', models.ForeignKey(limit_choices_to={'status__in': ['ann', 'reg', 'act']}, on_delete=django.db.models.deletion.CASCADE, related_name='tours', to='tournaments.tournament')),
+                ('tournament', models.ForeignKey(limit_choices_to={'tt_status__in': ['ann', 'reg', 'act']}, on_delete=django.db.models.deletion.CASCADE, related_name='tours', to='tournaments.tournament')),
             ],
             options={
                 'ordering': ['tournament', 'order_num'],
