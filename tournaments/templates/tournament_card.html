@@ -1,6 +1,13 @@
 <div class="card mb-3 mt-1 shadow-sm">
-  <div class="card-header"><a href="{{ tournament.get_absolute_url }}">Турнир {{ tournament.title }}</a></div>
+  <div class="card-header">
+    <a href="{% url 'tournament-detail' tournament.tt_slug %}">Турнир {{ tournament.title }}</a>
+  </div>
   <ul class="list-group list-group-flush">
+    {% if tournament.organizer %}
+    <li class="list-group-item">
+      Организатор: {{ tournament.organizer }}
+    </li>
+    {% endif %}
     <li class="list-group-item">
       Начало: {{ tournament.start_date }} - {{ tournament.start_time }}
     </li>
@@ -20,31 +27,42 @@
       Участников: {{ tournament.registered_players.count }}
     </li>
     {% if user.is_authenticated %}
+    {% if tournament.organizer == user %}
+    {% if tournament.tt_status == 'ann' %}
     <li class="list-group-item">
-      {% if tournament.organizer == user %}
-      <a class="btn btn-outline-dark" href="{{ tournament.get_absolute_url }}open-registration/" role="button">
+      <a class="btn btn-outline-dark" href="{% url 'tournament-open-registration' tournament.tt_slug %}" role="button">
         Открыть регистрацию
       </a>
-      <a class="btn btn-outline-dark" href="{{ tournament.get_absolute_url }}close-registration/" role="button">
+    </li>
+    {% elif  tournament.tt_status == 'reg' %}
+    <li class="list-group-item">
+      <a class="btn btn-outline-dark" href="{% url 'tournament-close-registration' tournament.tt_slug %}" role="button">
         Закрыть регистрацию
       </a>
-      <a class="btn btn-outline-dark" href="{{ tournament.get_absolute_url }}start/" role="button">
+    </li>
+    {% elif tournament.tt_status == 'creg' %}
+    <li class="list-group-item">
+      <a class="btn btn-outline-dark" href="{% url 'tournament-start' tournament.tt_slug %}" role="button">
         Начать турнир
       </a>
-      {% else %}
+    </li>
+    {% endif %}
+
+    {% else %}
+
+    <li class="list-group-item">
       {% if tournament.id in tournaments_reglist %}
-      <form action="">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-dark">Покинуть</button>
-      </form>
+      <a class="btn btn-outline-dark" href="#" role="button">
+        Покинуть турнир
+      </a>
       {% else %}
-      <form action="{{ tournament.get_absolute_url }}register/">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-dark">Принять участие</button>
-      </form>
-      {% endif %}
+      <a class="btn btn-outline-dark" href="{% url 'tournament-reg' tournament.tt_slug %}" role="button">
+        Принять участие
+      </a>
       {% endif %}
     </li>
+
+    {% endif %}
     {% endif %}
   </ul>
 </div>

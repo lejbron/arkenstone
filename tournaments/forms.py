@@ -1,14 +1,22 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.forms import inlineformset_factory
 from tempus_dominus.widgets import DatePicker, TimePicker
 
 from .models import Match, PlayerStats, Tour, Tournament
+
+User = get_user_model()
 
 
 class TournamentCreationForm(forms.ModelForm):
     """
     Форма создания турнира.
     """
+    organizer_id = forms.ChoiceField(
+        label='Организатор',
+        choices=User.objects.filter(is_staff=True).values_list('id', 'username'),
+        )
+
     class Meta:
         model = Tournament
         fields = ('title', 'start_date', 'start_time', 'tours_amount', 'tt_category', 'tt_type')

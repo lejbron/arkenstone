@@ -1,8 +1,21 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 
 from tournaments.models import Tour, Tournament
 
 
+def organizer_check(func):
+    """Декоратор. Проверяет наличие прав нормоконтроллера."""
+    def check_user(request, *args, **kwargs):
+        tournament = get_object_or_404(Tournament, tt_slug=kwargs.get('tt_slug'))
+        if tournament.organizer != request.user:
+            return redirect('index')
+        return func(request, *args, **kwargs)
+    return check_user
+
+
+@login_required
+@organizer_check
 def open_registration(request, tt_slug):
     """
     View-функция, открывающая регистрацию на турнир.
@@ -17,6 +30,8 @@ def open_registration(request, tt_slug):
     return redirect('tournament-detail', tournament.tt_slug)
 
 
+@login_required
+@organizer_check
 def close_registration(request, tt_slug):
     """
     View-функция, закрывающая регистрацию на турнир.
@@ -31,6 +46,8 @@ def close_registration(request, tt_slug):
     return redirect('tournament-detail', tournament.tt_slug)
 
 
+@login_required
+@organizer_check
 def start_tournament(request, tt_slug):
     """
     View-функция формы запуска турнира. Доступна только организаторам.
@@ -46,6 +63,8 @@ def start_tournament(request, tt_slug):
     return redirect('tournament-detail', tournament.tt_slug)
 
 
+@login_required
+@organizer_check
 def start_tour(request, tour_slug):
     """
     View-функция формы запуска турнира. Доступна только организаторам.
@@ -61,6 +80,8 @@ def start_tour(request, tour_slug):
     return redirect('tour-detail', tour.tour_slug)
 
 
+@login_required
+@organizer_check
 def finish_tour(request, tour_slug):
     """
     View-функция формы завершения турнира. Доступна только организаторам.

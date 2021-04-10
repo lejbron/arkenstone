@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from players.models import PlayerStats
@@ -6,7 +8,10 @@ from tournaments.forms import (
 )
 from tournaments.models import Tour, Tournament
 
+User = get_user_model()
 
+
+@login_required
 def create_tournament(request):
     """
     View-функция формы создания турнира.
@@ -18,7 +23,11 @@ def create_tournament(request):
     crt_form = TournamentCreationForm(data)  # MyForm(data)
 
     if crt_form.is_valid():
-        crt_form.save()
+        tournament = crt_form.save(commit=False)
+        organizer_id = crt_form.cleaned_data['organizer_id']
+        organizer = get_object_or_404(User, id=organizer_id)
+        tournament.organizer = organizer
+        tournament.save()
         return redirect('index')
 
     context = {
@@ -28,6 +37,7 @@ def create_tournament(request):
     return render(request, 'tournament_crt_form.html', context)
 
 
+@login_required
 def register_on_tournament(request, tt_slug):
     """
     View-функция формы регистрации на турнир.
@@ -38,25 +48,22 @@ def register_on_tournament(request, tt_slug):
         player_stat: Статистика игрока на выбранном турнире.
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
-
     data = request.POST or None
     reg_form = TournamentRegisterForm(data)
-
-    if reg_form.is_valid():
-        player_stat = reg_form.save(commit=False)
-        player_stat.tournament = tournament
-        player_stat.player = request.user
-        player_stat.save()
-        return redirect('index')
-
     context = {
         'tournament': tournament,
         'reg_form': reg_form,
     }
+    if not reg_form.is_valid() or tournament.organizer == request.user:
+        return render(request, 'tournament_reg_form.html', context)
+    player_stat = reg_form.save(commit=False)
+    player_stat.tournament = tournament
+    player_stat.player = request.user
+    player_stat.save()
+    return redirect('index')
 
-    return render(request, 'tournament_reg_form.html', context)
 
-
+@login_required
 def input_tour_results(request, tour_slug):
     """
     View-функция формы внесения результатов тура.
