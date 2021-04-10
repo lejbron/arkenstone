@@ -369,6 +369,7 @@ class Match(models.Model):
 
     class Meta:
         verbose_name_plural = 'matches'
+        ordering = [('table'), ]
 
     def save(self, *args, **kwargs):
         """
