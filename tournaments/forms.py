@@ -12,7 +12,7 @@ class TournamentCreationForm(forms.ModelForm):
     """
     Форма создания турнира.
     """
-    organizer_id = forms.ChoiceField(
+    superviser_id = forms.ChoiceField(
         label='Организатор',
         choices=User.objects.filter(is_staff=True).values_list('id', 'username'),
         )

@@ -21,19 +21,16 @@ def create_tournament(request):
     """
     data = request.POST or None
     crt_form = TournamentCreationForm(data)  # MyForm(data)
-
     if crt_form.is_valid():
         tournament = crt_form.save(commit=False)
-        organizer_id = crt_form.cleaned_data['organizer_id']
-        organizer = get_object_or_404(User, id=organizer_id)
-        tournament.organizer = organizer
+        superviser_id = crt_form.cleaned_data['superviser_id']
+        superviser = get_object_or_404(User, id=superviser_id)
+        tournament.superviser = superviser
         tournament.save()
         return redirect('index')
-
     context = {
         'crt_form': crt_form,
     }
-
     return render(request, 'tournament_crt_form.html', context)
 
 
@@ -54,7 +51,7 @@ def register_on_tournament(request, tt_slug):
         'tournament': tournament,
         'reg_form': reg_form,
     }
-    if not reg_form.is_valid() or tournament.organizer == request.user:
+    if not reg_form.is_valid() or tournament.superviser == request.user:
         return render(request, 'tournament_reg_form.html', context)
     player_stat = reg_form.save(commit=False)
     player_stat.tournament = tournament

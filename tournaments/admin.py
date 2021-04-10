@@ -6,7 +6,7 @@ from .models import Match, Tour, Tournament
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
     list_display = (
-        'title', 'organizer', 'start_date', 'start_time', 'tours_amount',
+        'title', 'superviser', 'start_date', 'start_time', 'tours_amount',
         'tt_status', 'tt_category', 'tt_type')
     list_filter = (
         'tt_status', 'tt_category', 'tt_type'
@@ -16,7 +16,7 @@ class TournamentAdmin(admin.ModelAdmin):
           'fields': ('title', 'start_date', 'start_time', 'tours_amount')
       }),
       ('Management', {
-          'fields': ('organizer', 'tt_category', 'tt_type')
+          'fields': ('superviser', 'tt_category', 'tt_type')
       }),
       ('Administration', {
           'fields': ('tt_status', 'tt_slug')

@@ -1,33 +1,27 @@
 <div class="card mb-3 mt-1 shadow-sm">
   <div class="card-header">
-    <a href="{% url 'tournament-detail' tournament.tt_slug %}">Турнир {{ tournament.title }}</a>
+    <a class="h4" href="{% url 'tournament-detail' tournament.tt_slug %}">{{ tournament.title }}</a>
+    {% if tournament.tt_category == 'rtg' %}
+    <i class="fas fa-crown" title="Рейтинговый турнир" style="color: rgb(255, 187, 0);"></i>
+    {% elif tournament.tt_category == 'nrt' %}
+    <i class="fas fa-dungeon" title="Нарративный турнир" style="color: rgba(255, 187, 0, 0.87);"></i>
+    {% elif tournament.tt_category == 'nyt' %}
+    <i class="fas fa-candy-cane" title="Новогодний турнир" style="color: rgba(225, 136, 252, 0.925);"></i>
+    {% endif %}
+    {% if tournament.tt_type == 's' %}
+    <i class="fas fa-user" title="Одиночный турнир" style="color: rgba(122, 223, 101, 0.829);"></i>
+    {% elif tournament.tt_type == 'd' %}
+    <i class="fas fa-user-friends" title="Парный турнир" style="color: rgba(122, 223, 101, 0.829);"></i>
+    {% elif tournament.tt_type == 't' %}
+    <i class="fas fa-users" title="Командный турнир" style="color: rgba(122, 223, 101, 0.829);"></i>
+    {% endif %}
   </div>
   <ul class="list-group list-group-flush">
-    {% if tournament.organizer %}
     <li class="list-group-item">
-      Организатор: {{ tournament.organizer }}
-    </li>
-    {% endif %}
-    <li class="list-group-item">
-      Начало: {{ tournament.start_date }} - {{ tournament.start_time }}
-    </li>
-    <li class="list-group-item">
-      Категория: {{ tournament.get_tt_category_display }}
-    </li>
-    <li class="list-group-item">
-      Тип: {{ tournament.get_tt_type_display }}
-    </li>
-    <li class="list-group-item">
-      Количество туров: {{ tournament.tours_amount }}
-    </li>
-    <li class="list-group-item">
-      Текущий статус: {{ tournament.get_tt_status_display }}
-    </li>
-    <li class="list-group-item">
-      Участников: {{ tournament.registered_players.count }}
+      {{ tournament.start_date }} в {{ tournament.start_time }}, туров - {{ tournament.tours_amount }}, <a href="{% url 'player-detail' tournament.superviser.id %}">{{ tournament.superviser }}</a>
     </li>
     {% if user.is_authenticated %}
-    {% if tournament.organizer == user %}
+    {% if tournament.superviser == user %}
     {% if tournament.tt_status == 'ann' %}
     <li class="list-group-item">
       <a class="btn btn-outline-dark" href="{% url 'tournament-open-registration' tournament.tt_slug %}" role="button">
@@ -47,21 +41,20 @@
       </a>
     </li>
     {% endif %}
-
     {% else %}
-
+    {% if tournament.id in tournaments_reglist %}
     <li class="list-group-item">
-      {% if tournament.id in tournaments_reglist %}
       <a class="btn btn-outline-dark" href="#" role="button">
         Покинуть турнир
       </a>
-      {% else %}
+    </li>
+    {% else %}
+    <li class="list-group-item">
       <a class="btn btn-outline-dark" href="{% url 'tournament-reg' tournament.tt_slug %}" role="button">
         Принять участие
       </a>
-      {% endif %}
     </li>
-
+    {% endif %}
     {% endif %}
     {% endif %}
   </ul>
