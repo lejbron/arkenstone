@@ -24,7 +24,7 @@ class PlayerStats(models.Model):
         player: ID пользователя.
         army: Армии, которые игрок заявлет ра турнир.
         game_points: Сумма набранных игровых очков.
-        tournament_points: Сумма набранных турнирных очков
+        tournament_points: Сумма набранных турнирных очков.
         difference: Общая разница игровых очков.
 
     Properties:
@@ -37,12 +37,15 @@ class PlayerStats(models.Model):
     tournament = models.ForeignKey(
         'tournaments.Tournament',
         on_delete=models.CASCADE,
-        null=True,)
-
+        null=True,
+        related_name='registered_players'
+    )
     player = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
-        null=True,)
+        null=True,
+        related_name='tt_stats'
+    )
 
     army = models.CharField(
         max_length=80,
