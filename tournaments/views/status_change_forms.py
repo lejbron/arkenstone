@@ -3,6 +3,34 @@ from django.shortcuts import get_object_or_404, redirect
 from tournaments.models import Tour, Tournament
 
 
+def open_registration(request, tt_slug):
+    """
+    View-функция, открывающая регистрацию на турнир.
+    Доступна только организаторам.
+
+    Attributes:
+        tournament: Выбранный турнир.
+    """
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
+    tournament.tt_status = 'reg'
+    tournament.save()
+    return redirect('tournament-detail', tournament.tt_slug)
+
+
+def close_registration(request, tt_slug):
+    """
+    View-функция, закрывающая регистрацию на турнир.
+    Доступна только организаторам.
+
+    Attributes:
+        tournament: Выбранный турнир.
+    """
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
+    tournament.tt_status = 'creg'
+    tournament.save()
+    return redirect('tournament-detail', tournament.tt_slug)
+
+
 def start_tournament(request, tt_slug):
     """
     View-функция формы запуска турнира. Доступна только организаторам.

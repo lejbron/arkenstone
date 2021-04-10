@@ -3,34 +3,11 @@
 {% block header %}Tournaments{% endblock %}
 {% block content %}
 {% load user_filters %}
-
-<div class="row">
-  {% if tournaments_list %}
-      <ul>
-        {% for t in tournaments_list %}
-          <li>
-            <p>
-              <a href="{{ t.get_absolute_url }}">{{ t }}</a>
-              {% if user.is_authenticated %}
-                {% if t.id in tournaments_reglist %}
-                  <form action="">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Покинуть</button>
-                  </form>
-                {% else %}
-                  <form action="{{ t.get_absolute_url }}register/">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-                  </form>
-                {% endif %}
-              {% endif %}
-            </p>
-          </li>
-        {% endfor %}
-      </ul>
-  {% else %}
-    <p>There are no tournaments yet.</p>
-  {% endif %}
-</div>
-
+{% if tournaments_list %}
+{% for tournament in tournaments_list %}
+{% include "tournament_card.html" with tournament=tournament %}
+{% endfor %}
+{% else %}
+<p>There are no tournaments yet.</p>
+{% endif %}
 {% endblock %}

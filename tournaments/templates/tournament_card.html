@@ -1,0 +1,50 @@
+<div class="card mb-3 mt-1 shadow-sm">
+  <div class="card-header"><a href="{{ tournament.get_absolute_url }}">Турнир {{ tournament.title }}</a></div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      Начало: {{ tournament.start_date }} - {{ tournament.start_time }}
+    </li>
+    <li class="list-group-item">
+      Категория: {{ tournament.get_tt_category_display }}
+    </li>
+    <li class="list-group-item">
+      Тип: {{ tournament.get_tt_type_display }}
+    </li>
+    <li class="list-group-item">
+      Количество туров: {{ tournament.tours_amount }}
+    </li>
+    <li class="list-group-item">
+      Текущий статус: {{ tournament.get_tt_status_display }}
+    </li>
+    <li class="list-group-item">
+      Участников: {{ tournament.registered_players.count }}
+    </li>
+    {% if user.is_authenticated %}
+    <li class="list-group-item">
+      {% if tournament.organizer == user %}
+      <a class="btn btn-outline-dark" href="{{ tournament.get_absolute_url }}open-registration/" role="button">
+        Открыть регистрацию
+      </a>
+      <a class="btn btn-outline-dark" href="{{ tournament.get_absolute_url }}close-registration/" role="button">
+        Закрыть регистрацию
+      </a>
+      <a class="btn btn-outline-dark" href="{{ tournament.get_absolute_url }}start/" role="button">
+        Начать турнир
+      </a>
+      {% else %}
+      {% if tournament.id in tournaments_reglist %}
+      <form action="">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-dark">Покинуть</button>
+      </form>
+      {% else %}
+      <form action="{{ tournament.get_absolute_url }}register/">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-dark">Принять участие</button>
+      </form>
+      {% endif %}
+      {% endif %}
+    </li>
+    {% endif %}
+  </ul>
+</div>

@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth import get_user_model
 from django.contrib.postgres.validators import (
     MaxValueValidator, MinValueValidator,
 )
@@ -12,6 +13,8 @@ from pytils.translit import slugify
 from players.models import PlayerStats
 
 MAX_TOURS = 6
+
+User = get_user_model()
 
 
 class Tournament(models.Model):
@@ -51,7 +54,15 @@ class Tournament(models.Model):
         ('d', 'duo'),
         ('t', 'team')
     ]
-
+    organizer = models.ForeignKey(
+        User,
+        verbose_name='Организатор',
+        help_text='Укажите организатора турнира',
+        on_delete=models.SET_NULL,
+        related_name='tournaments',
+        blank=True,
+        null=True,
+    )
     title = models.CharField(
         max_length=200,
         unique=True
