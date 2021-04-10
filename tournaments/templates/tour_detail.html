@@ -24,13 +24,9 @@
 {% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
 <div class="row">
   {% if tour.matches %}
-  <ul>
-    {% for match in tour.matches.all %}
-    <li>
-      {% include 'include/match_card.html' %}
-    </li>
-    {% endfor %}
-  </ul>
+  {% for match in tour.matches.all %}
+  {% include 'include/match_card.html' %}
+  {% endfor %}
   {% else %}
   <p>There are no matches yet.</p>
   {% endif %}
@@ -69,30 +65,7 @@
 {% endif %}
 
 {% if tour.tour_status == 'fin' and json_stat is not None %}
-<div class="row">
-  <table class="table table-sm"">
-        <thead>
-            <tr>
-                <th scope=" col">#</th>
-    <th scope="col">Player</th>
-    <th scope="col">Game Points</th>
-    <th scope="col">Difference</th>
-    <th scope="col">Tournament Points</th>
-    </tr>
-    </thead>
-    <tbody>
-      {% for record in json_stat %}
-      <tr>
-        <th scope="row">{{ forloop.counter }}</th>
-        <td><a href="{% url 'player-detail' record.player__id %}">{{ record.player__username }}</a></td>
-        <td>{{ record.game_points }}</td>
-        <td>{{ record.difference }}</td>
-        <td>{{ record.tournament_points }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+{% include 'include/tour_results.html' %}
 {% endif %}
 
 {% endblock %}
