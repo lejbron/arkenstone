@@ -1,4 +1,5 @@
 import json
+import random
 
 from django.contrib.postgres.validators import (
     MaxValueValidator, MinValueValidator,
@@ -248,13 +249,23 @@ class Tour(models.Model):
             players: Список зарегистриованных на турнир игроков.
         """
         players = list(self.tournament.registered_players)
-        for i in range(0, len(players), 2):
-            m = Match(
-                tour=self,
-                opp1=players[i],
-                opp2=players[i+1],
-            )
-            m.save()
+        if self.order_num == 1:
+            random.shuffle(players)
+            for i in range(0, len(players), 2):
+                m = Match(
+                    tour=self,
+                    opp1=players[i],
+                    opp2=players[i+1],
+                )
+                m.save()
+        else:
+            for i in range(0, len(players), 2):
+                m = Match(
+                    tour=self,
+                    opp1=players[i],
+                    opp2=players[i+1],
+                )
+                m.save()
 
     def update_tour_results(self):
         """
