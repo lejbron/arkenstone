@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 
+from tournaments.decorators import superviser_check
 from tournaments.models import Tour, Tournament
 
-
+'''
 def superviser_check(func):
     """Декоратор. Проверяет является ли юзер организатором турнира."""
     def check_user(request, *args, **kwargs):
@@ -12,6 +13,7 @@ def superviser_check(func):
             return redirect('index')
         return func(request, *args, **kwargs)
     return check_user
+'''
 
 
 @login_required
