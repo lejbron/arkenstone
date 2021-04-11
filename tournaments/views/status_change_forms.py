@@ -32,6 +32,8 @@ def close_registration(request, tt_slug):
         tournament: Выбранный турнир.
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
+    if tournament.players.count() % 2 == 1:
+        return redirect('tournaments-list')
     tournament.tt_status = 'creg'
     tournament.save()
     return redirect('tournament-detail', tournament.tt_slug)
