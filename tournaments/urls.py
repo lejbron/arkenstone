@@ -13,8 +13,8 @@ urlpatterns = [
 urlpatterns += [
     path('<slug:tt_slug>/register/', views.register_on_tournament, name='tournament-reg'),
     path('<slug:tt_slug>/start/', views.start_tournament, name='tournament-start'),
-    path('<slug:tt_slug>/open-registration/', views.open_registration, name='tournament-open-registration'),
-    path('<slug:tt_slug>/close-registration/', views.close_registration, name='tournament-close-registration'),
+    path('<slug:tt_slug>/open-registration/', views.open_registration, name='tournament-open-reg'),
+    path('<slug:tt_slug>/close-registration/', views.close_registration, name='tournament-close-reg'),
 ]
 
 urlpatterns += [

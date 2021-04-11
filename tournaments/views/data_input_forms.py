@@ -21,12 +21,9 @@ def create_tournament(request):
     """
     data = request.POST or None
     crt_form = TournamentCreationForm(data)  # MyForm(data)
+    crt_form.fields['superviser'].queryset = User.objects.filter(is_staff=True)
     if crt_form.is_valid():
-        tournament = crt_form.save(commit=False)
-        superviser_id = crt_form.cleaned_data['superviser_id']
-        superviser = get_object_or_404(User, id=superviser_id)
-        tournament.superviser = superviser
-        tournament.save()
+        crt_form.save()
         return redirect('index')
     context = {
         'crt_form': crt_form,

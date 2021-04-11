@@ -24,13 +24,13 @@
     {% if tournament.superviser == user %}
     {% if tournament.tt_status == 'ann' %}
     <li class="list-group-item">
-      <a class="btn btn-outline-dark" href="{% url 'tournament-open-registration' tournament.tt_slug %}" role="button">
+      <a class="btn btn-outline-dark" href="{% url 'tournament-open-reg' tournament.tt_slug %}" role="button">
         Открыть регистрацию
       </a>
     </li>
     {% elif  tournament.tt_status == 'reg' %}
     <li class="list-group-item">
-      <a class="btn btn-outline-dark" href="{% url 'tournament-close-registration' tournament.tt_slug %}" role="button">
+      <a class="btn btn-outline-dark" href="{% url 'tournament-close-reg' tournament.tt_slug %}" role="button">
         Закрыть регистрацию
       </a>
     </li>

@@ -4,17 +4,6 @@ from django.shortcuts import get_object_or_404, redirect
 from tournaments.decorators import superviser_check
 from tournaments.models import Tour, Tournament
 
-'''
-def superviser_check(func):
-    """Декоратор. Проверяет является ли юзер организатором турнира."""
-    def check_user(request, *args, **kwargs):
-        tournament = get_object_or_404(Tournament, tt_slug=kwargs.get('tt_slug'))
-        if tournament.superviser != request.user:
-            return redirect('index')
-        return func(request, *args, **kwargs)
-    return check_user
-'''
-
 
 @login_required
 @superviser_check
