@@ -30,7 +30,7 @@
     </li>
     {% elif  tournament.tt_status == 'reg' %}
     <li class="list-group-item">
-      <a class="btn btn-outline-dark" href="{% url 'tournament-close-reg' tournament.tt_slug %}" role="button">
+      <a class="btn btn-outline-dark" href="#" role="button" OnClick="cls_reg('{{tournament.players.count}}', '{{ tournament.tt_slug }}');">
         Закрыть регистрацию
       </a>
     </li>
@@ -42,6 +42,7 @@
     </li>
     {% endif %}
     {% else %}
+    {% if  tournament.tt_status == 'reg' %}
     {% if tournament.id in tournaments_reglist %}
     <li class="list-group-item">
       <a class="btn btn-outline-dark" href="#" role="button">
@@ -57,5 +58,36 @@
     {% endif %}
     {% endif %}
     {% endif %}
+    {% endif %}
   </ul>
 </div>
+
+<!-- Modal -->
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ошибка регистрации</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick=closeModal()>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Недостаточное количество участников
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=closeModal()>Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script language="JavaScript">
+  function cls_reg(players_count, tt_slug) {
+    if (players_count % 2 == 0 && players_count != 0) {
+      document.location.href = `${tt_slug}/close-registration/`;
+    } else {
+      showModal()
+    }
+  }
+</script>
