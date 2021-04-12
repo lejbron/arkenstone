@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 
 from tournaments.decorators import superviser_check
 from tournaments.models import Tour, Tournament
@@ -33,10 +33,18 @@ def close_registration(request, tt_slug):
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
     count = tournament.players.count()
-    if (count % 2 == 0) or (count > 0):
+    if (count % 2 == 0) and (count > 0):
         tournament.tt_status = 'creg'
         tournament.save()
-    return redirect('tournament-detail', tournament.tt_slug)
+        return redirect('tournament-detail', tournament.tt_slug)
+
+    context = {
+        'tournament': tournament,
+        'players_stat': tournament.registered_players,
+        'quantity_flag': True,
+        }
+
+    return render(request, 'tournament_detail.html', context=context)
 
 
 @login_required

@@ -1,6 +1,5 @@
 {% extends "base_generic.html" %}
 {% block title %}{{ tournament }}{% endblock %}
-{% block header %}{{ tournament }}{% endblock %}
 {% block content %}
 {% load user_filters %}
 
@@ -18,32 +17,7 @@
 {% endif %}
 {% endif %}
 
-{% if tournament.tt_status == 'creg' %}
-<button type="submit" class="btn btn-primary" onclick=showModal()>Начать турнир</button>
-<div class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick=closeModal()>
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <form method="post" action="{% url 'tournament-start' tournament.tt_slug %}">
-        <div class="modal-body">
-          {% csrf_token %}
-          <p>Вы уверены, что готовы начать турнир?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick=closeModal()>Close</button>
-          <button type="submit" class="btn btn-primary">Начать турнир</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-{% endif %}
+{% include "tournament_card.html" with tournament=tournament %}
 
 {% if tournament.tt_status == 'act' or tournament.tt_status == 'fin' %}
 <div class="row">
