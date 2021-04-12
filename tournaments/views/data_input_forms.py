@@ -44,17 +44,17 @@ def register_on_tournament(request, tt_slug):
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
     data = request.POST or None
     reg_form = TournamentRegisterForm(data)
+    if reg_form.is_valid() and tournament.superviser != request.user:
+        player_stat = reg_form.save(commit=False)
+        player_stat.tournament = tournament
+        player_stat.player = request.user
+        player_stat.save()
+        return redirect('index')
     context = {
         'tournament': tournament,
         'reg_form': reg_form,
     }
-    if not reg_form.is_valid() or tournament.superviser == request.user:
-        return render(request, 'tournament_reg_form.html', context)
-    player_stat = reg_form.save(commit=False)
-    player_stat.tournament = tournament
-    player_stat.player = request.user
-    player_stat.save()
-    return redirect('index')
+    return render(request, 'tournament_reg_form.html', context)
 
 
 @login_required

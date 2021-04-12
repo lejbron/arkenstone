@@ -33,10 +33,9 @@ def close_registration(request, tt_slug):
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
     count = tournament.players.count()
-    if (count % 2 == 1) or (count == 0):
-        return redirect('tournaments-list')
-    tournament.tt_status = 'creg'
-    tournament.save()
+    if (count % 2 == 0) or (count > 0):
+        tournament.tt_status = 'creg'
+        tournament.save()
     return redirect('tournament-detail', tournament.tt_slug)
 
 

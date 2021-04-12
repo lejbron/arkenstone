@@ -14,8 +14,6 @@ def superviser_check(func):
             tournament = get_object_or_404(Tournament, tt_slug=kwargs.get('tt_slug'))
         elif kwargs.get('tour_slug'):
             tournament = get_object_or_404(Tournament, tours__tour_slug=kwargs.get('tour_slug'))
-        else:
-            return func(request, *args, **kwargs)
         if tournament.superviser != request.user:
             raise PermissionDenied
         return func(request, *args, **kwargs)
