@@ -117,13 +117,6 @@ class Tournament(models.Model):
         blank=True,
     )
 
-    @property
-    def registered_players(self):
-        try:
-            return PlayerStats.objects.filter(tournament=self)
-        except PlayerStats.DoesNotExist:
-            print('No players registered yet')
-
     class Meta:
         ordering = [('-start_date'), ]
 
@@ -275,7 +268,7 @@ class Tour(models.Model):
         Attributes:
             players: Список зарегистриованных на турнир игроков.
         """
-        players = list(self.tournament.registered_players)
+        players = list(self.tournament.registered_players.all())
         for i in range(0, len(players), 2):
             m = Match(
                 tour=self,

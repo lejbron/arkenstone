@@ -1,31 +1,56 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+  <div class="container-fluid">
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <a class="navbar-brand" href="{% url 'index' %}">Arkenstone</a>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+      <ul class="navbar-nav mt-2 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link " href="#">Новости</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{% url 'tournaments-list' %}">Турниры</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="#">Рейтинг</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto  mt-2 mt-lg-0">
         {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'player-detail' user.id %}">{{ user.username }}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'password_change' %}">Изменить пароль</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'tournaments-list' %}">Турниры</a>
-          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user.username }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+            {% if user.is_staff %}
+            <a class="dropdown-item" href="{% url 'tournament-crt' %}">Создать турнир</a>
+            <a class="dropdown-item" href="{% url 'tournaments-list' %}">Текущие турниры</a>
+            <div class="dropdown-divider"></div>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'player-detail' user.id %}">Личный кабинет</a>
+            <a class="dropdown-item" href="#">Рейтинг</a>
+            <a class="dropdown-item" href="#">Армии</a>
+            <div class="dropdown-divider"></div>
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'password_change' %}">Изменить пароль</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+          </div>
+        </li>
         {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Войти</a>
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="{% url 'signup' %}">Регистрация</a>
-          </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Войти</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'signup' %}">Регистрация</a>
+        </li>
         {% endif %}
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
