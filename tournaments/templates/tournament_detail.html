@@ -3,7 +3,9 @@
 {% block content %}
 {% load user_filters %}
 
-{% include "include/tournament_card.html" with tournament=tournament %}
+<div class="row">
+  {% include "include/cards/tournament_card.html" with tournament=tournament %}
+</div>
 
 {% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
 {% if players_stat is not None %}
@@ -21,13 +23,9 @@
 
 {% if tournament.tt_status == 'act' or tournament.tt_status == 'fin' %}
 <div class="row">
-  <ul>
-    {% for t in tournament.tours.all %}
-    <li>
-      <a href="{{ t.get_absolute_url }}">{{ t }}</a>
-    </li>
-    {% endfor %}
-  </ul>
+  {% for tour in tournament.tours.all %}
+  {% include "include/cards/tour_card.html" with tour=tour %}
+  {% endfor %}
 </div>
 <div class="row">
   <table class="table table-sm">

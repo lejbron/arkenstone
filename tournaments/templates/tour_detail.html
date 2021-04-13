@@ -7,31 +7,24 @@
 {% load user_filters %}
 
 <div class="row">
-  <div class="col-md-8">
-    <p>{{ tour.tour_status }}</p>
-  </div>
+  {% include "include/cards/tour_card.html" %}
 </div>
 
 {% if tour.tour_status == 'crt' and tour.previous_finished %}
-<div class="row">
-  <form method="post" action="{% url 'tour-start' tour.tour_slug %}">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Начать тур</button>
-  </form>
+
+<form method="post" action="{% url 'tour-start' tour.tour_slug %}">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-primary">Начать тур</button>
+</form>
 </div>
 {% endif %}
 
 {% if tour.tour_status == 'act' or tour.tour_status == 'fin' %}
 <div class="row">
   {% if tour.matches %}
-  <ul>
-    {% for match in tour.matches.all %}
-    <li>
-      <a href="{{ match.get_absolute_url }}">{{ match }}</a>
-      <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
-    </li>
-    {% endfor %}
-  </ul>
+  {% for match in tour.matches.all %}
+  {% include "include/cards/match_card.html" %}
+  {% endfor %}
   {% else %}
   <p>There are no matches yet.</p>
   {% endif %}

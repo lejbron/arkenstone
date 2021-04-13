@@ -1,31 +1,19 @@
 {% extends "base_generic.html" %}
 {% block title %}{{ tour }}{% endblock %}
 {% block header %}
-    <a href="{{ match.tour.tournament.get_absolute_url }}">
-        {{ match.tour.tournament }}
-    </a>
-     -
-    <a href="{{ match.tour.get_absolute_url }}">
-        {{ match.tour }}
-    </a>
+<a href="{{ match.tour.tournament.get_absolute_url }}">
+  {{ match.tour.tournament }}
+</a>
+-
+<a href="{{ match.tour.get_absolute_url }}">
+  {{ match.tour }}
+</a>
 {% endblock %}
 {% block content %}
 {% load user_filters %}
 
 <div class="row">
-    <div class="col-md-8">
-        <p>
-            <a href="{% url 'player-detail' match.opp1.player.id %}">
-                {{ match.opp1 }}
-            </a>
-             vs
-             <a href="{% url 'player-detail' match.opp2.player.id %}">
-                {{ match.opp2 }}
-            </a>
-        </p>
-        <p>{{ match.opp1.army }} vs {{ match.opp2.army }}</p>
-        <p>{{ match.opp1_gp }} : {{ match.opp2_gp }}</p>
-    </div>
+  {% include "include/cards/match_card.html" %}
 </div>
 
 {% endblock %}
