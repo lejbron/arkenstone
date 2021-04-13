@@ -10,13 +10,13 @@
 {% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
 {% if players_stat is not None %}
 <div class="row">
-  <ul>
+  <ol>
     {% for record in players_stat %}
     <li>
       <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
     </li>
     {% endfor %}
-  </ul>
+  </ol>
 </div>
 {% endif %}
 {% endif %}
@@ -27,29 +27,9 @@
   {% include "include/cards/tour_card.html" with tour=tour %}
   {% endfor %}
 </div>
+
 <div class="row">
-  <table class="table table-sm">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Player</th>
-        <th scope="col">Game Points</th>
-        <th scope="col">Difference</th>
-        <th scope="col">Tournament Points</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for record in players_stat %}
-      <tr>
-        <th scope="row">{{ forloop.counter }}</th>
-        <td><a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
-        <td>{{ record.game_points }}</td>
-        <td>{{ record.difference }}</td>
-        <td>{{ record.tournament_points }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% include "include/results_table.html" with players_stat=players_stat %}
 </div>
 {% endif %}
 
