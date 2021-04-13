@@ -31,4 +31,4 @@ class TourAdmin(admin.ModelAdmin):
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'tour', 'opp1', 'opp2', 'opp1_gp', 'opp2_gp')
+    list_display = ('__str__', 'tour', 'table', 'opp1', 'opp2', 'opp1_gp', 'opp2_gp')

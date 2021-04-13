@@ -62,7 +62,7 @@ MatchesResultsFormSet = inlineformset_factory(
     Tour,
     Match,
     form=TourResultsForm,
-    fields=('opp1', 'opp2', 'opp1_gp', 'opp2_gp'),
+    fields=('table', 'opp1', 'opp2', 'opp1_gp', 'opp2_gp'),
     extra=0,
     can_delete=False,
     )
