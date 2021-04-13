@@ -10,7 +10,7 @@
 {% endif %}
 {% if tournaments_list %}
 {% for tournament in tournaments_list %}
-{% include "tournament_card.html" with tournament=tournament %}
+{% include "include/tournament_card.html" with tournament=tournament %}
 {% endfor %}
 {% else %}
 <p>There are no tournaments yet.</p>

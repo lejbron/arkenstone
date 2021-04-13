@@ -23,6 +23,8 @@ class Tournament(models.Model):
     Турнир
 
     Attributes:
+        supervizor: Организатор турнира.
+                    owned_tournaments - Туринры, которые создавал организатор.
         title: Название турнира.
         strat_date: Дата начала турнира.
         tours_amout: Количество туров.
@@ -61,8 +63,7 @@ class Tournament(models.Model):
         verbose_name='Организатор',
         help_text='Укажите организатора турнира',
         on_delete=models.SET_NULL,
-        related_name='tournaments',
-        blank=True,
+        related_name='owned_tournaments',
         null=True,
     )
     title = models.CharField(
@@ -117,6 +118,14 @@ class Tournament(models.Model):
         unique=True,
         blank=True,
     )
+
+    @property
+    def tours_str(self):
+        if self.tours_amount in [3, 4]:
+            tstr = f'{self.tours_amount} тура'
+        elif self.tours_amount in [5, 6]:
+            tstr = f'{self.tours_amount} туров'
+        return tstr
 
     class Meta:
         ordering = [('-start_date'), ]
@@ -300,6 +309,7 @@ class Match(models.Model):
 
     Attributes:
         tour: Тур, в рамках которого создан матч.
+        table: Стол, на котором играется матч.
         opp1: Первый оппонент.
         opp2: Второй оппонент.
         opp1_gp: Игровые очки первого оппонента.

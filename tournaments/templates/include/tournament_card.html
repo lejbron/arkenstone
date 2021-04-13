@@ -18,7 +18,7 @@
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
-      {{ tournament.start_date }} в {{ tournament.start_time }}, туров - {{ tournament.tours_amount }}, <a href="{% url 'player-detail' tournament.superviser.id %}">{{ tournament.superviser }}</a>
+      {{ tournament.start_date }} в {{ tournament.start_time }}, {{ tournament.tours_str }}, <a href="{% url 'player-detail' tournament.superviser.id %}">{{ tournament.superviser }}</a>
     </li>
     {% if user.is_authenticated %}
     {% if tournament.superviser == user %}

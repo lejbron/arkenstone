@@ -3,7 +3,7 @@
 {% block content %}
 {% load user_filters %}
 
-{% include "tournament_card.html" with tournament=tournament %}
+{% include "include/tournament_card.html" with tournament=tournament %}
 
 {% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
 {% if players_stat is not None %}

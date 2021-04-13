@@ -12,7 +12,6 @@ class TournamentCreationForm(forms.ModelForm):
     """
     Форма создания турнира.
     """
-
     class Meta:
         model = Tournament
         fields = ('title', 'superviser', 'start_date', 'start_time', 'tours_amount', 'tt_category', 'tt_type')

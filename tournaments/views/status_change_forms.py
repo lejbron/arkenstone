@@ -30,6 +30,7 @@ def close_registration(request, tt_slug):
 
     Attributes:
         tournament: Выбранный турнир.
+        quantity_flag: Флаг, сигнализирующий о нечетном количестве зарегистрировавшихся.
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
     count = tournament.players.count()
