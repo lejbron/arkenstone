@@ -30,7 +30,7 @@ def create_tournament(request):
     context = {
         'crt_form': crt_form,
     }
-    return render(request, 'tournament_crt_form.html', context)
+    return render(request, 'forms/tournament_crt_form.html', context)
 
 
 @login_required
@@ -51,7 +51,7 @@ def register_on_tournament(request, tt_slug):
         'reg_form': reg_form,
     }
     if not reg_form.is_valid() or tournament.superviser == request.user:
-        return render(request, 'tournament_reg_form.html', context)
+        return render(request, 'forms/tournament_reg_form.html', context)
     player_stat = reg_form.save(commit=False)
     player_stat.tournament = tournament
     player_stat.player = request.user
@@ -87,4 +87,4 @@ def input_tour_results(request, tour_slug):
         'formset': formset,
     }
 
-    return render(request, 'tour_matches_setup_form.html', context)
+    return render(request, 'forms/tour_matches_setup_form.html', context)

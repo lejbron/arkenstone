@@ -1,7 +1,30 @@
 <div class="col-sm-4">
   <div class="card mb-3 mt-1 shadow-sm">
-    <div class="card-body">
-      <h5 class="card-title"><a href="{{ tour.get_absolute_url }}">{{ tour }}</a> - {{ tour.tour_status }}</h5>
-    </div>
+    <div class="card-header"><a href="{{ tour.get_absolute_url }}">{{ tour }}</a> - {{ tour.tour_status }}</div>
+    <ul class="list-group list-group-flush">
+      {% if user.is_authenticated %}
+      {% if tour.tour_status == 'crt' and tour.previous_finished %}
+      <li class="list-group-item">
+        <a class="btn btn-outline-dark" href="{% url 'tour-start' tour.tour_slug %}" role="button">
+          Начать тур
+        </a>
+      </li>
+      {% elif user.is_staff and tour.tour_status == 'act' %}
+      <li class="list-group-item">
+        <a class="btn btn-outline-dark" href="{% url 'tour-results' tour.tour_slug %}" role="button">
+          Обновить результаты тура
+        </a>
+      </li>
+      {% if tour.all_results_ready %}
+      <li class="list-group-item">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#finishTourWarning">
+          Завершить тур
+        </button>
+      </li>
+      {% endif %}
+      {% endif %}
+      {% endif %}
+    </ul>
   </div>
+  {% include "include/modals/warning_finish_tour.html" %}
 </div>
