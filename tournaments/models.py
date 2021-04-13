@@ -204,7 +204,7 @@ class Tour(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        limit_choices_to={'status__in': ['ann', 'reg', 'act']},
+        limit_choices_to={'tt_status__in': ['ann', 'reg', 'act']},
         related_name='tours'
     )
     order_num = models.PositiveIntegerField(
@@ -332,6 +332,10 @@ class Match(models.Model):
         Tour,
         on_delete=models.CASCADE,
         related_name='matches')
+
+    table = models.PositiveIntegerField(
+        default=666
+    )
 
     opp1 = models.ForeignKey(
         PlayerStats,
