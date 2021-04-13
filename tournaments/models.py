@@ -1,6 +1,7 @@
 import json
 import random
 
+from django.contrib.auth import get_user_model
 from django.contrib.postgres.validators import (
     MaxValueValidator, MinValueValidator,
 )
@@ -13,6 +14,8 @@ from pytils.translit import slugify
 from players.models import PlayerStats
 
 MAX_TOURS = 6
+
+User = get_user_model()
 
 
 class Tournament(models.Model):
@@ -35,59 +38,84 @@ class Tournament(models.Model):
     """
 
     TOURNAMENT_STATUSES = [
-        ('ann', 'announce'),
-        ('reg', 'registration'),
-        ('creg', 'registration closed'),
-        ('act', 'active'),
-        ('fin', 'finished'),
+        ('ann', 'Анонс'),
+        ('reg', 'Регистрация открыта'),
+        ('creg', 'Регистрация закрыта'),
+        ('act', 'Активный'),
+        ('fin', 'Завершен'),
     ]
 
     CATEGORIES = [
-        ('nrt', 'narrative'),
-        ('rtg', 'raiting'),
+        ('nrt', 'Нарративный'),
+        ('rtg', 'Рейтинговый'),
+        ('nyt', 'Новогодний')
     ]
 
     TYPES = [
-        ('s', 'solo'),
-        ('d', 'duo'),
-        ('t', 'team')
+        ('s', 'Одиночный'),
+        ('d', 'Парный'),
+        ('t', 'Командный')
     ]
-
+    superviser = models.ForeignKey(
+        User,
+        verbose_name='Организатор',
+        help_text='Укажите организатора турнира',
+        on_delete=models.SET_NULL,
+        related_name='tournaments',
+        blank=True,
+        null=True,
+    )
     title = models.CharField(
+        verbose_name='Название',
+        help_text='Название турнира',
         max_length=200,
         unique=True
     )
-    start_date = models.DateField(default=timezone.now, null=True)
-    start_time = models.TimeField(default=timezone.now)
+    start_date = models.DateField(
+        verbose_name='Дата',
+        help_text='Дата проведения турнира',
+        default=timezone.now,
+        null=True
+    )
+    start_time = models.TimeField(
+        verbose_name='Время',
+        help_text='Время проведения турнира',
+        default=timezone.now
+    )
     tours_amount = models.PositiveIntegerField(
+        verbose_name='Кол-во туров',
+        help_text=f'Укажите количество туров в турнире - от 3 до {MAX_TOURS}',
         default=3,
         validators=[MinValueValidator(3), MaxValueValidator(MAX_TOURS)]
     )
-
     tt_category = models.CharField(
+        verbose_name='Категория',
+        help_text='Выберите категорию турнира из списка',
         default='rtg',
         max_length=4,
         choices=CATEGORIES,
-        verbose_name='Tournament Category'
     )
     tt_type = models.CharField(
+        verbose_name='Тип турнира',
+        help_text='Выберите тип турнира из списка',
         default='s',
         max_length=4,
         choices=TYPES,
-        verbose_name='Tournament Type'
     )
     tt_status = models.CharField(
+        verbose_name='Статус турнира',
+        help_text='Укажите статус турнира',
         default='ann',
         max_length=4,
         choices=TOURNAMENT_STATUSES,
-        verbose_name='Tournament Status'
     )
 
     tt_slug = models.SlugField(
+        verbose_name='Слаг турнира',
+        help_text='Укажите слаг турнира',
         null=True,
         unique=True,
         blank=True,
-        verbose_name='Slug'
     )
 
     class Meta:

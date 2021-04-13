@@ -1,8 +1,54 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 
+from tournaments.decorators import superviser_check
 from tournaments.models import Tour, Tournament
 
 
+@login_required
+@superviser_check
+def open_registration(request, tt_slug):
+    """
+    View-функция, открывающая регистрацию на турнир.
+    Доступна только организаторам.
+
+    Attributes:
+        tournament: Выбранный турнир.
+    """
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
+    tournament.tt_status = 'reg'
+    tournament.save()
+    return redirect('tournament-detail', tournament.tt_slug)
+
+
+@login_required
+@superviser_check
+def close_registration(request, tt_slug):
+    """
+    View-функция, закрывающая регистрацию на турнир.
+    Доступна только организаторам.
+
+    Attributes:
+        tournament: Выбранный турнир.
+    """
+    tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
+    count = tournament.players.count()
+    if (count % 2 == 0) and (count > 0):
+        tournament.tt_status = 'creg'
+        tournament.save()
+        return redirect('tournament-detail', tournament.tt_slug)
+
+    context = {
+        'tournament': tournament,
+        'players_stat': tournament.registered_players,
+        'quantity_flag': True,
+        }
+
+    return render(request, 'tournament_detail.html', context=context)
+
+
+@login_required
+@superviser_check
 def start_tournament(request, tt_slug):
     """
     View-функция формы запуска турнира. Доступна только организаторам.
@@ -18,6 +64,8 @@ def start_tournament(request, tt_slug):
     return redirect('tournament-detail', tournament.tt_slug)
 
 
+@login_required
+@superviser_check
 def start_tour(request, tour_slug):
     """
     View-функция формы запуска турнира. Доступна только организаторам.
@@ -33,6 +81,8 @@ def start_tour(request, tour_slug):
     return redirect('tour-detail', tour.tour_slug)
 
 
+@login_required
+@superviser_check
 def finish_tour(request, tour_slug):
     """
     View-функция формы завершения турнира. Доступна только организаторам.
