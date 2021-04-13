@@ -13,8 +13,17 @@
         <li class="nav-item">
           <a class="nav-link " href="#">Новости</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="{% url 'tournaments-list' %}">Турниры</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Турниры
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% if user.is_authenticated and user.is_staff %}
+            <a class="dropdown-item" href="{% url 'tournament-crt' %}">Создать турнир</a>
+            <div class="dropdown-divider"></div>
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'tournaments-list' %}">Текущие турниры</a>
+          </div>
         </li>
         <li class="nav-item">
           <a class="nav-link " href="#">Рейтинг</a>
@@ -28,16 +37,10 @@
             {{ user.username }}
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            {% if user.is_staff %}
-            <a class="dropdown-item" href="{% url 'tournament-crt' %}">Создать турнир</a>
-            <a class="dropdown-item" href="{% url 'tournaments-list' %}">Текущие турниры</a>
-            <div class="dropdown-divider"></div>
-            {% else %}
             <a class="dropdown-item" href="{% url 'player-detail' user.id %}">Личный кабинет</a>
             <a class="dropdown-item" href="#">Рейтинг</a>
             <a class="dropdown-item" href="#">Армии</a>
             <div class="dropdown-divider"></div>
-            {% endif %}
             <a class="dropdown-item" href="{% url 'password_change' %}">Изменить пароль</a>
             <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
           </div>

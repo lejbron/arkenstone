@@ -3,16 +3,13 @@
 {% block header %}Tournaments{% endblock %}
 {% block content %}
 {% load user_filters %}
-{% if user.is_staff %}
-<a class="btn btn-dark btn-lg mb-2" href="{% url 'tournament-crt' %}" role="button">
-  Создать новый турнир
-</a>
-{% endif %}
-{% if tournaments_list %}
-{% for tournament in tournaments_list %}
-{% include "include/tournament_card.html" with tournament=tournament %}
-{% endfor %}
-{% else %}
-<p>There are no tournaments yet.</p>
-{% endif %}
+<div class="row">
+  {% if tournaments_list %}
+  {% for tournament in tournaments_list %}
+  {% include "include/tournament_card.html" with tournament=tournament %}
+  {% endfor %}
+  {% else %}
+  <p>There are no tournaments yet.</p>
+  {% endif %}
+</div>
 {% endblock %}
