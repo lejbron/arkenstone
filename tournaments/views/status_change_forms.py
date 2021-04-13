@@ -40,7 +40,7 @@ def close_registration(request, tt_slug):
 
     context = {
         'tournament': tournament,
-        'players_stat': tournament.registered_players,
+        'players_stat': tournament.players.all(),
         'quantity_flag': True,
         }
 

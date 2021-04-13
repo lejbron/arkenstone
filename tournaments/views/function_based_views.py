@@ -41,7 +41,7 @@ def tournament_detail_view(request, tt_slug):
 
     context = {
         'tournament': tournament,
-        'players_stat': tournament.registered_players.all(),
+        'players_stat': tournament.players.all(),
         }
 
     return render(request, 'tournament_detail.html', context=context)

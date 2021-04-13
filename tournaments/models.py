@@ -269,7 +269,7 @@ class Tour(models.Model):
         Attributes:
             players: Список зарегистриованных на турнир игроков.
         """
-        players = list(self.tournament.registered_players)
+        players = list(self.tournament.players.all())
         if self.order_num == 1:
             random.shuffle(players)
         for i in range(0, len(players), 2):
