@@ -18,8 +18,13 @@ def tournaments_list_view(request):
                              Зарегистрироваться/Покинуть.
 
     """
-    tournaments_list = Tournament.objects.all()
-    tournaments_reglist = request.user.tt_stats.all().values_list('tournament', flat=True)
+    try:
+        tournaments_list = Tournament.objects.all()
+        tournaments_reglist = request.user.tt_stats.all().values_list('tournament', flat=True)
+    except Tournament.DoesNotExist:
+        tournaments_list = None
+    except AttributeError:
+        tournaments_reglist = None
 
     context = {
         'tournaments_list': tournaments_list,
