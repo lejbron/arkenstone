@@ -1,27 +1,88 @@
 {% extends "base_generic.html" %}
-{% block title %}{{ player }}{% endblock %}
-{% block header %} {{ player }} {% endblock %}
+{% block title %}Профиль {{ player }}{% endblock %}
+{% block header %}Профиль {{ player }} {% endblock %}
 {% block content %}
 {% load user_filters %}
 
-    <div class="row">
-        <div class="col-md-8">
-            <p>{{ player.profile.birth_date }}</p>
-        </div>
-    </div>
+<div class="row">
+  <div class="col-md-8">
 
-    <div class="row">
-        {% if player_info %}
-            <ul>
-                {% for record in player_info %}
-                <li>
-                    <a href="{{ record.tournament.get_absolute_url }}">{{ record.tournament }}</a>
-                    <p>{{ record.army }}</p>
-                </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Player has no tournaments yet.</p>
-        {% endif %}
+  </div>
+</div>
+
+<!--
+<div class="row">
+  <div class="col-md-8">
+    <p>{{ player.profile.birth_date }}</p>
+  </div>
+</div>
+-->
+
+{% if player_info %}
+<div class="col-sm-6">
+  <p>{{ player }} участвует в турнирах:</p>
+</div>
+
+{% for record in player_info %}
+
+<div class="col-sm-6">
+  <div class="card mb-3 mt-1 shadow-sm">
+    <div class="card-header">
+      <a class="h4" href="{% url 'tournament-detail' record.tournament.tt_slug %}">{{ record.tournament.title }}</a>
+      {% if record.tournament.tt_category == 'rtg' %}
+      <i class="fas fa-crown" title="Рейтинговый турнир" style="color: rgb(255, 187, 0);"></i>
+      {% elif record.tournament.tt_category == 'nrt' %}
+      <i class="fas fa-dungeon" title="Нарративный турнир" style="color: rgba(255, 187, 0, 0.87);"></i>
+      {% elif record.tournament.tt_category == 'nyt' %}
+      <i class="fas fa-candy-cane" title="Новогодний турнир" style="color: rgba(225, 136, 252, 0.925);"></i>
+      {% endif %}
+      {% if record.tournament.tt_type == 's' %}
+      <i class="fas fa-user" title="Одиночный турнир" style="color: rgba(122, 223, 101, 0.829);"></i>
+      {% elif record.tournament.tt_type == 'd' %}
+      <i class="fas fa-user-friends" title="Парный турнир" style="color: rgba(122, 223, 101, 0.829);"></i>
+      {% elif record.tournament.tt_type == 't' %}
+      <i class="fas fa-users" title="Командный турнир" style="color: rgba(122, 223, 101, 0.829);"></i>
+      {% endif %}
     </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <p>Армия - {{ record.army }}</p>
+
+        {% if request.user != player %}
+        {% if user_challenges %}
+        {% for challenge in user_challenges %}
+        {% if challenge.tournament == record.tournament %}
+        <a class="btn btn-outline-dark" href="{% url 'challenge_cancel' record.tournament.tt_slug player.id %}" role="button">
+          Отменить вызов
+        </a>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <a class="btn btn-outline-dark" href="{% url 'challenge_create' record.tournament.tt_slug player.id %}" role="button">
+          Вызвать на бой
+        </a>
+        {% endif %}
+        <br>
+        {% else %}
+
+        {% for challenge in all_challenges %}
+        Игрок {{ challenge.user }} бросил вам вызов<br>
+        <a class="btn btn-outline-dark" href="#" role="button">
+          Принять
+        </a>
+        <a class="btn btn-outline-dark" href="#" role="button">
+          Отказаться
+        </a><br>
+        {% endfor %}
+        {% endif %}
+
+      </li>
+    </ul>
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<p>Игрок не участвует ни в одном турнире.</p>
+{% endif %}
+
 {% endblock %}

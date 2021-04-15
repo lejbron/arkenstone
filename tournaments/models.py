@@ -127,6 +127,10 @@ class Tournament(models.Model):
             tstr = f'{self.tours_amount} туров'
         return tstr
 
+    @property
+    def is_registered(self):
+        return PlayerStats.objects.get(player=self.request.user).exists()
+
     class Meta:
         ordering = [('-start_date'), ]
 
@@ -457,3 +461,28 @@ class Match(models.Model):
             return 'big'
         else:
             return 'minor'
+
+
+class Challenge(models.Model):
+    tournament = models.ForeignKey(
+        Tournament,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='challenges_tt',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='challenges_user',
+    )
+    opponent = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='challenges_opp',
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['tournament', 'user', 'opponent'],
+                                    name='uniq_challenge')
+        ]

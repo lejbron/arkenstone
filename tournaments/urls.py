@@ -22,3 +22,10 @@ urlpatterns += [
     path('tours/<slug:tour_slug>/results/', views.input_tour_results, name='tour-results'),
     path('tours/<slug:tour_slug>/finish/', views.finish_tour, name='tour-finish'),
 ]
+
+urlpatterns += [
+    path('<slug:tt_slug>/<int:player_id>/create-challenge', views.challenge_create, name='challenge_create'),
+    path('<slug:tt_slug>/<int:player_id>/cancel-challenge', views.challenge_cancel, name='challenge_cancel'),
+    path('<slug:tt_slug>/<int:player_id>/accept-challenge', views.challenge_accept, name='challenge_accept'),
+    path('<slug:tt_slug>/<int:player_id>/refuse-challenge', views.challenge_refuse, name='challenge_refuse'),
+]
