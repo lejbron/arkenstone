@@ -127,10 +127,6 @@ class Tournament(models.Model):
             tstr = f'{self.tours_amount} туров'
         return tstr
 
-    @property
-    def is_registered(self):
-        return PlayerStats.objects.get(player=self.request.user).exists()
-
     class Meta:
         ordering = [('-start_date'), ]
 
