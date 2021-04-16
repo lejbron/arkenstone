@@ -38,12 +38,15 @@ def tournament_detail_view(request, tt_slug):
         players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
-
+    count = tournament.players.count()
+    odd_number_flag = False
+    if count % 2 != 0:
+        odd_number_flag = True
     context = {
         'tournament': tournament,
         'players_stat': tournament.players.all(),
-        }
-
+        'odd_number_flag': odd_number_flag,
+    }
     return render(request, 'tournament_detail.html', context=context)
 
 

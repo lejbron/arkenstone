@@ -11,6 +11,7 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
+    proxy_bot = models.BooleanField(default=False)
 
 
 class PlayerStats(models.Model):

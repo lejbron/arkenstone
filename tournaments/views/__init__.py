@@ -5,6 +5,8 @@ from .function_based_views import match_detail_view  # noqa
 from .function_based_views import tour_detail_view  # noqa
 from .function_based_views import tournament_detail_view  # noqa
 from .function_based_views import tournaments_list_view  # noqa
+from .player_manage_views import player_add_bot  # noqa
+from .player_manage_views import player_delete  # noqa
 from .status_change_forms import close_registration  # noqa
 from .status_change_forms import finish_tour  # noqa
 from .status_change_forms import open_registration  # noqa

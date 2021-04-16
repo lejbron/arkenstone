@@ -9,11 +9,24 @@
 
 {% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
 {% if players_stat is not None %}
+
+{% if odd_number_flag %}
+<a class="btn btn-sm btn-outline-dark mb-3" href="{% url 'player_add_bot' tournament.tt_slug %}" role="button">
+  Добавить бота
+</a>
+{% endif %}
+
 <div class="row">
+
   <ol>
     {% for record in players_stat %}
     <li>
-      <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
+      <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a>
+      {% if tournament.superviser == user %}
+      <a class="btn btn-sm btn-outline-dark mb-1" href="{% url 'player_delete' tournament.tt_slug record.player.id %}" role="button">
+        Удалить игрока
+      </a>
+      {% endif %}
     </li>
     {% endfor %}
   </ol>
