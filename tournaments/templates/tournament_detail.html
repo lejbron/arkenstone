@@ -23,8 +23,8 @@
     <li>
       <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a>
       {% if tournament.superviser == user %}
-      <a class="btn btn-sm btn-outline-dark mb-1" href="{% url 'player_delete' tournament.tt_slug record.player.id %}" role="button">
-        Удалить игрока
+      <a href="{% url 'player_delete' tournament.tt_slug record.player.id %}" role="button">
+        <i class="fas fa-user-times ml-1"></i>
       </a>
       {% endif %}
     </li>
