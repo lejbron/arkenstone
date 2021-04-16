@@ -20,7 +20,6 @@ def tournaments_list_view(request):
     """
     tournaments_list = Tournament.objects.all()
     tournaments_reglist = request.user.tt_stats.all().values_list('tournament', flat=True)
-
     context = {
         'tournaments_list': tournaments_list,
         'tournaments_reglist': tournaments_reglist,
@@ -38,10 +37,12 @@ def tournament_detail_view(request, tt_slug):
         players_stat: Текущие результаты турнира. Статусы турнира: ['act', 'fin'].
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
+    is_registered = tournament.is_registered(request.user)
 
     context = {
         'tournament': tournament,
         'players_stat': tournament.players.all(),
+        'is_registered': is_registered
         }
 
     return render(request, 'tournament_detail.html', context=context)

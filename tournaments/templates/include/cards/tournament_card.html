@@ -44,7 +44,7 @@
       {% endif %}
       {% else %}
       {% if  tournament.tt_status == 'reg' %}
-      {% if tournament.id in tournaments_reglist %}
+      {% if tournament.id in tournaments_reglist or is_registered %}
       <li class="list-group-item">
         <a class="btn btn-outline-dark" href="#" role="button">
           Покинуть турнир

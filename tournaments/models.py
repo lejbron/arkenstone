@@ -144,6 +144,9 @@ class Tournament(models.Model):
             self.tt_slug = slugify(self)
         super(Tournament, self).save(*args, **kwargs)
 
+    def is_registered(self, user):
+        return user.tt_stats.filter(tournament=self).exists()
+
     def get_absolute_url(self):
         """Returns the url to access a particular tournament instance."""
         return reverse('tournament-detail', args=[self.tt_slug])
