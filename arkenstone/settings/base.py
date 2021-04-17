@@ -7,6 +7,12 @@ SECRET_KEY = config('SECRET_KEY')
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
+DEBUG = True
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 INSTALLED_APPS = [
     'asgard',
     'django.contrib.admin',
@@ -19,6 +25,7 @@ INSTALLED_APPS = [
     'players',
     'tournaments',
     'tempus_dominus',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -30,6 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 WSGI_APPLICATION = 'arkenstone.wsgi.application'
