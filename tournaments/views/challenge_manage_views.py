@@ -19,20 +19,23 @@ def challenge_create(request, tt_slug, player_id):
 
 
 @login_required
-def challenge_cancel(request, tt_slug, player_id):
-    challenge = get_object_or_404(Challenge, tournament__tt_slug=tt_slug, user=request.user, opponent_id=player_id)
+def challenge_cancel(request, challenge_id):
+    challenge = get_object_or_404(Challenge, id=challenge_id)
     challenge.delete()
-    return redirect('player-detail', player_id)
+    return redirect('player-detail', challenge.opponent.id)
 
 
 @login_required
-def challenge_accept(request, tt_slug, player_id):
-    # добавить поле со статусом вызова - ожидается, принят, отказ
-    return redirect('player-detail', player_id)
+def challenge_accept(request, challenge_id):
+    challenge = get_object_or_404(Challenge, id=challenge_id)
+    challenge.status = 'acc'
+    challenge.save()
+    return redirect('player-detail', challenge.opponent.id)
 
 
 @login_required
-def challenge_refuse(request, tt_slug, player_id):
-    get_object_or_404(Challenge, tournament__tt_slug=tt_slug, user=request.user, opponent_id=player_id)
-    # Здесь не удалять вызов, а изменять статус.
-    return redirect('player-detail', player_id)
+def challenge_refuse(request, challenge_id):
+    challenge = get_object_or_404(Challenge, id=challenge_id)
+    challenge.status = 'ref'
+    challenge.save()
+    return redirect('player-detail', challenge.opponent.id)

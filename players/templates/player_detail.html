@@ -52,7 +52,7 @@
         {% if user_challenges %}
         {% for challenge in user_challenges %}
         {% if challenge.tournament == record.tournament %}
-        <a class="btn btn-outline-dark" href="{% url 'challenge_cancel' record.tournament.tt_slug player.id %}" role="button">
+        <a class="btn btn-outline-dark" href="{% url 'challenge_cancel' challenge.id %}" role="button">
           Отменить вызов
         </a>
         {% endif %}
@@ -66,13 +66,21 @@
         {% else %}
 
         {% for challenge in all_challenges %}
+        {% if challenge.pending %}
         Игрок {{ challenge.user }} бросил вам вызов<br>
-        <a class="btn btn-outline-dark" href="#" role="button">
+        {% elif challenge.accepted %}
+        Вы приняли вызов игрока {{ challenge.user }}<br>
+        {% elif challenge.refused %}
+        Вы отказались от вызова игрока {{ challenge.user }}.<br>
+        {% endif %}
+        {% if challenge.pending %}
+        <a class="btn btn-outline-dark" href="{% url 'challenge_accept' challenge.id %}" role="button">
           Принять
         </a>
-        <a class="btn btn-outline-dark" href="#" role="button">
+        <a class="btn btn-outline-dark" href="{% url 'challenge_refuse' challenge.id %}" role="button">
           Отказаться
         </a><br>
+        {% endif %}
         {% endfor %}
         {% endif %}
 

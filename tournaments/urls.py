@@ -24,8 +24,8 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('<slug:tt_slug>/<int:player_id>/create-challenge', views.challenge_create, name='challenge_create'),
-    path('<slug:tt_slug>/<int:player_id>/cancel-challenge', views.challenge_cancel, name='challenge_cancel'),
-    path('<slug:tt_slug>/<int:player_id>/accept-challenge', views.challenge_accept, name='challenge_accept'),
-    path('<slug:tt_slug>/<int:player_id>/refuse-challenge', views.challenge_refuse, name='challenge_refuse'),
+    path('challenges/<slug:tt_slug>/<int:player_id>/create', views.challenge_create, name='challenge_create'),
+    path('challenges/<int:challenge_id>/cancel', views.challenge_cancel, name='challenge_cancel'),
+    path('challenges/<int:challenge_id>/accept', views.challenge_accept, name='challenge_accept'),
+    path('challenges/<int:challenge_id>/refuse', views.challenge_refuse, name='challenge_refuse'),
 ]

@@ -460,6 +460,12 @@ class Match(models.Model):
 
 
 class Challenge(models.Model):
+    CHALLENGE_STATUSES = [
+        ('acc', 'accept'),
+        ('ref', 'refuse'),
+        ('pen', 'pending'),
+    ]
+
     tournament = models.ForeignKey(
         Tournament,
         on_delete=models.CASCADE,
@@ -476,9 +482,29 @@ class Challenge(models.Model):
         on_delete=models.CASCADE,
         related_name='challenges_opp',
     )
+    status = models.CharField(
+        default='pen',
+        max_length=4,
+        choices=CHALLENGE_STATUSES,
+    )
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['tournament', 'user', 'opponent'],
                                     name='uniq_challenge')
         ]
+
+    def accepted(self):
+        if self.status == 'acc':
+            return True
+        return False
+
+    def refused(self):
+        if self.status == 'ref':
+            return True
+        return False
+
+    def pending(self):
+        if self.status == 'pen':
+            return True
+        return False
