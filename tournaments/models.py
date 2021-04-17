@@ -150,6 +150,12 @@ class Tournament(models.Model):
             return True
         return False
 
+    @property
+    def is_act_or_fin(self):
+        if self.tt_status == 'act' or self.tt_status == 'fin':
+            return True
+        return False
+
     def get_absolute_url(self):
         """Returns the url to access a particular tournament instance."""
         return reverse('tournament-detail', args=[self.tt_slug])

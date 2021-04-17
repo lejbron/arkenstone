@@ -7,8 +7,7 @@
   {% include "include/cards/tournament_card.html" with tournament=tournament %}
 </div>
 
-{% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
-{% if players_stat is not None %}
+{% if tournament.reg_is_open_or_close and players_stat is not None %}
 {% if odd_number_flag %}
 <div class="row">
   <div class="col-sm-6 mb-3">
@@ -58,9 +57,8 @@
   </div>
 </div>
 {% endif %}
-{% endif %}
 
-{% if tournament.tt_status == 'act' or tournament.tt_status == 'fin' %}
+{% if tournament.is_act_or_fin %}
 <div class="row">
   {% for tour in tournament.tours.all %}
   {% include "include/cards/tour_card.html" with tour=tour %}
