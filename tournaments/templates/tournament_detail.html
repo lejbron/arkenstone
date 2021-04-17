@@ -11,9 +11,18 @@
 {% if players_stat is not None %}
 
 {% if odd_number_flag %}
-<a class="btn btn-sm btn-outline-dark mb-3" href="{% url 'player_add_bot' tournament.tt_slug %}" role="button">
-  Добавить бота
-</a>
+<div class="col-sm-12">
+  <form class="form-inline" method="post" action="{% url 'player_add_bot' tournament.tt_slug %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      {{ proxy_bot_form.proxy_bot.label }}
+    </div>
+    <div class="form-group mx-sm-3">
+      {{ proxy_bot_form.proxy_bot|addclass:"form-control" }}
+    </div>
+    <button type="submit" class="btn btn-outline-dark"> Добавить</button>
+  </form>
+</div>
 {% endif %}
 
 <div class="row">

@@ -4,6 +4,7 @@ import json
 
 from django.shortcuts import get_object_or_404, render
 
+from tournaments.forms import ProxyBotAddForm
 from tournaments.models import Match, Tour, Tournament
 
 
@@ -42,10 +43,12 @@ def tournament_detail_view(request, tt_slug):
     odd_number_flag = False
     if count % 2 != 0:
         odd_number_flag = True
+    proxy_bot_form = ProxyBotAddForm(request.POST or None)
     context = {
         'tournament': tournament,
         'players_stat': tournament.players.all(),
         'odd_number_flag': odd_number_flag,
+        'proxy_bot_form': proxy_bot_form,
     }
     return render(request, 'tournament_detail.html', context=context)
 

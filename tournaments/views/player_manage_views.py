@@ -5,6 +5,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404, redirect
 
 from players.models import PlayerStats
 from tournaments.decorators import superviser_check
+from tournaments.forms import ProxyBotAddForm
 from tournaments.models import Tournament
 
 
@@ -30,15 +31,23 @@ def player_add_bot(request, tt_slug):
         raise PermissionDenied
 
     count = tournament.players.count()
-    if count % 2 == 0:
+    form = ProxyBotAddForm(request.POST or None)
+    if count % 2 == 0 or not form.is_valid():
         return redirect('tournament-detail', tt_slug)
 
-    proxy_bots = get_list_or_404(User, profile__proxy_bot=True)
-    for bot in proxy_bots:
-        if not bot.tt_stats.filter(tournament=tournament).exists():
-            PlayerStats.objects.create(
-                tournament=tournament,
-                player=bot,
-            )
-            return redirect('tournament-detail', tt_slug)
+    proxy_bot = form.cleaned_data.get('proxy_bot')
+    if proxy_bot is not None:
+        PlayerStats.objects.create(
+            tournament=tournament,
+            player=proxy_bot,
+        )
+    else:
+        proxy_bots = get_list_or_404(User, profile__proxy_bot=True)
+        for proxy_bot in proxy_bots:
+            if not proxy_bot.tt_stats.filter(tournament=tournament).exists():
+                PlayerStats.objects.create(
+                    tournament=tournament,
+                    player=proxy_bot,
+                )
+                break
     return redirect('tournament-detail', tt_slug)
