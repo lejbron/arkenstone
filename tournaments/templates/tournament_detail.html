@@ -9,36 +9,53 @@
 
 {% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
 {% if players_stat is not None %}
-
 {% if odd_number_flag %}
-<div class="col-sm-12">
-  <form class="form-inline" method="post" action="{% url 'player_add_bot' tournament.tt_slug %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group">
-      {{ proxy_bot_form.proxy_bot.label }}
-    </div>
-    <div class="form-group mx-sm-3">
-      {{ proxy_bot_form.proxy_bot|addclass:"form-control" }}
-    </div>
-    <button type="submit" class="btn btn-outline-dark"> Добавить</button>
-  </form>
+<div class="row">
+  <div class="col-sm-6 mb-3">
+    <form class="form-inline" method="post" action="{% url 'player_add_bot' tournament.tt_slug %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ proxy_bot_form.proxy_bot.label }}
+      </div>
+      <div class="form-group mx-sm-3">
+        {{ proxy_bot_form.proxy_bot|addclass:"form-control" }}
+      </div>
+      <button type="submit" class="btn btn-outline-dark"> Добавить</button>
+    </form>
+  </div>
 </div>
 {% endif %}
 
 <div class="row">
-
-  <ol>
-    {% for record in players_stat %}
-    <li>
-      <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a>
-      {% if tournament.superviser == user %}
-      <a href="{% url 'player_delete' tournament.tt_slug record.player.id %}" role="button">
-        <i class="fas fa-user-times ml-1"></i>
-      </a>
-      {% endif %}
-    </li>
-    {% endfor %}
-  </ol>
+  <div class="col-sm-4">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">№</th>
+          <th scope="col">Ник</th>
+          <th scope="col">Армия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in players_stat %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>
+            <a href="{% url 'player-detail' record.player.id %}">
+              {{ record }}
+            </a>
+            {% if tournament.superviser == user %}
+            <a href="{% url 'player_delete' tournament.tt_slug record.player.id %}" role="button">
+              <i class="fas fa-user-times ml-1"></i>
+            </a>
+            {% endif %}
+          </td>
+          <td>{{ record.army }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endif %}
 {% endif %}
