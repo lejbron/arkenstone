@@ -43,7 +43,7 @@ def tournament_detail_view(request, tt_slug):
     odd_number_flag = False
     if count % 2 != 0:
         odd_number_flag = True
-    proxy_bot_form = ProxyBotAddForm(request.POST or None)
+    proxy_bot_form = ProxyBotAddForm()
     context = {
         'tournament': tournament,
         'players_stat': tournament.players.all(),
