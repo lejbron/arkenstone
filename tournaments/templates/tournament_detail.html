@@ -7,21 +7,63 @@
   {% include "include/cards/tournament_card.html" with tournament=tournament %}
 </div>
 
-{% if tournament.tt_status == 'reg' or tournament.tt_status == 'creg' %}
-{% if players_stat is not None %}
+{% if tournament.is_open_reg or tournament.is_close_reg %}
+{% if players_stat.exists %}
+{% if odd_number_flag and tournament.superviser == user %}
 <div class="row">
-  <ol>
-    {% for record in players_stat %}
-    <li>
-      <a href="{% url 'player-detail' record.player.id %}">{{ record }}</a></td>
-    </li>
-    {% endfor %}
-  </ol>
+  <div class="col-sm-6 mb-3">
+    <form class="form-inline" method="post" action="{% url 'player_add_bot' tournament.tt_slug %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ proxy_bot_form.proxy_bot.label }}
+      </div>
+      <div class="form-group mx-sm-3">
+        {{ proxy_bot_form.proxy_bot|addclass:"form-control" }}
+      </div>
+      <button type="submit" class="btn btn-outline-dark"> Добавить</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-sm-4">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">№</th>
+          <th scope="col">Ник</th>
+          <th scope="col">Армия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in players_stat %}
+
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>
+            <a href="{% url 'player-detail' record.player.id %}">
+              {{ record }}
+            </a>
+            {% if tournament.superviser == user %}
+
+            {% include "include/modals/warning_delete_player.html" with tournament=tournament record=record counter=forloop.counter %}
+            <a href="" role="button" data-toggle="modal" data-target="#deletePlayerWarning{{ forloop.counter }}">
+              <i class="fas fa-user-times ml-1"></i>
+            </a>
+            {% endif %}
+          </td>
+          <td>{{ record.army }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endif %}
 {% endif %}
-
-{% if tournament.tt_status == 'act' or tournament.tt_status == 'fin' %}
+{% if tournament.is_active or tournament.is_finished %}
 <div class="row">
   {% for tour in tournament.tours.all %}
   {% include "include/cards/tour_card.html" with tour=tour %}

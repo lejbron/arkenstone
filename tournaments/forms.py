@@ -58,6 +58,17 @@ class TourResultsForm(forms.ModelForm):
         exclude = ()
 
 
+class ProxyBotAddForm(forms.Form):
+    """
+    Форма добавления прокси бота.
+    """
+    proxy_bot = forms.ModelChoiceField(
+        label='Прокси-бот',
+        queryset=User.objects.filter(profile__proxy_bot=True),
+        required=False,
+    )
+
+
 MatchesResultsFormSet = inlineformset_factory(
     Tour,
     Match,

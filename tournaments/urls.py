@@ -22,3 +22,8 @@ urlpatterns += [
     path('tours/<slug:tour_slug>/results/', views.input_tour_results, name='tour-results'),
     path('tours/<slug:tour_slug>/finish/', views.finish_tour, name='tour-finish'),
 ]
+
+urlpatterns += [
+    path('<slug:tt_slug>/<int:player_id>/delete/', views.player_delete, name='player_delete'),
+    path('<slug:tt_slug>/add-bot/', views.player_add_bot, name='player_add_bot'),
+]

@@ -144,6 +144,28 @@ class Tournament(models.Model):
             self.tt_slug = slugify(self)
         super(Tournament, self).save(*args, **kwargs)
 
+    @property
+    def is_announced(self):
+        if self.tt_status == 'ann':
+            return True
+        return False
+
+    @property
+    def is_open_reg(self):
+        return self.tt_status == 'reg'
+
+    @property
+    def is_close_reg(self):
+        return self.tt_status == 'creg'
+
+    @property
+    def is_active(self):
+        return self.tt_status == 'act'
+
+    @property
+    def is_finished(self):
+        return self.tt_status == 'fin'
+
     def get_absolute_url(self):
         """Returns the url to access a particular tournament instance."""
         return reverse('tournament-detail', args=[self.tt_slug])

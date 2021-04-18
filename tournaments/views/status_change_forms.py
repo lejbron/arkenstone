@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from tournaments.decorators import superviser_check
+from tournaments.forms import ProxyBotAddForm
 from tournaments.models import Tour, Tournament
 
 
@@ -38,11 +39,12 @@ def close_registration(request, tt_slug):
         tournament.tt_status = 'creg'
         tournament.save()
         return redirect('tournament-detail', tournament.tt_slug)
-
+    proxy_bot_form = ProxyBotAddForm()
     context = {
         'tournament': tournament,
         'players_stat': tournament.players.all(),
-        'quantity_flag': True,
+        'odd_number_flag': True,
+        'proxy_bot_form': proxy_bot_form,
         }
 
     return render(request, 'tournament_detail.html', context=context)
