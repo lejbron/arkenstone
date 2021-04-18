@@ -27,7 +27,7 @@ def player_add_bot(request, tt_slug):
     View-функция добавления бота на турнир.
     """
     tournament = get_object_or_404(Tournament, tt_slug=tt_slug)
-    if not tournament.reg_is_open_or_close:
+    if not (tournament.is_open_reg or tournament.is_close_reg):
         raise PermissionDenied
 
     count = tournament.players.count()
@@ -37,10 +37,13 @@ def player_add_bot(request, tt_slug):
 
     proxy_bot = form.cleaned_data.get('proxy_bot')
     if proxy_bot is not None:
-        PlayerStats.objects.create(
-            tournament=tournament,
-            player=proxy_bot,
-        )
+        if proxy_bot.tt_stats.filter(tournament=tournament).exists():
+            return redirect('tournament-detail', tt_slug)
+        else:
+            PlayerStats.objects.create(
+                tournament=tournament,
+                player=proxy_bot,
+            )
     else:
         proxy_bots = get_list_or_404(User, profile__proxy_bot=True)
         for proxy_bot in proxy_bots:

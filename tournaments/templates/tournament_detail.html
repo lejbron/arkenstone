@@ -7,8 +7,9 @@
   {% include "include/cards/tournament_card.html" with tournament=tournament %}
 </div>
 
-{% if tournament.reg_is_open_or_close and players_stat is not None %}
-{% if odd_number_flag %}
+{% if tournament.is_open_reg or tournament.is_close_reg %}
+{% if players_stat.exists %}
+{% if odd_number_flag and tournament.superviser == user %}
 <div class="row">
   <div class="col-sm-6 mb-3">
     <form class="form-inline" method="post" action="{% url 'player_add_bot' tournament.tt_slug %}" enctype="multipart/form-data">
@@ -37,6 +38,7 @@
       </thead>
       <tbody>
         {% for record in players_stat %}
+
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
           <td>
@@ -44,21 +46,24 @@
               {{ record }}
             </a>
             {% if tournament.superviser == user %}
-            <a href="{% url 'player_delete' tournament.tt_slug record.player.id %}" role="button">
+
+            {% include "include/modals/warning_delete_player.html" with tournament=tournament record=record counter=forloop.counter %}
+            <a href="" role="button" data-toggle="modal" data-target="#deletePlayerWarning{{ forloop.counter }}">
               <i class="fas fa-user-times ml-1"></i>
             </a>
             {% endif %}
           </td>
           <td>{{ record.army }}</td>
         </tr>
+
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
 {% endif %}
-
-{% if tournament.is_act_or_fin %}
+{% endif %}
+{% if tournament.is_active or tournament.is_finished %}
 <div class="row">
   {% for tour in tournament.tours.all %}
   {% include "include/cards/tour_card.html" with tour=tour %}

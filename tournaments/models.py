@@ -145,16 +145,26 @@ class Tournament(models.Model):
         super(Tournament, self).save(*args, **kwargs)
 
     @property
-    def reg_is_open_or_close(self):
-        if self.tt_status == 'reg' or self.tt_status == 'creg':
+    def is_announced(self):
+        if self.tt_status == 'ann':
             return True
         return False
 
     @property
-    def is_act_or_fin(self):
-        if self.tt_status == 'act' or self.tt_status == 'fin':
-            return True
-        return False
+    def is_open_reg(self):
+        return self.tt_status == 'reg'
+
+    @property
+    def is_close_reg(self):
+        return self.tt_status == 'creg'
+
+    @property
+    def is_active(self):
+        return self.tt_status == 'act'
+
+    @property
+    def is_finished(self):
+        return self.tt_status == 'fin'
 
     def get_absolute_url(self):
         """Returns the url to access a particular tournament instance."""
